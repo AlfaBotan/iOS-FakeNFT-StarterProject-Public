@@ -8,7 +8,6 @@
 import UIKit
 
 struct StatisticsUserCellModel {
-    let cellIndex: Int
     let avatarImage: UIImage
     let name: String
     let score: Int

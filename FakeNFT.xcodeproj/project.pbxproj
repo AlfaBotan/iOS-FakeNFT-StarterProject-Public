@@ -51,6 +51,7 @@
 		689224572C8A5A4900CE698A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 689224592C8A5A4900CE698A /* Localizable.strings */; };
 		68B5D3872C8B9A2700FABE53 /* StatisticsUserCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B5D3862C8B9A2700FABE53 /* StatisticsUserCellModel.swift */; };
 		68B5D3892C8B9A4400FABE53 /* StatisticsUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B5D3882C8B9A4400FABE53 /* StatisticsUserTableViewCell.swift */; };
+		68B5D38E2C8BA0EC00FABE53 /* StatisticViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B5D38D2C8BA0EC00FABE53 /* StatisticViewModel.swift */; };
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
 /* End PBXBuildFile section */
@@ -119,6 +120,7 @@
 		6892245A2C8A5A5500CE698A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		68B5D3862C8B9A2700FABE53 /* StatisticsUserCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserCellModel.swift; sourceTree = "<group>"; };
 		68B5D3882C8B9A4400FABE53 /* StatisticsUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserTableViewCell.swift; sourceTree = "<group>"; };
+		68B5D38D2C8BA0EC00FABE53 /* StatisticViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewModel.swift; sourceTree = "<group>"; };
 		E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		E1CD40D92A96BE7D00BE7FE8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -371,8 +373,9 @@
 		689224482C8A3E8E00CE698A /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
-				68B5D3842C8B988700FABE53 /* Cell */,
-				6892244D2C8A3FD700CE698A /* StatisticViewController.swift */,
+				68B5D3932C8BA48800FABE53 /* UsersCollection */,
+				68B5D3922C8BA47900FABE53 /* UserCard */,
+				68B5D3902C8BA46D00FABE53 /* Rating */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -384,6 +387,30 @@
 				68B5D3882C8B9A4400FABE53 /* StatisticsUserTableViewCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		68B5D3902C8BA46D00FABE53 /* Rating */ = {
+			isa = PBXGroup;
+			children = (
+				68B5D3842C8B988700FABE53 /* Cell */,
+				6892244D2C8A3FD700CE698A /* StatisticViewController.swift */,
+				68B5D38D2C8BA0EC00FABE53 /* StatisticViewModel.swift */,
+			);
+			path = Rating;
+			sourceTree = "<group>";
+		};
+		68B5D3922C8BA47900FABE53 /* UserCard */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UserCard;
+			sourceTree = "<group>";
+		};
+		68B5D3932C8BA48800FABE53 /* UsersCollection */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UsersCollection;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
@@ -562,6 +589,7 @@
 				E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */,
 				3F478ED129DB476500F6D39E /* Fonts.swift in Sources */,
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
+				68B5D38E2C8BA0EC00FABE53 /* StatisticViewModel.swift in Sources */,
 				68B5D3872C8B9A2700FABE53 /* StatisticsUserCellModel.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,

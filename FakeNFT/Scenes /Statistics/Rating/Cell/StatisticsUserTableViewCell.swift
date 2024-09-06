@@ -24,7 +24,7 @@ final class StatisticsUserTableViewCell: UITableViewCell {
     
     private lazy var bgView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.textPrimary
+        view.backgroundColor = UIColor.segmentInactive
         view.layer.cornerRadius = 12
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -34,7 +34,7 @@ final class StatisticsUserTableViewCell: UITableViewCell {
     private lazy var avatarImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = 14
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -73,9 +73,9 @@ final class StatisticsUserTableViewCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: padding, right: 0))
     }
     
-    func configure(with model: StatisticsUserCellModel) {
-        cellIndex.text = "\(model.cellIndex)"
-        avatarImageView.image = model.avatarImage
+    func configure(with model: StatisticsUserCellModel, and index: Int) {
+        cellIndex.text = "\(index)"
+        avatarImageView.image = model.avatarImage.withTintColor(UIColor.segmentActive)
         nameLabel.text = model.name
         scoreLabel.text = "\(model.score)"
     }
