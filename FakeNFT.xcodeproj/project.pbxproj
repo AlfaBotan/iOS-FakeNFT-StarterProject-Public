@@ -367,9 +367,17 @@
 		689224482C8A3E8E00CE698A /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
+				68B5D3842C8B988700FABE53 /* Cell */,
 				6892244D2C8A3FD700CE698A /* StatisticViewController.swift */,
 			);
 			path = Statistics;
+			sourceTree = "<group>";
+		};
+		68B5D3842C8B988700FABE53 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
