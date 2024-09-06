@@ -1,6 +1,6 @@
 import UIKit
 
-final class StatisticsViewController: UIViewController {
+final class StatisticViewController: UIViewController {
     
     private lazy var sortButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -73,7 +73,7 @@ final class StatisticsViewController: UIViewController {
     }
 }
 
-extension StatisticsViewController: UITableViewDataSource {
+extension StatisticViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 100
     }
@@ -94,6 +94,6 @@ extension StatisticsViewController: UITableViewDataSource {
     }
 }
 
-extension StatisticsViewController: UITableViewDelegate {
+extension StatisticViewController: UITableViewDelegate {
     
 }
