@@ -41,7 +41,20 @@ final class StatisticViewController: UIViewController {
         
         setupBindings()
         setupTable()
+        setupNavBar()
         constraintView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     private func setupBindings() {
@@ -61,6 +74,11 @@ final class StatisticViewController: UIViewController {
         scoreTable.dataSource = self
         scoreTable.register(StatisticsUserTableViewCell.self, 
                             forCellReuseIdentifier: StatisticsUserTableViewCell.reuseIdentifier)
+    }
+    
+    private func setupNavBar() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.tintColor = UIColor.segmentActive
     }
     
     private func constraintView() {
