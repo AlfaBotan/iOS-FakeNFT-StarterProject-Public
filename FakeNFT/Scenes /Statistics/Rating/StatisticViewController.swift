@@ -140,32 +140,33 @@ extension StatisticViewController: UITableViewDataSource {
 
 extension StatisticViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let userCardViewController = UserCardViewController()
+        let user = viewModel.users[indexPath.row]
+        let userCardViewController = UserCardViewController(user: user)
         navigationController?.pushViewController(userCardViewController, animated: true)
     }
 }
 
 enum UserMock {
-    static let mockStatisticsUserData: [StatisticsUserCellModel] = [
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Alice Johnson", score: 108),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Bob Smith", score: 140),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Charlie Brown", score: 132),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Diana Prince", score: 125),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Eve Adams", score: 120),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Frank Wright", score: 143),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Grace Hopper", score: 138),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Harry Potter", score: 100),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Isabelle McKenzie", score: 110),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Jack Sparrow", score: 105),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Karen Black", score: 150),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Liam Neeson", score: 145),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Mia Wallace", score: 130),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Nathan Drake", score: 118),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Olivia Wilde", score: 103),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Peter Parker", score: 135),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Quinn Harper", score: 113),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Rachel Green", score: 128),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Steve Rogers", score: 115),
-        StatisticsUserCellModel(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Tony Stark", score: 103)
+    static let mockStatisticsUserData: [UserStatistics] = [
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Alice Johnson", score: 108, bio: "Любит путешествовать и открывать новые места."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Bob Smith", score: 140, bio: "Увлекается фотографией и горными походами."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Charlie Brown", score: 132, bio: "Ведет блог о кулинарии."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Diana Prince", score: 125, bio: "Активный участник волонтерских программ."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Eve Adams", score: 120, bio: "Профессионально занимается дизайном интерьеров."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Frank Wright", score: 143, bio: "Любит спорт и участвует в марафонах."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Grace Hopper", score: 138, bio: "Изучает программирование и математику."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Harry Potter", score: 100, bio: "Любит приключения и игры с друзьями."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Isabelle McKenzie", score: 110, bio: "Пишет стихи и рассказы."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Jack Sparrow", score: 105, bio: "Мечтает об океанских приключениях."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Karen Black", score: 150, bio: "Интересуется модой и стилем."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Liam Neeson", score: 145, bio: "Любит смотреть кино и изучать актерское мастерство."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Mia Wallace", score: 130, bio: "Увлекается музыкой и играет на гитаре."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Nathan Drake", score: 118, bio: "Обожает приключения и активный отдых."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Olivia Wilde", score: 103, bio: "Интересуется искусством и занимается живописью."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Peter Parker", score: 135, bio: "Увлекается фотографией и научными экспериментами."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Quinn Harper", score: 113, bio: "Любит читать и путешествовать по миру."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Rachel Green", score: 128, bio: "Интересуется модой и дизайном."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Steve Rogers", score: 115, bio: "Проводит много времени на свежем воздухе и занимается спортом."),
+        UserStatistics(avatarImage: Images.TabBar.icon(for: .profile)!, name: "Tony Stark", score: 103, bio: "Гениальный инженер и изобретатель.")
     ]
 }

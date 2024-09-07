@@ -73,7 +73,7 @@ final class StatisticsUserTableViewCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: padding, right: 0))
     }
     
-    func configure(with model: StatisticsUserCellModel, and index: Int) {
+    func configure(with model: UserStatistics, and index: Int) {
         cellIndex.text = "\(index)"
         avatarImageView.image = model.avatarImage.withTintColor(UIColor.segmentActive)
         nameLabel.text = model.name

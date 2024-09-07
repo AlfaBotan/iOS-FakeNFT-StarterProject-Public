@@ -10,7 +10,7 @@ import Foundation
 protocol StatisticViewModelProtocol: AnyObject {
     var reloadTableView: (() -> Void)? { get set }
     var showSortActionSheet: (() -> Void)? { get set }
-    var users: [StatisticsUserCellModel] { get }
+    var users: [UserStatistics] { get }
     
     func loadMockData()
     func sortByName()
@@ -23,7 +23,7 @@ final class StatisticViewModel: StatisticViewModelProtocol {
     
     var showSortActionSheet: (() -> Void)?
     
-    private(set) var users: [StatisticsUserCellModel] = []
+    private(set) var users: [UserStatistics] = []
     
     init() {
         loadMockData()
