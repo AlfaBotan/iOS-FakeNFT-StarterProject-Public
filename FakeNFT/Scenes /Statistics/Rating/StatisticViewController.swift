@@ -120,7 +120,12 @@ extension StatisticViewController: UITableViewDataSource {
     }
 }
 
-extension StatisticViewController: UITableViewDelegate {}
+extension StatisticViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let userCardViewController = UserCardViewController()
+        navigationController?.pushViewController(userCardViewController, animated: true)
+    }
+}
 
 enum UserMock {
     static let mockStatisticsUserData: [StatisticsUserCellModel] = [
