@@ -62,7 +62,7 @@ final class UserCardViewController: UIViewController {
     
     private lazy var arrowButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "chevron.right"), for: .normal) // TODO: Вынести картинку в Images
+        button.setImage(Images.Common.forwardBtn, for: .normal)
         button.tintColor = .segmentActive
         button.isUserInteractionEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
