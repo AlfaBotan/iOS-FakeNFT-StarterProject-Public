@@ -72,6 +72,7 @@ final class UserCardViewController: UIViewController {
     private lazy var collectionButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
+        button.addTarget(nil, action: #selector(tappedUserCollectionButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -100,6 +101,7 @@ final class UserCardViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         
+        setupNavBar()
         constraintView()
         configure()
     }
@@ -117,6 +119,16 @@ final class UserCardViewController: UIViewController {
         if let button = view.subviews.first(where: { $0 is UIButton }) as? UIButton {
             button.layer.borderColor = UIColor.segmentActive.cgColor
         }
+    }
+    
+    @objc private func tappedUserCollectionButton() {
+        let userCollectionVC = UserCollectionViewController()
+        navigationController?.pushViewController(userCollectionVC, animated: true)
+    }
+    
+    private func setupNavBar() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.tintColor = UIColor.segmentActive
     }
     
     private func constraintView() {
