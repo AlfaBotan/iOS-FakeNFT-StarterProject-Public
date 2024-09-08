@@ -26,7 +26,6 @@ final class NFTCollectionViewCell: UICollectionView {
     
     private lazy var ethLabel: UILabel = {
         let label = UILabel()
-        label.font = 
         return label
     }()
     
