@@ -9,18 +9,12 @@ import UIKit
 
 final class UserCollectionViewController: UIViewController {
     
-    private let layout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        layout.minimumLineSpacing = 16
-        layout.minimumInteritemSpacing = 8
-        // layout.itemSize = CGSize(width: (view.frame.width / 3) - 9, height: 192)
-        return layout
-    }()
     private lazy var userCollectionView: UICollectionView = {
-        let collection = UICollectionView(frame: view.frame, collectionViewLayout: layout)
+        let collection = UICollectionView(frame: view.frame, collectionViewLayout: createLayout())
         collection.backgroundColor = .clear
         collection.translatesAutoresizingMaskIntoConstraints = false
+        collection.showsVerticalScrollIndicator = false
+        collection.showsHorizontalScrollIndicator = false
         return collection
     }()
     
@@ -29,6 +23,7 @@ final class UserCollectionViewController: UIViewController {
         
         configure()
         setupCollection()
+        constraintView()
     }
     
     private func configure() {
@@ -37,26 +32,56 @@ final class UserCollectionViewController: UIViewController {
     }
     
     private func setupCollection() {
+        userCollectionView.register(NFTCollectionViewCell.self, forCellWithReuseIdentifier: NFTCollectionViewCell.reuseIdentifier)
         userCollectionView.dataSource = self
         userCollectionView.delegate = self
+    }
+    
+    private func createLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        
+        let cellWidth: CGFloat = 108
+        let cellHeight: CGFloat = 192
+        
+        layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 8
+        
+        return layout
+    }
+    
+    private func constraintView() {
+        view.addSubview(userCollectionView)
+        
+        NSLayoutConstraint.activate([
+            userCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            userCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            userCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            userCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
 }
 
 extension UserCollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 15
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "mockCell", for: indexPath)
-        cell.backgroundColor = .red
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCollectionViewCell.reuseIdentifier, for: indexPath) as? NFTCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        let nft = NFTCellModel(image: UIImage(named: "mockNFT") ?? UIImage(),
+                               rating: 4,
+                               name: "Archie",
+                               cost: 1.78)
+        cell.configure(nft: nft)
+        
         return cell
     }
 }
 
 extension UserCollectionViewController: UICollectionViewDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (view.frame.width / 3) - 9, height: 192)
-    }
 }
