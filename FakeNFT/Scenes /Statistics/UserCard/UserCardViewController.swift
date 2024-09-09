@@ -9,7 +9,7 @@ import UIKit
 
 final class UserCardViewController: UIViewController {
     
-    private let user: UserStatistics
+    var viewModel: UserCardViewModelProtocol
     
     private lazy var userPick: UIImageView = {
         let view = UIImageView()
@@ -86,10 +86,14 @@ final class UserCardViewController: UIViewController {
         return stack
     }()
     
-    init(user: UserStatistics) {
-        self.user = user
-        
+    init(viewModel: UserCardViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        
+        self.viewModel.didTapCollectionButton = { [weak self] in
+            let userCollectionVC = UserCollectionViewController()
+            self?.navigationController?.pushViewController(userCollectionVC, animated: true)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -122,8 +126,7 @@ final class UserCardViewController: UIViewController {
     }
     
     @objc private func tappedUserCollectionButton() {
-        let userCollectionVC = UserCollectionViewController()
-        navigationController?.pushViewController(userCollectionVC, animated: true)
+        viewModel.tapCollectionButton()
     }
     
     private func setupNavBar() {
@@ -168,9 +171,9 @@ final class UserCardViewController: UIViewController {
     }
     
     private func configure() {
-        userPick.image = user.avatarImage
-        userName.text = user.name
-        userBio.text = user.bio
-        collectionTitleLabel.text = "\(Strings.Statistics.collectionNft) (\(user.score))"
+        userPick.image = viewModel.user.avatarImage
+        userName.text = viewModel.user.name
+        userBio.text = viewModel.user.bio
+        collectionTitleLabel.text = "\(Strings.Statistics.collectionNft) (\(viewModel.user.score))"
     }
 }

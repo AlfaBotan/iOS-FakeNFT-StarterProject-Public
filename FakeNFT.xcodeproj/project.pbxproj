@@ -43,6 +43,8 @@
 		3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */; };
 		558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558E39E62C68CE0900FB86AC /* NftService.swift */; };
 		68050FB92C8E4AB100E635C7 /* NFTCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68050FB82C8E4AB100E635C7 /* NFTCellModel.swift */; };
+		6886EF332C8EEA0A00F93102 /* UserCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6886EF322C8EEA0A00F93102 /* UserCardViewModel.swift */; };
+		6886EF372C8EFE1700F93102 /* UserCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6886EF362C8EFE1700F93102 /* UserCollectionViewModel.swift */; };
 		689224452C8A365D00CE698A /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689224442C8A365D00CE698A /* Strings.swift */; };
 		6892244A2C8A3EA900CE698A /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689224492C8A3EA900CE698A /* CartViewController.swift */; };
 		6892244C2C8A3F3600CE698A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6892244B2C8A3F3600CE698A /* ProfileViewController.swift */; };
@@ -116,6 +118,8 @@
 		3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatters+Presets.swift"; sourceTree = "<group>"; };
 		558E39E62C68CE0900FB86AC /* NftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftService.swift; sourceTree = "<group>"; };
 		68050FB82C8E4AB100E635C7 /* NFTCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCellModel.swift; sourceTree = "<group>"; };
+		6886EF322C8EEA0A00F93102 /* UserCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCardViewModel.swift; sourceTree = "<group>"; };
+		6886EF362C8EFE1700F93102 /* UserCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionViewModel.swift; sourceTree = "<group>"; };
 		689224442C8A365D00CE698A /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		689224492C8A3EA900CE698A /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		6892244B2C8A3F3600CE698A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -411,6 +415,7 @@
 			isa = PBXGroup;
 			children = (
 				68B5D3942C8CE5A700FABE53 /* UserCardViewController.swift */,
+				6886EF322C8EEA0A00F93102 /* UserCardViewModel.swift */,
 			);
 			path = UserCard;
 			sourceTree = "<group>";
@@ -420,6 +425,7 @@
 			children = (
 				68DC7F982C8E3D5900DB8CDE /* Cell */,
 				68DC7F962C8E3D5300DB8CDE /* UserCollectionViewController.swift */,
+				6886EF362C8EFE1700F93102 /* UserCollectionViewModel.swift */,
 			);
 			path = UsersCollection;
 			sourceTree = "<group>";
@@ -611,6 +617,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6886EF372C8EFE1700F93102 /* UserCollectionViewModel.swift in Sources */,
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
 				68DC7F9A2C8E3D5900DB8CDE /* NFTCollectionViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
@@ -646,6 +653,7 @@
 				6892244C2C8A3F3600CE698A /* ProfileViewController.swift in Sources */,
 				3F6806D729CBC50A00B4F915 /* CellsReusingUtils.swift in Sources */,
 				0C79EE612A76DCD600EE90EA /* NftByIdRequest.swift in Sources */,
+				6886EF332C8EEA0A00F93102 /* UserCardViewModel.swift in Sources */,
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,

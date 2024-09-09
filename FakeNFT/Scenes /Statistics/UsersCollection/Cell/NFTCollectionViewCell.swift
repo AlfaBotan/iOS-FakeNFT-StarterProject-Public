@@ -37,15 +37,17 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var favoriteButton: UIButton = {
-        let button = UIButton()
-        button.setImage(Images.Common.favoriteInactive, for: .normal)
+        let button = UIButton(type: .custom)
+        let image = Images.Common.favoriteInactive ?? UIImage()
+        button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private lazy var cartButton: UIButton = {
-        let button = UIButton()
-        button.setImage(Images.Common.addCartBtn, for: .normal)
+        let button = UIButton(type: .custom)
+        let image = Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
+        button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -125,7 +127,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
             nameLabel.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 5),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             
-            ethLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 12),
+            ethLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
             ethLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             
             favoriteButton.topAnchor.constraint(equalTo: nftImageView.topAnchor),
