@@ -212,6 +212,10 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             let favouritesNftVC = FavouritesNftViewController()
             navigationController?.pushViewController(favouritesNftVC, animated: true)
         }
+        if indexPath.row == 2 {
+            let webVC = WebViewController(urlString: "https://practicum.yandex.ru")
+            navigationController?.pushViewController(webVC, animated: true)
+        }
     }
 }
 
