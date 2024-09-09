@@ -203,6 +203,15 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         viewModel.didSelectMenuItem(at: indexPath.row)
+        
+        if indexPath.row == 0 {
+            let myNftVC = MyNftViewController()
+            navigationController?.pushViewController(myNftVC, animated: true)
+        }
+        if indexPath.row == 1 {
+            let favouritesNftVC = FavouritesNftViewController()
+            navigationController?.pushViewController(favouritesNftVC, animated: true)
+        }
     }
 }
 

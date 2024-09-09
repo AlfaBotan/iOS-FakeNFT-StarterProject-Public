@@ -26,6 +26,8 @@
 		2C173DFF2C8EDAD1009B8D23 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C173DFE2C8EDAD1009B8D23 /* ProfileViewModel.swift */; };
 		2C173E012C8EDB81009B8D23 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C173E002C8EDB81009B8D23 /* WebViewController.swift */; };
 		2C173E042C8EEE9D009B8D23 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C173E032C8EEE9D009B8D23 /* Observable.swift */; };
+		2C173E072C8F131F009B8D23 /* MyNftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C173E062C8F131F009B8D23 /* MyNftViewController.swift */; };
+		2C173E0A2C8F1340009B8D23 /* FavouritesNftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C173E092C8F1340009B8D23 /* FavouritesNftViewController.swift */; };
 		3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F478ECE29DB474E00F6D39E /* Colors.swift */; };
 		3F478ED129DB476500F6D39E /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F478ED029DB476500F6D39E /* Fonts.swift */; };
 		3F603CCD29DB4A53000C43D7 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3F603CCC29DB4A53000C43D7 /* ProgressHUD */; };
@@ -93,6 +95,8 @@
 		2C173DFE2C8EDAD1009B8D23 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		2C173E002C8EDB81009B8D23 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		2C173E032C8EEE9D009B8D23 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		2C173E062C8F131F009B8D23 /* MyNftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNftViewController.swift; sourceTree = "<group>"; };
+		2C173E092C8F1340009B8D23 /* FavouritesNftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesNftViewController.swift; sourceTree = "<group>"; };
 		3F478ECE29DB474E00F6D39E /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		3F478ED029DB476500F6D39E /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		3F68069329CBBAF100B4F915 /* FakeNFT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FakeNFT.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -369,6 +373,8 @@
 				2C173DFE2C8EDAD1009B8D23 /* ProfileViewModel.swift */,
 				2C173E002C8EDB81009B8D23 /* WebViewController.swift */,
 				2C173E032C8EEE9D009B8D23 /* Observable.swift */,
+				2C173E062C8F131F009B8D23 /* MyNftViewController.swift */,
+				2C173E092C8F1340009B8D23 /* FavouritesNftViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -560,6 +566,7 @@
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
 				6892244E2C8A3FD700CE698A /* StatisticViewController.swift in Sources */,
+				2C173E072C8F131F009B8D23 /* MyNftViewController.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
@@ -570,6 +577,7 @@
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
 				558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */,
 				6892244A2C8A3EA900CE698A /* CartViewController.swift in Sources */,
+				2C173E0A2C8F1340009B8D23 /* FavouritesNftViewController.swift in Sources */,
 				3F68069729CBBAF100B4F915 /* AppDelegate.swift in Sources */,
 				2C173E012C8EDB81009B8D23 /* WebViewController.swift in Sources */,
 				3F68069929CBBAF100B4F915 /* SceneDelegate.swift in Sources */,
