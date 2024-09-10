@@ -1,12 +1,12 @@
 //
-//  CatalogModel.swift
+//  CollectionMiodel.swift
 //  FakeNFT
 //
-//  Created by Илья Волощик on 9.09.24.
+//  Created by Илья Волощик on 10.09.24.
 //
 
 import Foundation
 
-final class CatalogModel {
+final class CollectionMiodel {
     //MARK: Здесь будет реализована работа с сетью
 }

@@ -8,6 +8,7 @@
 import UIKit
 
 final class CatalogTableViewCell: UITableViewCell {
+    
     static let identifer = "CatalogTableViewCell"
     
     private lazy var topImage: UIImageView = {
@@ -43,16 +44,16 @@ final class CatalogTableViewCell: UITableViewCell {
         heightCell.priority = .defaultHigh
         
         NSLayoutConstraint.activate([
-        heightCell,
-        topImage.topAnchor.constraint(equalTo: contentView.topAnchor),
-        topImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-        topImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        topImage.heightAnchor.constraint(equalToConstant: 140),
-        
-        nameAndCountLable.topAnchor.constraint(equalTo: topImage.bottomAnchor, constant: 4),
-        nameAndCountLable.leadingAnchor.constraint(equalTo: topImage.leadingAnchor),
-        nameAndCountLable.trailingAnchor.constraint(equalTo: topImage.trailingAnchor),
-        nameAndCountLable.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -13),
+            heightCell,
+            topImage.topAnchor.constraint(equalTo: contentView.topAnchor),
+            topImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            topImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            topImage.heightAnchor.constraint(equalToConstant: 140),
+            
+            nameAndCountLable.topAnchor.constraint(equalTo: topImage.bottomAnchor, constant: 4),
+            nameAndCountLable.leadingAnchor.constraint(equalTo: topImage.leadingAnchor),
+            nameAndCountLable.trailingAnchor.constraint(equalTo: topImage.trailingAnchor),
+            nameAndCountLable.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -13),
         ])
     }
     

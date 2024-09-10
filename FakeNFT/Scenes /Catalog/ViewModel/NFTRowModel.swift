@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct NFTRowForTableView {
+struct NFTRowModel {
     let image: UIImage
     let name: String
     let count: Int
