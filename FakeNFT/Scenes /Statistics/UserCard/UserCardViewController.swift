@@ -7,8 +7,7 @@
 
 import UIKit
 
-final class UserCardViewController: UIViewController {
-    
+final class UserCardViewController: UIViewController, ViewSetupable {
     var viewModel: UserCardViewModelProtocol
     
     private lazy var userPick: UIImageView = {
@@ -103,10 +102,11 @@ final class UserCardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
+        addSubviews()
+        addConstraints()
+        configureView()
         
         setupNavBar()
-        constraintView()
         configure()
     }
     
@@ -118,27 +118,22 @@ final class UserCardViewController: UIViewController {
         }
     }
     
-    @objc private func updateButtonAppearance() {
-        // Обновляем цвет границы при смене темы
-        if let button = view.subviews.first(where: { $0 is UIButton }) as? UIButton {
-            button.layer.borderColor = UIColor.segmentActive.cgColor
-        }
+    func configureView() {
+        view.backgroundColor = .systemBackground
     }
     
-    @objc private func tappedUserCollectionButton() {
-        viewModel.tapCollectionButton()
-    }
-    
-    private func setupNavBar() {
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationController?.navigationBar.tintColor = UIColor.segmentActive
-    }
-    
-    private func constraintView() {
-        [userPick, userName, userBio, siteButton, stackView, collectionButton].forEach {
+    func addSubviews() {
+        [userPick, 
+         userName,
+         userBio,
+         siteButton,
+         stackView,
+         collectionButton].forEach {
             view.addSubview($0)
         }
-        
+    }
+    
+    func addConstraints() {
         NSLayoutConstraint.activate([
             userPick.widthAnchor.constraint(equalToConstant: 70),
             userPick.heightAnchor.constraint(equalTo: userPick.widthAnchor),
@@ -168,6 +163,22 @@ final class UserCardViewController: UIViewController {
             collectionButton.topAnchor.constraint(equalTo: stackView.topAnchor),
             collectionButton.bottomAnchor.constraint(equalTo: stackView.bottomAnchor)
         ])
+    }
+    
+    @objc private func updateButtonAppearance() {
+        // Обновляем цвет границы при смене темы
+        if let button = view.subviews.first(where: { $0 is UIButton }) as? UIButton {
+            button.layer.borderColor = UIColor.segmentActive.cgColor
+        }
+    }
+    
+    @objc private func tappedUserCollectionButton() {
+        viewModel.tapCollectionButton()
+    }
+    
+    private func setupNavBar() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.tintColor = UIColor.segmentActive
     }
     
     private func configure() {

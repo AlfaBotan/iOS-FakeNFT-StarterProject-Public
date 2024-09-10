@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class UserCollectionViewController: UIViewController {
+final class UserCollectionViewController: UIViewController, ViewSetupable {
     
     private var viewModel: UserCollectionViewModelProtocol
     
@@ -32,12 +32,27 @@ final class UserCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configure()
+        addSubviews()
+        addConstraints()
+        configureView()
+        
         setupCollection()
-        constraintView()
         setupBindings()
         
         viewModel.loadNFTs()
+    }
+    
+    func addSubviews() {
+        view.addSubview(userCollectionView)
+    }
+    
+    func addConstraints() {
+        NSLayoutConstraint.activate([
+            userCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            userCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            userCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            userCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     private func setupBindings() {
@@ -46,7 +61,7 @@ final class UserCollectionViewController: UIViewController {
         }
     }
     
-    private func configure() {
+    private func configureView() {
         view.backgroundColor = .systemBackground
         self.title = Strings.Statistics.collectionNft
     }
@@ -68,17 +83,6 @@ final class UserCollectionViewController: UIViewController {
         layout.minimumLineSpacing = 8
         
         return layout
-    }
-    
-    private func constraintView() {
-        view.addSubview(userCollectionView)
-        
-        NSLayoutConstraint.activate([
-            userCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            userCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            userCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            userCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
     }
 }
 

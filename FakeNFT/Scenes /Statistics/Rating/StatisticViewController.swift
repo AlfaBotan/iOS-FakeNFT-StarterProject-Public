@@ -1,6 +1,6 @@
 import UIKit
 
-final class StatisticViewController: UIViewController {
+final class StatisticViewController: UIViewController, ViewSetupable {
     
     var viewModel: StatisticViewModelProtocol
     
@@ -37,12 +37,13 @@ final class StatisticViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
+        addSubviews()
+        addConstraints()
+        configureView()
         
         setupBindings()
         setupTable()
         setupNavBar()
-        constraintView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,6 +56,30 @@ final class StatisticViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    func addSubviews() {
+        view.addSubview(sortButton)
+        view.addSubview(scoreTable)
+    }
+    
+    func addConstraints() {
+        NSLayoutConstraint.activate([
+            
+            sortButton.widthAnchor.constraint(equalToConstant: 42),
+            sortButton.heightAnchor.constraint(equalTo: sortButton.widthAnchor),
+            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            sortButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -9),
+            
+            scoreTable.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
+            scoreTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            scoreTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            scoreTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -13)
+        ])
+    }
+    
+    private func configureView() {
+        view.backgroundColor = .systemBackground
     }
     
     private func setupBindings() {
@@ -79,24 +104,6 @@ final class StatisticViewController: UIViewController {
     private func setupNavBar() {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationController?.navigationBar.tintColor = UIColor.segmentActive
-    }
-    
-    private func constraintView() {
-        view.addSubview(sortButton)
-        view.addSubview(scoreTable)
-        
-        NSLayoutConstraint.activate([
-            
-            sortButton.widthAnchor.constraint(equalToConstant: 42),
-            sortButton.heightAnchor.constraint(equalTo: sortButton.widthAnchor),
-            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            sortButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -9),
-            
-            scoreTable.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
-            scoreTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            scoreTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            scoreTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -13)
-        ])
     }
     
     @objc private func sortButtonTapped() {
