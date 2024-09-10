@@ -70,16 +70,15 @@ final class StatisticViewController: UIViewController, ViewSetupable {
     
     func addConstraints() {
         NSLayoutConstraint.activate([
-            
-            sortButton.widthAnchor.constraint(equalToConstant: 42),
+            sortButton.widthAnchor.constraint(equalToConstant: Constants.Layout.sortButtonWidth),
             sortButton.heightAnchor.constraint(equalTo: sortButton.widthAnchor),
-            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            sortButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -9),
+            sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Layout.sortButtonTop),
+            sortButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.Layout.sortButtonTrailing),
             
-            scoreTable.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: 20),
-            scoreTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            scoreTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            scoreTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -13)
+            scoreTable.topAnchor.constraint(equalTo: sortButton.bottomAnchor, constant: Constants.Layout.scoreTableTop),
+            scoreTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.scoreTableLeading),
+            scoreTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.Layout.scoreTableTrailing),
+            scoreTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: Constants.Layout.scoreTableBottom)
         ])
     }
     
@@ -156,6 +155,19 @@ extension StatisticViewController: UITableViewDelegate {
         let userCardViewModel = UserCardViewModel(user: user)
         let userCardViewController = UserCardViewController(viewModel: userCardViewModel)
         navigationController?.pushViewController(userCardViewController, animated: true)
+    }
+}
+
+private enum Constants {
+    enum Layout {
+        static let sortButtonWidth: CGFloat = 42
+        static let sortButtonTrailing: CGFloat = -9
+        static let sortButtonTop: CGFloat = 0
+        
+        static let scoreTableTop: CGFloat = 20
+        static let scoreTableLeading: CGFloat = 16
+        static let scoreTableTrailing: CGFloat = -16
+        static let scoreTableBottom: CGFloat = -13
     }
 }
 

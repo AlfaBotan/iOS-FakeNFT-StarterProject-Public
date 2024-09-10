@@ -52,10 +52,10 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
     
     func addConstraints() {
         NSLayoutConstraint.activate([
-            userCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            userCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            userCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            userCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            userCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Layout.topSpacing),
+            userCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.leading),
+            userCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.Layout.trailing),
+            userCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: Constants.Layout.bottomSpacing)
         ])
     }
     
@@ -111,4 +111,13 @@ extension UserCollectionViewController: UICollectionViewDataSource {
 
 extension UserCollectionViewController: UICollectionViewDelegate {
     // TODO: Реализовать в следующем спринте
+}
+
+private enum Constants {
+    enum Layout {
+        static let leading: CGFloat = 16
+        static let trailing: CGFloat = -16
+        static let topSpacing: CGFloat = 0
+        static let bottomSpacing: CGFloat = 0
+    }
 }

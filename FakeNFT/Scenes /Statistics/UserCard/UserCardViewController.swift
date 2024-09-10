@@ -137,28 +137,28 @@ final class UserCardViewController: UIViewController, ViewSetupable {
     
     func addConstraints() {
         NSLayoutConstraint.activate([
-            userPick.widthAnchor.constraint(equalToConstant: 70),
+            userPick.widthAnchor.constraint(equalToConstant: Constants.Layout.userPickSize),
             userPick.heightAnchor.constraint(equalTo: userPick.widthAnchor),
-            userPick.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            userPick.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            userPick.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Layout.topSpacing),
+            userPick.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.leading),
             
             userName.centerYAnchor.constraint(equalTo: userPick.centerYAnchor),
-            userName.leadingAnchor.constraint(equalTo: userPick.trailingAnchor, constant: 16),
-            userName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            userName.leadingAnchor.constraint(equalTo: userPick.trailingAnchor, constant: Constants.Layout.leading),
+            userName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.Layout.trailing),
             
-            userBio.topAnchor.constraint(equalTo: userPick.bottomAnchor, constant: 20),
-            userBio.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            userBio.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            userBio.topAnchor.constraint(equalTo: userPick.bottomAnchor, constant: Constants.Layout.topSpacing),
+            userBio.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.leading),
+            userBio.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.Layout.trailing),
             
-            siteButton.topAnchor.constraint(equalTo: userBio.bottomAnchor, constant: 28),
-            siteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            siteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            siteButton.heightAnchor.constraint(equalToConstant: 40),
+            siteButton.topAnchor.constraint(equalTo: userBio.bottomAnchor, constant: Constants.Layout.userBioSpacing),
+            siteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.leading),
+            siteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.Layout.trailing),
+            siteButton.heightAnchor.constraint(equalToConstant: Constants.Layout.buttonHeight),
             
-            stackView.topAnchor.constraint(equalTo: siteButton.bottomAnchor, constant: 40),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            stackView.heightAnchor.constraint(equalToConstant: 54),
+            stackView.topAnchor.constraint(equalTo: siteButton.bottomAnchor, constant: Constants.Layout.stackViewTopSpacing),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.leading),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Constants.Layout.trailing),
+            stackView.heightAnchor.constraint(equalToConstant: Constants.Layout.stackViewHeight),
             
             collectionButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             collectionButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
@@ -193,5 +193,19 @@ final class UserCardViewController: UIViewController, ViewSetupable {
         userName.text = viewModel.user.name
         userBio.text = viewModel.user.bio
         collectionTitleLabel.text = "\(Strings.Statistics.collectionNft) (\(viewModel.user.score))"
+    }
+}
+
+private enum Constants {
+    enum Layout {
+        static let leading: CGFloat = 16
+        static let trailing: CGFloat = -16
+        static let topSpacing: CGFloat = 20
+        static let buttonHeight: CGFloat = 40
+        static let stackViewHeight: CGFloat = 54
+        static let collectionButtonHeight: CGFloat = stackViewHeight
+        static let userPickSize: CGFloat = 70
+        static let userBioSpacing: CGFloat = 28
+        static let stackViewTopSpacing: CGFloat = 40
     }
 }
