@@ -8,8 +8,11 @@
 import UIKit
 
 final class UserCardViewController: UIViewController, ViewSetupable {
+
+    // MARK: - Public Properties
     var viewModel: UserCardViewModelProtocol
     
+    // MARK: - Private Properties
     private lazy var userPick: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
@@ -85,6 +88,7 @@ final class UserCardViewController: UIViewController, ViewSetupable {
         return stack
     }()
     
+    // MARK: - Initializers
     init(viewModel: UserCardViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -99,6 +103,7 @@ final class UserCardViewController: UIViewController, ViewSetupable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Overrides Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -118,12 +123,9 @@ final class UserCardViewController: UIViewController, ViewSetupable {
         }
     }
     
-    func configureView() {
-        view.backgroundColor = .systemBackground
-    }
-    
+    // MARK: - Public Methods
     func addSubviews() {
-        [userPick, 
+        [userPick,
          userName,
          userBio,
          siteButton,
@@ -165,6 +167,11 @@ final class UserCardViewController: UIViewController, ViewSetupable {
         ])
     }
     
+    // MARK: - Private Methods
+    private func configureView() {
+        view.backgroundColor = .systemBackground
+    }
+
     @objc private func updateButtonAppearance() {
         // Обновляем цвет границы при смене темы
         if let button = view.subviews.first(where: { $0 is UIButton }) as? UIButton {

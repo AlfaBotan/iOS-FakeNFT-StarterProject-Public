@@ -8,7 +8,8 @@
 import UIKit
 
 final class UserCollectionViewController: UIViewController, ViewSetupable {
-    
+
+    // MARK: - Private Properties
     private var viewModel: UserCollectionViewModelProtocol
     
     private lazy var userCollectionView: UICollectionView = {
@@ -20,6 +21,7 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
         return collection
     }()
     
+    // MARK: - Initializers
     init(viewModel: UserCollectionViewModelProtocol = UserCollectionViewModel()) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -29,6 +31,7 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Overrides Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,6 +45,7 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
         viewModel.loadNFTs()
     }
     
+    // MARK: - Public Methods
     func addSubviews() {
         view.addSubview(userCollectionView)
     }
@@ -55,6 +59,7 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
         ])
     }
     
+    // MARK: - Private Methods
     private func setupBindings() {
         viewModel.onDataChanged = { [weak self] in
             self?.userCollectionView.reloadData()

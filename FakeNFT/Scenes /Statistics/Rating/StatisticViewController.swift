@@ -2,8 +2,10 @@ import UIKit
 
 final class StatisticViewController: UIViewController, ViewSetupable {
     
+    // MARK: - Public Properties
     var viewModel: StatisticViewModelProtocol
     
+    // MARK: - Private Properties
     private lazy var sortButton: UIButton = {
         let button = UIButton(type: .custom)
         let image = Images.Common.sortBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
@@ -24,6 +26,7 @@ final class StatisticViewController: UIViewController, ViewSetupable {
         return table
     }()
     
+    // MARK: - Initializers
     init(viewModel: StatisticViewModelProtocol = StatisticViewModel()) {
         self.viewModel = viewModel
         
@@ -34,6 +37,7 @@ final class StatisticViewController: UIViewController, ViewSetupable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Overrides Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,7 +61,8 @@ final class StatisticViewController: UIViewController, ViewSetupable {
         
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
-    
+
+    // MARK: - Public Methods
     func addSubviews() {
         view.addSubview(sortButton)
         view.addSubview(scoreTable)
@@ -78,6 +83,7 @@ final class StatisticViewController: UIViewController, ViewSetupable {
         ])
     }
     
+    // MARK: - Private Methods
     private func configureView() {
         view.backgroundColor = .systemBackground
     }
@@ -97,7 +103,7 @@ final class StatisticViewController: UIViewController, ViewSetupable {
     private func setupTable() {
         scoreTable.delegate = self
         scoreTable.dataSource = self
-        scoreTable.register(StatisticsUserTableViewCell.self, 
+        scoreTable.register(StatisticsUserTableViewCell.self,
                             forCellReuseIdentifier: StatisticsUserTableViewCell.reuseIdentifier)
     }
     
@@ -125,8 +131,7 @@ final class StatisticViewController: UIViewController, ViewSetupable {
         alert.addAction(rating)
         alert.addAction(close)
         
-        present(alert, animated: true)
-        
+        present(alert, animated: true)   
     }
 }
 
