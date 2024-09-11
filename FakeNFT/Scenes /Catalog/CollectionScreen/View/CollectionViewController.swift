@@ -11,7 +11,6 @@ final class CollectionViewController: UIViewController {
     
     private let viewModel = CollectionViewModel()
     
-    
     private lazy var topImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -41,11 +40,19 @@ final class CollectionViewController: UIViewController {
         return lable
     }()
     
-    private lazy var secondAuthorLable: UILabel = {
-        let lable = UILabel()
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        lable.font = .caption1
-        return lable
+    private lazy var urlButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let font = UIFont.caption1
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: UIColor.systemBlue
+        ]
+        let attributedTitle = NSAttributedString(string: "", attributes: attributes)
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.addTarget(self, action: #selector(goToAuthorURL), for: .touchUpInside)
+        button.contentHorizontalAlignment = .left
+        return button
     }()
     
     private lazy var descriptionLable: UILabel = {
@@ -69,6 +76,7 @@ final class CollectionViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         addSubviews()
+        configureNavBar()
         addConstraints()
         loadData()
     }
@@ -81,23 +89,35 @@ final class CollectionViewController: UIViewController {
         }
     }
     
+    private func configureNavBar() {
+         let backButton = UIBarButtonItem(
+             image: UIImage(named: "backward"),
+             style: .plain,
+             target: self,
+             action: #selector(backButtonTapped)
+         )
+         backButton.tintColor = .black
+         navigationItem.leftBarButtonItem = backButton
+     }
+     
+     @objc private func backButtonTapped() {
+         navigationController?.popViewController(animated: true)
+     }
+ 
+    
     private func addSubviews() {
-        let closeButton = UIBarButtonItem(image: Images.Common.backBtn, style: .done, target: self, action: #selector(dismissViewController))
-        closeButton.tintColor = .segmentActive
-        navigationItem.leftBarButtonItem = closeButton
-        
         view.addSubview(topImage)
         view.addSubview(topView)
         topView.addSubview(nameLable)
         topView.addSubview(firstAuthorLable)
-        topView.addSubview(secondAuthorLable)
+        topView.addSubview(urlButton)
         view.addSubview(descriptionLable)
         view.addSubview(collectionView)
         
         topImage.image = UIImage(named: "peachMaxi")
         nameLable.text = "Peach"
+        urlButton.setTitle("John Doe", for: .normal)
         firstAuthorLable.text = Strings.Catalog.collectionAuthor
-        secondAuthorLable.text = "John Doe"
         descriptionLable.text = "Персиковый — как облака над закатным солнцем в океане. В этой коллекции совмещены трогательная нежность и живая игривость сказочных зефирных зверей."
     }
     
@@ -123,10 +143,10 @@ final class CollectionViewController: UIViewController {
             firstAuthorLable.widthAnchor.constraint(equalToConstant: 115),
             firstAuthorLable.heightAnchor.constraint(equalToConstant: 18),
             
-            secondAuthorLable.leadingAnchor.constraint(equalTo: firstAuthorLable.trailingAnchor, constant: 4),
-            secondAuthorLable.heightAnchor.constraint(equalToConstant: 28),
-            secondAuthorLable.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
-            secondAuthorLable.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -16),
+            urlButton.leadingAnchor.constraint(equalTo: firstAuthorLable.trailingAnchor, constant: 4),
+            urlButton.heightAnchor.constraint(equalToConstant: 28),
+            urlButton.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
+            urlButton.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -16),
             
             descriptionLable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             descriptionLable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -143,6 +163,10 @@ final class CollectionViewController: UIViewController {
     @objc func dismissViewController() {
         dismiss(animated: true, completion: nil)
     }
+    
+    @objc func goToAuthorURL() {
+        
+    }
 }
 
 extension CollectionViewController: UICollectionViewDelegate {
@@ -155,7 +179,8 @@ extension CollectionViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCellForCollectionView.reuseIdentifier, for: indexPath) as? NFTCellForCollectionView
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCellForCollectionView.reuseIdentifier,
+                                                            for: indexPath) as? NFTCellForCollectionView
         else {
             print("Не прошёл каст")
             return UICollectionViewCell()

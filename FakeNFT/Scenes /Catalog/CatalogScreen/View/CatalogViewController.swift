@@ -18,6 +18,7 @@ final class CatalogViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(CatalogTableViewCell.self, forCellReuseIdentifier: CatalogTableViewCell.identifer)
+        tableView.separatorStyle = .none
         return tableView
     }()
     
@@ -77,13 +78,14 @@ final class CatalogViewController: UIViewController {
 }
 
 extension CatalogViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let collectionVC = CollectionViewController()
-        
-        let navController = UINavigationController(rootViewController: collectionVC)
-        navController.modalPresentationStyle = .fullScreen
-        
-        present(navController, animated: true, completion: nil)
+           let collectionVC = CollectionViewController()
+           navigationController?.pushViewController(collectionVC, animated: true)
+       }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 187
     }
 }
 
@@ -102,8 +104,6 @@ extension CatalogViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         return cell
     }
-    
-    
 }
 
 private enum Constants {
