@@ -13,9 +13,6 @@ class CatalogViewModel {
     func fetchCollections(completion: @escaping () -> Void) {
         // Здесь будет запрос к сервису для загрузки данных
         // После загрузки данных обновим массив collections
-        DispatchQueue.main.async {
-            
-        }
         guard let image = UIImage(named: "peachMini") else {return}
         collections = [NFTRowModel(image: image, name: "Peach", count: 11),
                        NFTRowModel(image: image, name: "Peach", count: 11),

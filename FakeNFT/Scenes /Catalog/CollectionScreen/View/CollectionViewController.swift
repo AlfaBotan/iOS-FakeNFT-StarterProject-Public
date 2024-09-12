@@ -11,6 +11,20 @@ final class CollectionViewController: UIViewController {
     
     private let viewModel = CollectionViewModel()
     
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.alwaysBounceVertical = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.contentInsetAdjustmentBehavior = .never
+        return scrollView
+    }()
+    
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var topImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -63,12 +77,14 @@ final class CollectionViewController: UIViewController {
         return lable
     }()
     
+    private var collectionViewHeightConstraint: NSLayoutConstraint?
     private lazy var collectionView: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.delegate = self
         collection.dataSource = self
         collection.register(NFTCellForCollectionView.self, forCellWithReuseIdentifier: NFTCellForCollectionView.reuseIdentifier)
+        collection.isScrollEnabled = false
         return collection
     }()
     
@@ -85,11 +101,17 @@ final class CollectionViewController: UIViewController {
         viewModel.fetchCollections {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
+                self.updateCollectionViewHeight()
             }
         }
     }
     
     private func configureNavBar() {
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+           navigationController?.navigationBar.shadowImage = UIImage()
+           navigationController?.navigationBar.isTranslucent = true
+           navigationController?.view.backgroundColor = .clear
+        
          let backButton = UIBarButtonItem(
              image: UIImage(named: "backward"),
              style: .plain,
@@ -106,13 +128,17 @@ final class CollectionViewController: UIViewController {
  
     
     private func addSubviews() {
-        view.addSubview(topImage)
-        view.addSubview(topView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        
+        contentView.addSubview(topImage)
+        contentView.addSubview(topView)
         topView.addSubview(nameLable)
         topView.addSubview(firstAuthorLable)
         topView.addSubview(urlButton)
-        view.addSubview(descriptionLable)
-        view.addSubview(collectionView)
+        contentView.addSubview(descriptionLable)
+        contentView.addSubview(collectionView)
         
         topImage.image = UIImage(named: "peachMaxi")
         nameLable.text = "Peach"
@@ -123,9 +149,20 @@ final class CollectionViewController: UIViewController {
     
     private func addConstraints() {
         NSLayoutConstraint.activate([
-            topImage.topAnchor.constraint(equalTo: view.topAnchor),
-            topImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            topImage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            
+            topImage.topAnchor.constraint(equalTo: contentView.topAnchor),
+            topImage.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor),
+            topImage.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor),
             topImage.heightAnchor.constraint(equalToConstant: 310),
             
             topView.topAnchor.constraint(equalTo: topImage.bottomAnchor, constant: 16),
@@ -148,16 +185,29 @@ final class CollectionViewController: UIViewController {
             urlButton.bottomAnchor.constraint(equalTo: topView.bottomAnchor),
             urlButton.trailingAnchor.constraint(equalTo: topView.trailingAnchor, constant: -16),
             
-            descriptionLable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            descriptionLable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            descriptionLable.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            descriptionLable.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             descriptionLable.topAnchor.constraint(equalTo: topView.bottomAnchor),
             descriptionLable.heightAnchor.constraint(equalToConstant: 72),
             
             collectionView.topAnchor.constraint(equalTo: descriptionLable.bottomAnchor, constant: 16),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
+        
+        collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 800)
+        collectionViewHeightConstraint?.isActive = true
+    }
+    
+    func updateCollectionViewHeight() {
+        let numberOfItems = collectionView.numberOfItems(inSection: 0)
+        let rows = CGFloat((numberOfItems / 3) + (numberOfItems % 3 == 0 ? 0 : 1))
+        let itemHeight: CGFloat = 192
+        let verticalSpacing: CGFloat = 8
+        
+        let totalHeight = rows * itemHeight + (rows - 1) * verticalSpacing
+        collectionViewHeightConstraint?.constant = totalHeight
     }
     
     @objc func dismissViewController() {
