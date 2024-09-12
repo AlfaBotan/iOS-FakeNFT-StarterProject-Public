@@ -2,7 +2,7 @@ import UIKit
 
 final class CatalogViewController: UIViewController {
     
-    private let viewModel = CatalogViewModel()
+    private let viewModel: CatalogViewModelProtocol
     
     private lazy var NFTTableView: UITableView = {
         let tableView = UITableView(frame: .zero)
@@ -14,7 +14,8 @@ final class CatalogViewController: UIViewController {
         return tableView
     }()
     
-    init(servicesAssembly: ServicesAssembly) {
+    init(servicesAssembly: ServicesAssembly, viewModel: CatalogViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -78,7 +79,8 @@ final class CatalogViewController: UIViewController {
 extension CatalogViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-           let collectionVC = CollectionViewController()
+        let viewModelForCollectionVC = CollectionViewModel()
+        let collectionVC = CollectionViewController(viewModel: viewModelForCollectionVC)
            navigationController?.pushViewController(collectionVC, animated: true)
        }
     

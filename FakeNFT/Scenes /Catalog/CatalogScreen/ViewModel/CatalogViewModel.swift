@@ -7,7 +7,13 @@
 
 import UIKit
 
-class CatalogViewModel {
+protocol CatalogViewModelProtocol: AnyObject {
+    func fetchCollections(completion: @escaping () -> Void)
+    func numberOfCollections() -> Int
+    func collection(at index: Int) -> NFTRowModel
+}
+
+class CatalogViewModel: CatalogViewModelProtocol {
     private var collections: [NFTRowModel] = []
     
     func fetchCollections(completion: @escaping () -> Void) {
@@ -30,3 +36,4 @@ class CatalogViewModel {
         return collections[index]
     }
 }
+

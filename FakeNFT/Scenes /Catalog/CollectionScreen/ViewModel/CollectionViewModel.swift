@@ -7,7 +7,13 @@
 
 import UIKit
 
-final class CollectionViewModel {
+protocol CollectionViewModelProtocol: AnyObject {
+    func fetchCollections(completion: @escaping () -> Void)
+    func numberOfCollections() -> Int
+    func collection(at index: Int) -> NFTCellModel
+}
+
+final class CollectionViewModel: CollectionViewModelProtocol {
     private var collections: [NFTCellModel] = []
     
     func fetchCollections(completion: @escaping () -> Void) {
