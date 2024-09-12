@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class UserCardViewController: UIViewController, ViewSetupable {
+final class UserCardViewController: UIViewController {
 
     // MARK: - Public Properties
     var viewModel: UserCardViewModelProtocol
@@ -123,8 +123,8 @@ final class UserCardViewController: UIViewController, ViewSetupable {
         }
     }
     
-    // MARK: - Public Methods
-    func addSubviews() {
+    // MARK: - Private Methods
+    private func addSubviews() {
         [userPick,
          userName,
          userBio,
@@ -135,7 +135,7 @@ final class UserCardViewController: UIViewController, ViewSetupable {
         }
     }
     
-    func addConstraints() {
+    private func addConstraints() {
         NSLayoutConstraint.activate([
             userPick.widthAnchor.constraint(equalToConstant: Constants.Layout.userPickSize),
             userPick.heightAnchor.constraint(equalTo: userPick.widthAnchor),
@@ -167,7 +167,6 @@ final class UserCardViewController: UIViewController, ViewSetupable {
         ])
     }
     
-    // MARK: - Private Methods
     private func configureView() {
         view.backgroundColor = .systemBackground
     }

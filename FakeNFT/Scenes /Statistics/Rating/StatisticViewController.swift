@@ -1,6 +1,6 @@
 import UIKit
 
-final class StatisticViewController: UIViewController, ViewSetupable {
+final class StatisticViewController: UIViewController {
     
     // MARK: - Public Properties
     var viewModel: StatisticViewModelProtocol
@@ -61,14 +61,14 @@ final class StatisticViewController: UIViewController, ViewSetupable {
         
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
-
-    // MARK: - Public Methods
-    func addSubviews() {
+    
+    // MARK: - Private Methods
+    private func addSubviews() {
         view.addSubview(sortButton)
         view.addSubview(scoreTable)
     }
     
-    func addConstraints() {
+    private func addConstraints() {
         NSLayoutConstraint.activate([
             sortButton.widthAnchor.constraint(equalToConstant: Constants.Layout.sortButtonWidth),
             sortButton.heightAnchor.constraint(equalTo: sortButton.widthAnchor),
@@ -82,7 +82,6 @@ final class StatisticViewController: UIViewController, ViewSetupable {
         ])
     }
     
-    // MARK: - Private Methods
     private func configureView() {
         view.backgroundColor = .systemBackground
     }

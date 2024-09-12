@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class UserCollectionViewController: UIViewController, ViewSetupable {
+final class UserCollectionViewController: UIViewController {
 
     // MARK: - Private Properties
     private var viewModel: UserCollectionViewModelProtocol
@@ -45,12 +45,12 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
         viewModel.loadNFTs()
     }
     
-    // MARK: - Public Methods
-    func addSubviews() {
+    // MARK: - Private Methods
+    private func addSubviews() {
         view.addSubview(userCollectionView)
     }
     
-    func addConstraints() {
+    private func addConstraints() {
         NSLayoutConstraint.activate([
             userCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Layout.topSpacing),
             userCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.leading),
@@ -59,7 +59,6 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
         ])
     }
     
-    // MARK: - Private Methods
     private func setupBindings() {
         viewModel.onDataChanged = { [weak self] in
             self?.userCollectionView.reloadData()
