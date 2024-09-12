@@ -8,18 +8,18 @@
 import UIKit
 
 protocol UserCardViewModelProtocol {
-    var user: UserStatistics { get }
+    var user: User { get }
     var didTapCollectionButton: (() -> Void)? { get set }
     
     func tapCollectionButton()
 }
 
 final class UserCardViewModel: UserCardViewModelProtocol {
-    var user: UserStatistics
+    var user: User
     
     var didTapCollectionButton: (() -> Void)?
     
-    init(user: UserStatistics) {
+    init(user: User) {
         self.user = user
     }
     

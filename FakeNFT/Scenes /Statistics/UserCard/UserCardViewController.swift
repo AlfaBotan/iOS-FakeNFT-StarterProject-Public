@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import WebKit
+import Kingfisher
 
 final class UserCardViewController: UIViewController {
 
@@ -49,6 +51,7 @@ final class UserCardViewController: UIViewController {
         button.layer.borderColor = UIColor.segmentActive.cgColor
         button.layer.cornerRadius = 16
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(openUserWebsite), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -170,6 +173,14 @@ final class UserCardViewController: UIViewController {
     private func configureView() {
         view.backgroundColor = .systemBackground
     }
+    
+    @objc private func openUserWebsite() {
+        guard let url = URL(string: viewModel.user.website) else { return }
+        
+        let webViewVC = UserCardWebViewController(url: url)
+        navigationController?.pushViewController(webViewVC, animated: true)
+    }
+
 
     @objc private func updateButtonAppearance() {
         // Обновляем цвет границы при смене темы
@@ -188,10 +199,16 @@ final class UserCardViewController: UIViewController {
     }
     
     private func configure() {
-        userPick.image = viewModel.user.avatarImage
+        userPick.kf.setImage(
+            with: URL(string: viewModel.user.avatar),
+            placeholder: UIImage(named: "profile"),
+            options: [
+                .transition(.fade(0.2))
+            ]
+        )
         userName.text = viewModel.user.name
-        userBio.text = viewModel.user.bio
-        collectionTitleLabel.text = "\(Strings.Statistics.collectionNft) (\(viewModel.user.score))"
+        userBio.text = viewModel.user.description
+        collectionTitleLabel.text = "\(Strings.Statistics.collectionNft) (\(viewModel.user.rating))"
     }
 }
 

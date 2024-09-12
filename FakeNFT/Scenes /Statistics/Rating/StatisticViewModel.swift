@@ -10,7 +10,7 @@ import Foundation
 protocol StatisticViewModelProtocol: AnyObject {
     var reloadTableView: (() -> Void)? { get set }
     var showSortActionSheet: (() -> Void)? { get set }
-    var users: [UserStatistics] { get }
+    var users: Users { get }
     
     func loadMockData()
     func sortByName()
@@ -23,7 +23,7 @@ final class StatisticViewModel: StatisticViewModelProtocol {
     
     var showSortActionSheet: (() -> Void)?
     
-    private(set) var users: [UserStatistics] = []
+    private(set) var users: Users = []
     
     private var isSortByRating: Bool {
         // TODO: нужно будет разобраться: раз в несколько запусков сохранение порядка не срабатывает(
@@ -61,7 +61,7 @@ final class StatisticViewModel: StatisticViewModelProtocol {
     
     func sortByRating() {
         isSortByRating = true
-        users.sort { $0.score > $1.score }
+        users.sort { $0.rating > $1.rating }
         reloadTableView?()
     }
     
