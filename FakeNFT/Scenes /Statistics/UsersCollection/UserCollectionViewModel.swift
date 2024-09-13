@@ -6,9 +6,10 @@
 //
 
 import UIKit
-import Kingfisher
+import ProgressHUD
 
 protocol UserCollectionViewModelProtocol {
+    var userNFTs: [String] { get }
     var nftService: NftService { get }
     var numberOfItems: Int { get }
     var onDataChanged: (() -> Void)? { get set }
@@ -18,23 +19,29 @@ protocol UserCollectionViewModelProtocol {
 }
 
 final class UserCollectionViewModel: UserCollectionViewModelProtocol {
+    
     var nftService: NftService
+    var userNFTs: [String]
     
     var numberOfItems: Int {
         return nfts.count
     }
     var onDataChanged: (() -> Void)?
     
-    init(nftService: NftService = NftServiceImpl(networkClient: DefaultNetworkClient(),
+    init(userNFTs: [String],
+         nftService: NftService = NftServiceImpl(networkClient: DefaultNetworkClient(),
                                                  storage: NftStorageImpl())) {
+        self.userNFTs = userNFTs
         self.nftService = nftService
+        print(userNFTs)
     }
     
-    private var nfts: [NFTCellModel] = [] {
-        didSet {
-            onDataChanged?()
-        }
-    }
+    private var nfts: [NFTCellModel] = []
+    //    private var nfts: [NFTCellModel] = [] {
+    //        didSet {
+    //            onDataChanged?()
+    //        }
+    //    }
     
     func item(at indexPath: IndexPath) -> NFTCellModel? {
         guard indexPath.row < nfts.count else { return nil }
@@ -42,32 +49,45 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
     }
     
     func loadNFTs() {
-        // TODO: Заменить на актуальные данные после создания сервиса
-//        let mockNFTs = (1...15).map { _ in
-//            NFTCellModel(image: UIImage(named:"mockNFT") ?? UIImage(),
-//                         rating: 3,
-//                         name: "Archie",
-//                         cost: 1.78)
-//        }
-        nftService.loadNfts(page: 1, size: 10) { result in
-            switch result {
-            case .success(let nfts):
-                let mockNFTS = nfts.map { nft in
-                    NFTCellModel(image: UIImage(named: "mockNFT") ?? UIImage(), 
-                                 rating: nft.rating,
-                                 name: nft.name,
-                                 cost: nft.price)
+        
+        if userNFTs.count == 0 {
+            return
+        }
+        
+        ProgressHUD.show()
+        var nftsFromNetwork: [NFTCellModel] = []
+        let dispatchGroup = DispatchGroup()
+        
+        for userNFT in userNFTs {
+            dispatchGroup.enter()
+            nftService.loadNft(id: userNFT) { result in
+                switch result {
+                case .success(let nft):
+                    let nftCellModel = NFTCellModel(
+                        image: UIImage(named: "mockNFT") ?? UIImage(),
+                        rating: nft.rating,
+                        name: nft.name.components(separatedBy: " ")[0],
+                        cost: nft.price
+                    )
+                    nftsFromNetwork.append(nftCellModel)
+                    
+                case .failure(let error):
+                    print("Failed to load NFT with id \(userNFT): \(error.localizedDescription)")
                 }
-                self.nfts = mockNFTS
-            case .failure(let error):
-                print("Localized Description: \(error.localizedDescription)")
-                if let error = error as? NSError {
-                    print("Domain: \(error.domain)")
-                    print("Code: \(error.code)")
-                    print("User Info: \(error.userInfo)")
-                }
+                ProgressHUD.dismiss()
+                dispatchGroup.leave()
             }
         }
         
+        dispatchGroup.notify(queue: .main) {
+            self.nfts = nftsFromNetwork
+            if !self.nfts.isEmpty {
+                self.onDataChanged?()
+            } else {
+                // Можно вывести сообщение, что данные не загружены
+                print("No NFTs loaded.")
+            }
+        }
     }
+    
 }

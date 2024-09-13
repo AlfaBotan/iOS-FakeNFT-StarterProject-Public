@@ -30,10 +30,10 @@ final class NftServiceImpl: NftService {
     }
 
     func loadNft(id: String, completion: @escaping NftCompletion) {
-        if let nft = storage.getNft(with: id) {
-            completion(.success(nft))
-            return
-        }
+//        if let nft = storage.getNft(with: id) {
+//            completion(.success(nft))
+//            return
+//        }
 
         let request = NFTRequest(id: id)
         networkClient.send(request: request, type: Nft.self) { [weak storage] result in

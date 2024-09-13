@@ -97,7 +97,8 @@ final class UserCardViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.viewModel.didTapCollectionButton = { [weak self] in
-            let userCollectionVC = UserCollectionViewController()
+            let userCollectionVM = UserCollectionViewModel(userNFTs: viewModel.user.nfts)
+            let userCollectionVC = UserCollectionViewController(viewModel: userCollectionVM)
             self?.navigationController?.pushViewController(userCollectionVC, animated: true)
         }
     }
@@ -183,7 +184,6 @@ final class UserCardViewController: UIViewController {
 
 
     @objc private func updateButtonAppearance() {
-        // Обновляем цвет границы при смене темы
         if let button = view.subviews.first(where: { $0 is UIButton }) as? UIButton {
             button.layer.borderColor = UIColor.segmentActive.cgColor
         }
@@ -208,7 +208,7 @@ final class UserCardViewController: UIViewController {
         )
         userName.text = viewModel.user.name
         userBio.text = viewModel.user.description
-        collectionTitleLabel.text = "\(Strings.Statistics.collectionNft) (\(viewModel.user.rating))"
+        collectionTitleLabel.text = "\(Strings.Statistics.collectionNft) (\(viewModel.user.nfts.count))"
     }
 }
 

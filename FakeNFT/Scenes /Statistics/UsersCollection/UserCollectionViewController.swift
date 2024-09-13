@@ -22,7 +22,7 @@ final class UserCollectionViewController: UIViewController {
     }()
     
     // MARK: - Initializers
-    init(viewModel: UserCollectionViewModelProtocol = UserCollectionViewModel()) {
+    init(viewModel: UserCollectionViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -35,14 +35,14 @@ final class UserCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.loadNFTs()
+        
         addSubviews()
         addConstraints()
         configureView()
         
         setupCollection()
         setupBindings()
-        
-        viewModel.loadNFTs()
     }
     
     // MARK: - Private Methods
@@ -71,7 +71,8 @@ final class UserCollectionViewController: UIViewController {
     }
     
     private func setupCollection() {
-        userCollectionView.register(NFTCollectionViewCell.self, forCellWithReuseIdentifier: NFTCollectionViewCell.reuseIdentifier)
+        userCollectionView.register(NFTCollectionViewCell.self, 
+                                    forCellWithReuseIdentifier: NFTCollectionViewCell.reuseIdentifier)
         userCollectionView.dataSource = self
         userCollectionView.delegate = self
     }
