@@ -64,7 +64,7 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
                 switch result {
                 case .success(let nft):
                     let nftCellModel = NFTCellModel(
-                        image: UIImage(named: "mockNFT") ?? UIImage(),
+                        imageURL: nft.images[0],
                         rating: nft.rating,
                         name: nft.name.components(separatedBy: " ")[0],
                         cost: nft.price

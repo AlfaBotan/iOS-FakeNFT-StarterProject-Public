@@ -8,7 +8,7 @@
 import UIKit
 
 struct NFTCellModel {
-    let image: UIImage
+    let imageURL: URL
     let rating: Int
     let name: String
     let cost: Float

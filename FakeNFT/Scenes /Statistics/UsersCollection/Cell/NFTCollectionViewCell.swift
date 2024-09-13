@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class NFTCollectionViewCell: UICollectionViewCell {
     
@@ -74,7 +75,16 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     
     func configure(nft: NFTCellModel) {
         nameLabel.text = nft.name
-        nftImageView.image = nft.image
+        nftImageView.kf.indicatorType = .activity
+        nftImageView.kf.setImage(
+            with: nft.imageURL,
+            placeholder: UIImage(named: "mockNFT"),
+            options: [
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ]
+        )
         ethLabel.text = "\(nft.cost) \(Strings.Common.eth)"
         updateRating(nft.rating)
     }
