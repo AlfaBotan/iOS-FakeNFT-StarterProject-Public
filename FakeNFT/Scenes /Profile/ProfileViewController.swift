@@ -174,8 +174,10 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func editButtonTapped() {
-        // Обработка нажатия на кнопку
-        print("Edit button tapped")
+        let editProfileVC = EditProfileViewController()
+        editProfileVC.viewModel = viewModel
+        editProfileVC.modalPresentationStyle = .formSheet
+        present(editProfileVC, animated: true, completion: nil)
     }
 }
 
