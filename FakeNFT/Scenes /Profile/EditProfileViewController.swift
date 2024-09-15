@@ -16,6 +16,19 @@ final class EditProfileViewController: UIViewController {
         return imageView
     }()
     
+    private lazy var loadImageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Загрузить изображение"
+        label.textAlignment = .center
+        label.font = .bodyRegular
+        label.textColor = .black
+        label.isUserInteractionEnabled = true
+        label.isHidden = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(loadImageTapped))
+        label.addGestureRecognizer(tapGesture)
+        return label
+    }()
+    
     private lazy var overlayLabel: UILabel = {
         let label = UILabel()
         label.text = "Сменить \nфото"
@@ -128,6 +141,7 @@ final class EditProfileViewController: UIViewController {
     private func setupViews() {
         view.addSubview(avatarImageView)
         view.addSubview(overlayLabel)
+        view.addSubview(loadImageLabel)
         view.addSubview(nameLabel)
         view.addSubview(nameTextField)
         view.addSubview(descriptionLabel)
@@ -139,6 +153,7 @@ final class EditProfileViewController: UIViewController {
         // Устанавливаем констрейнты
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         overlayLabel.translatesAutoresizingMaskIntoConstraints = false
+        loadImageLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -153,6 +168,12 @@ final class EditProfileViewController: UIViewController {
             avatarImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             avatarImageView.widthAnchor.constraint(equalToConstant: 70),
             avatarImageView.heightAnchor.constraint(equalToConstant: 70),
+            
+            // Лейбл под аватаркой
+            loadImageLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 11),
+            loadImageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 78),
+            loadImageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -79),
+            loadImageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             // Констрейнты для darkOverlay
             darkOverlay.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
@@ -208,7 +229,37 @@ final class EditProfileViewController: UIViewController {
     }
     
     @objc private func changePhotoTapped() {
-        print("Change photo tapped")
+        if loadImageLabel.isHidden {
+            loadImageLabel.isHidden = false
+        }
+    }
+    
+    @objc private func loadImageTapped() {
+        let alertController = UIAlertController(title: "Enter Image URL", message: nil, preferredStyle: .alert)
+        
+        alertController.addTextField { textField in
+            textField.placeholder = "Enter image URL"
+        }
+        
+        let doneAction = UIAlertAction(title: "Done", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            if let imageURL = alertController.textFields?.first?.text, !imageURL.isEmpty {
+                // Сохраняем URL в UserDefaults
+                UserDefaults.standard.set(imageURL, forKey: "profileImageURL")
+                print("Image URL saved: \(imageURL)")
+            }
+            // Скрываем loadImageLabel после нажатия "Done"
+            self.loadImageLabel.isHidden = true
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
+            self?.loadImageLabel.isHidden = true
+        }
+        
+        alertController.addAction(doneAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     @objc private func closeButtonTapped() {
