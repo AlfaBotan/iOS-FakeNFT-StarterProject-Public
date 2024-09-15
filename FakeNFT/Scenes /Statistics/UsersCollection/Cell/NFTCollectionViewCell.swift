@@ -12,6 +12,9 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "NFTCollectionViewCell"
     
+    private var isLiked: Bool = false
+    private var inCart: Bool = false
+    
     private lazy var nftImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
@@ -41,6 +44,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         let button = UIButton(type: .custom)
         let image = Images.Common.favoriteInactive ?? UIImage()
         button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(tapLikeButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -49,6 +53,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         let button = UIButton(type: .custom)
         let image = Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(tapCartButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -74,6 +79,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(nft: NFTCellModel) {
+        // TODO: Добавить индикатор загрузки изображений
         nameLabel.text = nft.name
         nftImageView.kf.indicatorType = .activity
         nftImageView.kf.setImage(
@@ -87,6 +93,30 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         )
         ethLabel.text = "\(nft.cost) \(Strings.Common.eth)"
         updateRating(nft.rating)
+    }
+    
+    @objc func tapLikeButton() {
+        changeLikeStatus()
+        // TODO: Добавить отправку лайка по сети, после реализации сервиса
+    }
+    
+    @objc func tapCartButton() {
+        changeCartStatus()
+        // TODO: Добавить отправку NFT в корзину, после реализации сервиса
+    }
+    
+    private func changeLikeStatus() {
+        isLiked = !isLiked
+        let favoriteImage = isLiked ? Images.Common.favoriteActive : Images.Common.favoriteInactive
+        favoriteButton.setImage(favoriteImage ?? UIImage(), for: .normal)
+    }
+    
+    private func changeCartStatus() {
+        inCart = !inCart
+        let cartImage = inCart ? Images.Common.deleteCartBtn : Images.Common.addCartBtn
+        cartImage?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
+        
+        cartButton.setImage(cartImage ?? UIImage(), for: .normal)
     }
     
     private func updateRating(_ rating: Int) {
