@@ -49,16 +49,12 @@ final class EditProfileViewController: UIViewController {
         textField.backgroundColor = .segmentInactive
         textField.layer.cornerRadius = 10
         textField.clipsToBounds = true
-        
-        // Настройка правого вида для кнопки крестика
         textField.rightView = createClearButton()
         textField.rightViewMode = .whileEditing
         
-        // Добавляем отступы для текста
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = paddingView
         textField.leftViewMode = .always
-        
         return textField
     }()
     
@@ -123,7 +119,6 @@ final class EditProfileViewController: UIViewController {
         let clearImage = UIImage(systemName: "xmark.circle.fill")
         button.setImage(clearImage, for: .normal)
         button.tintColor = .lightGray
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.widthAnchor.constraint(equalToConstant: 17).isActive = true
         button.heightAnchor.constraint(equalToConstant: 17).isActive = true
         button.addTarget(self, action: #selector(clearTextFieldTapped), for: .touchUpInside)
@@ -159,7 +154,7 @@ final class EditProfileViewController: UIViewController {
             avatarImageView.widthAnchor.constraint(equalToConstant: 70),
             avatarImageView.heightAnchor.constraint(equalToConstant: 70),
             
-            // Констрейнты для darkOverlay, чтобы он покрыл avatarImageView
+            // Констрейнты для darkOverlay
             darkOverlay.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             darkOverlay.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor),
             darkOverlay.topAnchor.constraint(equalTo: avatarImageView.topAnchor),
@@ -232,9 +227,7 @@ final class EditProfileViewController: UIViewController {
         viewModel.userDescription.value = descriptionTextView.text ?? ""
         viewModel.userWebsite.value = websiteTextField.text ?? ""
         
-        // Сохраняем данные в UserDefaults
-        UserDefaults.standard.set(viewModel.userName.value, forKey: "userName")
-        UserDefaults.standard.set(viewModel.userDescription.value, forKey: "userDescription")
-        UserDefaults.standard.set(viewModel.userWebsite.value, forKey: "userWebsite")
+        // Сохраняем изменения в UserDefaults через ViewModel
+        viewModel.saveProfile()
     }
 }
