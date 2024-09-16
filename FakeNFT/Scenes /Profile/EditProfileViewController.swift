@@ -241,7 +241,7 @@ final class EditProfileViewController: UIViewController {
             textField.placeholder = "Enter image URL"
         }
         
-        let doneAction = UIAlertAction(title: "Done", style: .default) { [weak self] _ in
+        let doneAction = UIAlertAction(title: "Save", style: .default) { [weak self] _ in
             guard let self = self else { return }
             if let imageURL = alertController.textFields?.first?.text, !imageURL.isEmpty {
                 // Сохраняем URL в UserDefaults
