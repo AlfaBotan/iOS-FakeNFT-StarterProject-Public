@@ -72,7 +72,11 @@ final class NFTCellForCollectionView: UICollectionViewCell {
     func configure(nft: Nft) {
         let isLike = true
         let inCart = true
-        nameLabel.text = nft.name
+        let fullName = nft.name
+        let firstName = fullName.components(separatedBy: " ").first ?? fullName
+            
+        nameLabel.text = firstName
+        
         let urlForImage = nft.images[0]
         nftImageView.kf.setImage(
             with: urlForImage,
