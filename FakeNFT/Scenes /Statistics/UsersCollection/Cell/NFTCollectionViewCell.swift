@@ -61,8 +61,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     private lazy var ratingStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
-        view.alignment = .fill
-        view.distribution = .fillEqually
+        view.alignment = .leading
         view.spacing = 2
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -81,16 +80,17 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     func configure(nft: NFTCellModel) {
         // TODO: Добавить индикатор загрузки изображений
         nameLabel.text = nft.name
-        nftImageView.kf.indicatorType = .activity
-        nftImageView.kf.setImage(
-            with: nft.imageURL,
-            placeholder: UIImage(named: "mockNFT"),
-            options: [
-                .scaleFactor(UIScreen.main.scale),
-                .transition(.fade(1)),
-                .cacheOriginalImage
-            ]
-        )
+        DispatchQueue.main.async {
+            self.nftImageView.kf.indicatorType = .activity
+            self.nftImageView.kf.setImage(
+                with: nft.imageURL,
+                options: [
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1)),
+                    .cacheOriginalImage
+                ]
+            )
+        }
         ethLabel.text = "\(nft.cost) \(Strings.Common.eth)"
         updateRating(nft.rating)
     }
@@ -161,7 +161,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
             
             ratingStackView.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 8),
             ratingStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            ratingStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            ratingStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
             ratingStackView.heightAnchor.constraint(equalToConstant: 12),
             
             nameLabel.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 5),
