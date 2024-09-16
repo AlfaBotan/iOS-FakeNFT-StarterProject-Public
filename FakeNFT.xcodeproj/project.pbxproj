@@ -23,6 +23,7 @@
 		0CFCB7492A7808900009A829 /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB7482A7808900009A829 /* CatalogViewController.swift */; };
 		0CFCB74B2A780EA80009A829 /* UIView+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB74A2A780EA80009A829 /* UIView+Constraints.swift */; };
 		0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB74D2A7817DC0009A829 /* NftStorage.swift */; };
+		1C045E032C98CCBA0063CE78 /* EnumForSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C045E022C98CCBA0063CE78 /* EnumForSort.swift */; };
 		1C66D4862C908FAE00F6A565 /* NFTCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C66D4852C908FAE00F6A565 /* NFTCellModel.swift */; };
 		1C66D4882C90AC8C00F6A565 /* CollectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C66D4872C90AC8C00F6A565 /* CollectionModel.swift */; };
 		1C8EAFB72C8F66C200CF3A1B /* CatalogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C8EAFB62C8F66C200CF3A1B /* CatalogTableViewCell.swift */; };
@@ -99,6 +100,7 @@
 		0CFCB7482A7808900009A829 /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		0CFCB74A2A780EA80009A829 /* UIView+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Constraints.swift"; sourceTree = "<group>"; };
 		0CFCB74D2A7817DC0009A829 /* NftStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftStorage.swift; sourceTree = "<group>"; };
+		1C045E022C98CCBA0063CE78 /* EnumForSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumForSort.swift; sourceTree = "<group>"; };
 		1C66D4852C908FAE00F6A565 /* NFTCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCellModel.swift; sourceTree = "<group>"; };
 		1C66D4872C90AC8C00F6A565 /* CollectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionModel.swift; sourceTree = "<group>"; };
 		1C8EAFB62C8F66C200CF3A1B /* CatalogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogTableViewCell.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 			isa = PBXGroup;
 			children = (
 				1C8EAFB82C8F66D800CF3A1B /* CatalogViewModel.swift */,
+				1C045E022C98CCBA0063CE78 /* EnumForSort.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -677,6 +680,7 @@
 				689224452C8A365D00CE698A /* Strings.swift in Sources */,
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
 				3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */,
+				1C045E032C98CCBA0063CE78 /* EnumForSort.swift in Sources */,
 				1C66D4882C90AC8C00F6A565 /* CollectionModel.swift in Sources */,
 				0CFCB7462A78064B0009A829 /* NftDetailCellModel.swift in Sources */,
 				0CFCB74B2A780EA80009A829 /* UIView+Constraints.swift in Sources */,

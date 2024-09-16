@@ -29,6 +29,13 @@ final class CatalogViewController: UIViewController {
         configureNavBar()
         addSubvies()
         loadData()
+        setUpBinding()
+    }
+    
+    private func setUpBinding() {
+        viewModel.reloadTableView = { [weak self] in
+            self?.NFTTableView.reloadData()
+        }
     }
     
     private func configureNavBar() {
@@ -65,8 +72,13 @@ final class CatalogViewController: UIViewController {
         
         let alert = CustomAlertControllerForSort(title: Strings.Alerts.sortTitle, message: nil, preferredStyle: .actionSheet)
         let cancelAction = UIAlertAction(title: Strings.Alerts.closeBtn, style: .cancel, handler: nil)
-        let sortByTitle = UIAlertAction(title: Strings.Alerts.sortByTitle, style: .default, handler: nil)
-        let sortByNftQuantity = UIAlertAction(title: Strings.Alerts.sortByNftQuantity, style: .default, handler: nil)
+        let sortByTitle = UIAlertAction(title: Strings.Alerts.sortByTitle, style: .default) {[weak self] _ in
+            self?.viewModel.sortByName()
+            
+        }
+        let sortByNftQuantity = UIAlertAction(title: Strings.Alerts.sortByNftQuantity, style: .default) {[weak self] _ in
+            self?.viewModel.sortByCount()
+        }
         alert.setDimmingColor(UIColor.black.withAlphaComponent(0.5))
         alert.addAction(cancelAction)
         alert.addAction(sortByTitle)
