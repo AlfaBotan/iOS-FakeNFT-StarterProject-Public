@@ -29,6 +29,7 @@ final class PaymentViewCell: UICollectionViewCell {
     let currencyImage = UIImageView()
     currencyImage.layer.cornerRadius = 6
     currencyImage.layer.masksToBounds = true
+    currencyImage.backgroundColor = UIColor.black
     return currencyImage
   }()
 

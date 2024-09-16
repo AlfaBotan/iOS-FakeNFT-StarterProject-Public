@@ -58,7 +58,7 @@ final class PaymentViewController: UIViewController {
     let agreementButton = UIButton()
     agreementButton.setTitle(Strings.Cart.userAgreement, for: .normal)
     agreementButton.setTitleColor(UIColor.link, for: .normal)
-    agreementButton.titleLabel?.font = .systemFont(ofSize: 13)
+    agreementButton.titleLabel?.font = UIFont.caption2
     agreementButton.addTarget(self, action: #selector(showAgreement), for: .touchUpInside)
     return agreementButton
   }()
@@ -130,8 +130,7 @@ final class PaymentViewController: UIViewController {
 
   @objc private func showAgreement() {
     let webViewController = WebViewController()
-    navigationController?.pushViewController(webViewController, animated: true)
-    navigationController?.navigationBar.tintColor = UIColor.segmentActive
+    present(webViewController, animated: true)
   }
 
   private func getCurrencyList() {
