@@ -50,16 +50,19 @@ final class PaymentViewCell: UICollectionViewCell {
   func setupAppearance() {
     [stackView, currencyImage].forEach {
       $0.translatesAutoresizingMaskIntoConstraints = false
-      contentView.addSubview($0) }
+      contentView.addSubview($0)
+    }
+
     NSLayoutConstraint.activate([
+      currencyImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+      currencyImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+      currencyImage.heightAnchor.constraint(equalToConstant: 36),
+      currencyImage.widthAnchor.constraint(equalToConstant: 36),
 
-    currencyImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-    currencyImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-    currencyImage.heightAnchor.constraint(equalToConstant: 36),
-    currencyImage.widthAnchor.constraint(equalToConstant: 36),
-
-    stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-    stackView.leadingAnchor.constraint(equalTo: currencyImage.leadingAnchor, constant: 4)
+      stackView.centerYAnchor.constraint(equalTo: currencyImage.centerYAnchor),
+      stackView.leadingAnchor.constraint(equalTo: currencyImage.trailingAnchor, constant: 12),
+      stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
     ])
   }
+
 }

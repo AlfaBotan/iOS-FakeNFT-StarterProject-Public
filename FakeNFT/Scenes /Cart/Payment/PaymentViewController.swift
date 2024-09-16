@@ -16,7 +16,6 @@ final class PaymentViewController: UIViewController {
   override func viewDidLoad() {
     view.backgroundColor = .systemBackground
     super.viewDidLoad()
-    collectionView.register(PaymentViewCell.self, forCellWithReuseIdentifier: "cell")
     setupAppearance()
     getCurrencyList()
   }
@@ -51,7 +50,7 @@ final class PaymentViewController: UIViewController {
     collectionView.dataSource = self
     collectionView.delegate = self
     collectionView.showsVerticalScrollIndicator = false
-    //    collectionView.register(PaymentViewCell.self, forCellWithReuseIdentifier: "cell")
+    collectionView.register(PaymentViewCell.self, forCellWithReuseIdentifier: "cell")
     return collectionView
   }()
 
@@ -194,7 +193,23 @@ extension PaymentViewController: UICollectionViewDelegate {
 }
 
 extension PaymentViewController: UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: (view.frame.width - 48) / 3, height: 80)
-  }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let itemCount : CGFloat = 2
+        let space: CGFloat = 7
+        let width : CGFloat = (collectionView.bounds.width - space - 32) / itemCount
+        let height : CGFloat = 46
+        return CGSize(width: width , height: height)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 7
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 7
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 20, left: 16, bottom: 10, right: 16)
+    }
 }
