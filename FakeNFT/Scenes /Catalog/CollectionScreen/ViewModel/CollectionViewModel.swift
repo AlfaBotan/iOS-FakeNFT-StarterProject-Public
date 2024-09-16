@@ -6,39 +6,93 @@
 //
 
 import UIKit
+import ProgressHUD
 
 protocol CollectionViewModelProtocol: AnyObject {
     func fetchCollections(completion: @escaping () -> Void)
     func numberOfCollections() -> Int
-    func collection(at index: Int) -> NFTCellModel
+    func collection(at index: Int) -> Nft
+    func getPickedCollection() -> NFTModelCatalog
+    func fetchNFTs(completion: @escaping () -> Void)
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
-    private var collections: [NFTCellModel] = []
+    private let collectionModel: CollectionModel
+    private var pickedCollection: NFTModelCatalog
+    private var NFTsFromCollection: Nfts = []
+    
+    //    private var collections: [NFTCellModel] = []
+    
+    init(pickedCollection: NFTModelCatalog, model: CollectionModel) {
+        self.collectionModel = model
+        self.pickedCollection = pickedCollection
+    }
     
     func fetchCollections(completion: @escaping () -> Void) {
-        // Здесь будет запрос к сервису для загрузки данных
-        // После загрузки данных обновим массив collections
-        guard let image = UIImage(named: "archie") else {return}
-        collections = [NFTCellModel(image: image, rating: 1, name: "Archie", cost: 1, isLike: true, inCart: true),
-                       NFTCellModel(image: image, rating: 2, name: "Archie", cost: 2, isLike: false, inCart: false),
-                       NFTCellModel(image: image, rating: 3, name: "Archie", cost: 3, isLike: true, inCart: true),
-                       NFTCellModel(image: image, rating: 4, name: "Archie", cost: 4, isLike: false, inCart: false),
-                       NFTCellModel(image: image, rating: 5, name: "Archie", cost: 5, isLike: true, inCart: false),
-                       NFTCellModel(image: image, rating: 1, name: "Archie", cost: 6, isLike: false, inCart: false),
-                       NFTCellModel(image: image, rating: 1, name: "Archie", cost: 10, isLike: true, inCart: true),
-                       NFTCellModel(image: image, rating: 1, name: "Archie", cost: 10, isLike: true, inCart: true),
-                       NFTCellModel(image: image, rating: 1, name: "Archie", cost: 10, isLike: true, inCart: true),
-                       NFTCellModel(image: image, rating: 1, name: "Archie", cost: 10, isLike: true, inCart: true),
-                       NFTCellModel(image: image, rating: 1, name: "Archie", cost: 10, isLike: true, inCart: true)]
-        completion()
+        ProgressHUD.show()
+        ProgressHUD.animationType = .circleSpinFade
+        
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        
+        collectionModel.loadCollection(idArrys: pickedCollection.nfts) { [weak self] (result: Result<Nfts, any Error>) in
+            guard let self = self else {return}
+            switch result {
+            case .success(let nfts):
+                self.NFTsFromCollection = nfts
+                ProgressHUD.dismiss()
+                completion()
+                print("Все NFT загрузились: \(nfts)")
+            case .failure(let error):
+                ProgressHUD.showError()
+                print(error.localizedDescription)
+                print("NFT не загрузились")
+            }
+        }
+    }
+    
+    func fetchNFTs(completion: @escaping () -> Void) {
+        
+            let dispatchGroup = DispatchGroup()
+            
+            ProgressHUD.show()
+            ProgressHUD.animationType = .circleSpinFade
+        
+        let idArray = pickedCollection.nfts
+        var nftsArray: Nfts = []
+        
+        for i in idArray {
+            dispatchGroup.enter()
+            collectionModel.loadNft(id: i) { [weak self] (result: (Result<Nft, Error>)) in
+                guard let self = self else {return}
+                switch result {
+                case .success(let nft):
+                    nftsArray.append(nft)
+                case .failure(let error):
+                    ProgressHUD.showError()
+                    print(error.localizedDescription)
+                }
+                dispatchGroup.leave()
+            }
+        }
+            
+        dispatchGroup.notify(queue: .main) {
+            print(nftsArray.count)
+            ProgressHUD.dismiss()
+            self.NFTsFromCollection = nftsArray
+            completion()
+        }
     }
     
     func numberOfCollections() -> Int {
-        return collections.count
+        return NFTsFromCollection.count
     }
     
-    func collection(at index: Int) -> NFTCellModel {
-        return collections[index]
+    func collection(at index: Int) -> Nft {
+        return NFTsFromCollection[index]
+    }
+    
+    func getPickedCollection() -> NFTModelCatalog {
+        return pickedCollection
     }
 }

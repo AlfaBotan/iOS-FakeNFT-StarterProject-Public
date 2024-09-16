@@ -35,9 +35,9 @@ final class CollectionViewController: UIViewController {
     }()
     
     private lazy var topView: UIView = {
-        let view = UILabel()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+        let topView = UIView()
+        topView.translatesAutoresizingMaskIntoConstraints = false
+        return topView
     }()
     
     private lazy var nameLable: UILabel = {
@@ -55,17 +55,13 @@ final class CollectionViewController: UIViewController {
     }()
     
     private lazy var urlButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         let font = UIFont.caption1
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: font,
-            .foregroundColor: UIColor.systemBlue
-        ]
-        let attributedTitle = NSAttributedString(string: "", attributes: attributes)
-        button.setAttributedTitle(attributedTitle, for: .normal)
-        button.addTarget(self, action: #selector(goToAuthorURL), for: .touchUpInside)
         button.contentHorizontalAlignment = .left
+        button.setTitleColor(UIColor.link, for: .normal)
+        button.titleLabel?.font = font
+        button.addTarget(self, action: #selector(goToAuthorURL), for: .touchUpInside)
         return button
     }()
     
@@ -103,11 +99,12 @@ final class CollectionViewController: UIViewController {
         addSubviews()
         configureNavBar()
         addConstraints()
+        configureSubviews()
         loadData()
     }
     
     private func loadData() {
-        viewModel.fetchCollections {
+        viewModel.fetchNFTs {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
                 self.updateCollectionViewHeight()
@@ -148,12 +145,6 @@ final class CollectionViewController: UIViewController {
         topView.addSubview(urlButton)
         contentView.addSubview(descriptionLable)
         contentView.addSubview(collectionView)
-        
-        topImage.image = UIImage(named: "peachMaxi")
-        nameLable.text = "Peach"
-        urlButton.setTitle("John Doe", for: .normal)
-        firstAuthorLable.text = Strings.Catalog.collectionAuthor
-        descriptionLable.text = "Персиковый — как облака над закатным солнцем в океане. В этой коллекции совмещены трогательная нежность и живая игривость сказочных зефирных зверей."
     }
     
     private func addConstraints() {
@@ -209,6 +200,22 @@ final class CollectionViewController: UIViewController {
         collectionViewHeightConstraint?.isActive = true
     }
     
+    func configureSubviews() {
+        let pickedCollection = viewModel.getPickedCollection()
+        let urlForImage = URL(string: pickedCollection.cover)
+        topImage.kf.setImage(
+            with: urlForImage,
+            options: [
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ]
+        )
+        nameLable.text = pickedCollection.name
+        urlButton.setTitle(pickedCollection.author, for: .normal)
+        firstAuthorLable.text = Strings.Catalog.collectionAuthor
+        descriptionLable.text = pickedCollection.description
+    }
+    
     func updateCollectionViewHeight() {
         let numberOfItems = collectionView.numberOfItems(inSection: 0)
         let rows = CGFloat((numberOfItems / 3) + (numberOfItems % 3 == 0 ? 0 : 1))
@@ -224,7 +231,7 @@ final class CollectionViewController: UIViewController {
     }
     
     @objc func goToAuthorURL() {
-        
+        print("Переходим по ссылке: ")
     }
 }
 

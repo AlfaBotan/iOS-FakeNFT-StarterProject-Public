@@ -7,12 +7,6 @@
 
 import UIKit
 
-//struct NFTRowModel {
-//    let image: UIImage
-//    let name: String
-//    let count: Int
-//}
-
 struct NFTModelCatalog: Codable {
     let createdAt: String
     let name: String

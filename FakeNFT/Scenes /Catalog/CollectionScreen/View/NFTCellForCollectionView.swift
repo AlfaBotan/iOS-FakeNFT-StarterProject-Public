@@ -17,6 +17,7 @@ final class NFTCellForCollectionView: UICollectionViewCell {
         view.layer.cornerRadius = 12
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.kf.indicatorType = .activity
         return view
     }()
     
@@ -68,14 +69,23 @@ final class NFTCellForCollectionView: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(nft: NFTCellModel) {
+    func configure(nft: Nft) {
+        let isLike = true
+        let inCart = true
         nameLabel.text = nft.name
-        nftImageView.image = nft.image
-        let imageForLike = nft.isLike ? Images.Common.favoriteActive ?? UIImage() : Images.Common.favoriteInactive ?? UIImage()
+        let urlForImage = nft.images[0]
+        nftImageView.kf.setImage(
+            with: urlForImage,
+            options: [
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ]
+        )
+        let imageForLike = isLike ? Images.Common.favoriteActive ?? UIImage() : Images.Common.favoriteInactive ?? UIImage()
         favoriteButton.setImage(imageForLike, for: .normal)
-        let imageForCart = nft.inCart ? Images.Common.deleteCartBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal) : Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
+        let imageForCart = inCart ? Images.Common.deleteCartBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal) :                                          Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
         cartButton.setImage(imageForCart, for: .normal)
-        ethLabel.text = "\(nft.cost) \(Strings.Common.eth)"
+        ethLabel.text = "\(nft.price) \(Strings.Common.eth)"
         updateRating(nft.rating)
     }
     

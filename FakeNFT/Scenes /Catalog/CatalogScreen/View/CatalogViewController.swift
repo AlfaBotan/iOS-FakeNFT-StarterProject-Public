@@ -32,15 +32,15 @@ final class CatalogViewController: UIViewController {
     }
     
     private func configureNavBar() {
-         let sortButton = UIBarButtonItem(
-             image: UIImage(named: "sortBtn"),
-             style: .plain,
-             target: self,
-             action: #selector(sortButtonTupped)
-         )
+        let sortButton = UIBarButtonItem(
+            image: UIImage(named: "sortBtn"),
+            style: .plain,
+            target: self,
+            action: #selector(sortButtonTupped)
+        )
         sortButton.tintColor = .black
-         navigationItem.rightBarButtonItem = sortButton
-     }
+        navigationItem.rightBarButtonItem = sortButton
+    }
     
     private func addSubvies() {
         view.addSubview(NFTTableView)
@@ -79,10 +79,13 @@ final class CatalogViewController: UIViewController {
 extension CatalogViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewModelForCollectionVC = CollectionViewModel()
+        
+        let viewModelForCollectionVC = CollectionViewModel(pickedCollection: viewModel.collection(at: indexPath.row),
+                                                           model: CollectionModel(networkClient: DefaultNetworkClient(), storage: NftStorageImpl()))
+        
         let collectionVC = CollectionViewController(viewModel: viewModelForCollectionVC)
-           navigationController?.pushViewController(collectionVC, animated: true)
-       }
+        navigationController?.pushViewController(collectionVC, animated: true)
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 187

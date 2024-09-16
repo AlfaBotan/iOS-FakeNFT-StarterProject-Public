@@ -16,6 +16,7 @@ final class CatalogTableViewCell: UITableViewCell {
         image.translatesAutoresizingMaskIntoConstraints = false
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 12
+        image.kf.indicatorType = .activity
         return image
     }()
     
@@ -58,7 +59,13 @@ final class CatalogTableViewCell: UITableViewCell {
     
     func configCell(name: String, count: Int, image: String) {
         let urlForImage = URL(string: image)
-        topImage.kf.setImage(with: urlForImage)
+        topImage.kf.setImage(
+            with: urlForImage,
+            options: [
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ]
+        )
         nameAndCountLable.text = "\(name) (\(count))"
     }
 }
