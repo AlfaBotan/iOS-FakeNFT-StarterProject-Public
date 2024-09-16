@@ -100,7 +100,7 @@ extension CatalogViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         let nft = viewModel.collection(at: indexPath.row)
-        cell.configCell(name: nft.name, count: nft.count, image: nft.image)
+        cell.configCell(name: nft.name, count: nft.nfts.count, image: nft.cover)
         cell.selectionStyle = .none
         return cell
     }

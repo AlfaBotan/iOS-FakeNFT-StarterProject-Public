@@ -7,11 +7,11 @@
 
 import UIKit
 
-struct NFTRowModel {
-    let image: UIImage
-    let name: String
-    let count: Int
-}
+//struct NFTRowModel {
+//    let image: UIImage
+//    let name: String
+//    let count: Int
+//}
 
 struct NFTModelCatalog: Codable {
     let createdAt: String
@@ -22,3 +22,7 @@ struct NFTModelCatalog: Codable {
     let author: String
     let id: String
 }
+
+typealias NFTsModelCatalog = [NFTModelCatalog]
+typealias NFTsModelCatalogCompletion = (Result<NFTsModelCatalog, Error>) -> Void
+

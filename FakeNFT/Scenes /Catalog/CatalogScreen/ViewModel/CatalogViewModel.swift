@@ -6,34 +6,47 @@
 //
 
 import UIKit
+import ProgressHUD
 
 protocol CatalogViewModelProtocol: AnyObject {
     func fetchCollections(completion: @escaping () -> Void)
     func numberOfCollections() -> Int
-    func collection(at index: Int) -> NFTRowModel
+    func collection(at index: Int) -> NFTModelCatalog
 }
 
 class CatalogViewModel: CatalogViewModelProtocol {
-    private var collections: [NFTRowModel] = []
+    private let catalogModel = CatalogModel(networkClient: DefaultNetworkClient(), storage: NftStorageImpl())
+//    private var collections: [NFTRowModel] = []
+    private var catalog: [NFTModelCatalog] = []
     
     func fetchCollections(completion: @escaping () -> Void) {
-        // Здесь будет запрос к сервису для загрузки данных
-        // После загрузки данных обновим массив collections
-        guard let image = UIImage(named: "peachMini") else {return}
-        collections = [NFTRowModel(image: image, name: "Peach", count: 11),
-                       NFTRowModel(image: image, name: "Peach", count: 11),
-                       NFTRowModel(image: image, name: "Peach", count: 11),
-                       NFTRowModel(image: image, name: "Peach", count: 11),
-                       NFTRowModel(image: image, name: "Peach", count: 11)]
-        completion()
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        ProgressHUD.show()
+        ProgressHUD.animationType = .circleSpinFade
+        
+        catalogModel.loadCatalog { [weak self] (result: Result<NFTsModelCatalog, any Error>) in
+            guard let self = self else {return}
+            switch result {
+            case .success(let catalog):
+                self.catalog = catalog
+                ProgressHUD.dismiss()
+                print(self.catalog)
+                completion()
+            case .failure(let error):
+                ProgressHUD.showError()
+                print(error.localizedDescription)
+            }
+        }
+        dispatchGroup.leave()
     }
     
     func numberOfCollections() -> Int {
-        return collections.count
+        return catalog.count
     }
     
-    func collection(at index: Int) -> NFTRowModel {
-        return collections[index]
+    func collection(at index: Int) -> NFTModelCatalog {
+        return catalog[index]
     }
 }
 

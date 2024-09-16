@@ -56,8 +56,9 @@ final class CatalogTableViewCell: UITableViewCell {
         ])
     }
     
-    func configCell(name: String, count: Int, image: UIImage) {
-        topImage.image = image
+    func configCell(name: String, count: Int, image: String) {
+        let urlForImage = URL(string: image)
+        topImage.kf.setImage(with: urlForImage)
         nameAndCountLable.text = "\(name) (\(count))"
     }
 }
