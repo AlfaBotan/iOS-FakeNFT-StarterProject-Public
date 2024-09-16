@@ -178,7 +178,7 @@ enum UserMock {
             description: "Test",
             website: "https://student1.students.practicum.org",
             nfts: [],
-            rating: 1,
+            rating: 13,
             id: "6a054eb1-8aa8-4e8b-b047-4e216dcee6df"
         ),
         User(
@@ -201,7 +201,7 @@ enum UserMock {
                 "7773e33c-ec15-4230-a102-92426a3a6d5a",
                 "82570704-14ac-4679-9436-050f4a32a8a0"
             ],
-            rating: 5,
+            rating: 2,
             id: "61d3c8db-a147-4ae1-87cc-74329c18ff32"
         ),
         User(
@@ -215,7 +215,7 @@ enum UserMock {
                 "c14cf3bc-7470-4eec-8a42-5eaa65f4053c",
                 "b2f44171-7dcd-46d7-a6d3-e2109aacf520"
             ],
-            rating: 6,
+            rating: 66,
             id: "b400ce1f-7dac-4cf0-a866-bdb1911a04c4"
         )
     ]

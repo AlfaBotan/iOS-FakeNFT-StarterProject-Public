@@ -37,11 +37,6 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
     }
     
     private var nfts: [NFTCellModel] = []
-    //    private var nfts: [NFTCellModel] = [] {
-    //        didSet {
-    //            onDataChanged?()
-    //        }
-    //    }
     
     func item(at indexPath: IndexPath) -> NFTCellModel? {
         guard indexPath.row < nfts.count else { return nil }
@@ -74,7 +69,6 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
                 case .failure(let error):
                     print("Failed to load NFT with id \(userNFT): \(error.localizedDescription)")
                 }
-                ProgressHUD.dismiss()
                 dispatchGroup.leave()
             }
         }
@@ -87,6 +81,7 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
                 // Можно вывести сообщение, что данные не загружены
                 print("No NFTs loaded.")
             }
+            ProgressHUD.dismiss()
         }
     }
     

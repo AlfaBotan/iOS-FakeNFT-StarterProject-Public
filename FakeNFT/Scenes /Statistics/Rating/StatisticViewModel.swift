@@ -25,17 +25,17 @@ final class StatisticViewModel: StatisticViewModelProtocol {
     
     private(set) var users: Users = []
     
-    private var isSortByRating: Bool {
+    private var isSortByName: Bool {
         // TODO: нужно будет разобраться: раз в несколько запусков сохранение порядка не срабатывает(
         
         get {
-            let value = UserDefaults.standard.bool(forKey: Constants.UserDefaultKeys.isSortByRating)
+            let value = UserDefaults.standard.bool(forKey: Constants.UserDefaultKeys.isSortByName)
             return value
         }
         
         set(newValue) {
             UserDefaults.standard.setValue(newValue,
-                                           forKey: Constants.UserDefaultKeys.isSortByRating)
+                                           forKey: Constants.UserDefaultKeys.isSortByName)
         }
     }
     
@@ -46,21 +46,21 @@ final class StatisticViewModel: StatisticViewModelProtocol {
     func loadMockData() {
         users = UserMock.mockStatisticsUserData
         
-        if isSortByRating {
-            sortByRating()
-        } else {
+        if isSortByName {
             sortByName()
+        } else {
+            sortByRating()
         }
     }
     
     func sortByName() {
-        isSortByRating = false
+        isSortByName = true
         users.sort { $0.name < $1.name }
         reloadTableView?()
     }
     
     func sortByRating() {
-        isSortByRating = true
+        isSortByName = false
         users.sort { $0.rating > $1.rating }
         reloadTableView?()
     }
@@ -72,6 +72,6 @@ final class StatisticViewModel: StatisticViewModelProtocol {
 
 private enum Constants {
     enum UserDefaultKeys {
-        static let isSortByRating = "isSortByRating"
+        static let isSortByName = "isSortByName"
     }
 }
