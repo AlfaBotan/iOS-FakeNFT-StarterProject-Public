@@ -76,13 +76,16 @@ final class StatisticsUserTableViewCell: UITableViewCell {
     
     func configure(with model: User, and index: Int) {
         cellIndex.text = "\(index)"
-        avatarImageView.kf.setImage(
-            with: URL(string: model.avatar),
-            placeholder: UIImage(named: "profile"),
-            options: [
-                .transition(.fade(0.2))
-            ]
-        )
+        DispatchQueue.main.async {
+            self.avatarImageView.kf.indicatorType = .activity
+            self.avatarImageView.kf.setImage(
+                with: URL(string: model.avatar),
+                placeholder: UIImage(named: "profile"),
+                options: [
+                    .transition(.fade(0.2))
+                ]
+            )
+        }
         nameLabel.text = model.name
         scoreLabel.text = "\(model.rating)"
     }
