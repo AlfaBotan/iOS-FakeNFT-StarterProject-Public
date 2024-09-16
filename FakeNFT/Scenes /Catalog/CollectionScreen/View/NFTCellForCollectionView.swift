@@ -87,9 +87,9 @@ final class NFTCellForCollectionView: UICollectionViewCell {
         )
         let imageForLike = isLike ? Images.Common.favoriteActive ?? UIImage() : Images.Common.favoriteInactive ?? UIImage()
         favoriteButton.setImage(imageForLike, for: .normal)
-        let imageForCart = inCart ? Images.Common.deleteCartBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal) :                                          Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
+        let imageForCart = inCart ? Images.Common.deleteCartBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal) :                                                       Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
         cartButton.setImage(imageForCart, for: .normal)
-        ethLabel.text = "\(nft.price) \(Strings.Common.eth)"
+        ethLabel.text = "\(Int(nft.price)) \(Strings.Common.eth)"
         updateRating(nft.rating)
     }
     
@@ -140,6 +140,7 @@ final class NFTCellForCollectionView: UICollectionViewCell {
             
             nameLabel.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 5),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: cartButton.leadingAnchor),
             
             ethLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
             ethLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
