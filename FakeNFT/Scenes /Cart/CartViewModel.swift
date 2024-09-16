@@ -6,11 +6,18 @@ final class CartViewModel {
   private let orderService: OrderService = OrderServiceImpl(networkClient: DefaultNetworkClient())
   private let nftService: NftService = NftServiceImpl(networkClient: DefaultNetworkClient(), storage: NftStorageImpl())
   
+  var isLoading: Bool = false {
+    didSet {
+      onLoading?(isLoading)
+    }
+  }
+  
   var nftItems: Nfts = [] {
     didSet {
       onItemsUpdated?()
     }
   }
+  
   var onItemsUpdated: (() -> Void)?
   var onLoading: ((Bool) -> Void)?
   private var order: Order?
@@ -50,6 +57,7 @@ final class CartViewModel {
   }
   
   func loadItems() {
+    isLoading = true
     onLoading?(true)
     let dispatchGroup = DispatchGroup()
     
@@ -58,13 +66,16 @@ final class CartViewModel {
       dispatchGroup.leave()
       
       ProgressHUD.show()
+      ProgressHUD.animationType = .circleSpinFade
       guard let order = order else {
         ProgressHUD.dismiss()
+        self?.isLoading = false
         return
       }
       
       if order.nfts.isEmpty {
         ProgressHUD.dismiss()
+        self?.isLoading = false
         return
       }
       
@@ -87,13 +98,15 @@ final class CartViewModel {
       dispatchGroup.notify(queue: .main) {
         self?.nftItems = nftsFromNetwork
         ProgressHUD.dismiss()
+        self?.isLoading = false
+        self?.onItemsUpdated?()
       }
     }
   }
   
   func removeItem(at index: Int) {
     nftItems.remove(at: index)
-
+    
     let nftsIds = nftItems.map { $0.id }
     orderService.updateOrder(nftsIds: nftsIds) { [weak self] result in
       switch result {
@@ -104,11 +117,11 @@ final class CartViewModel {
         print(error.localizedDescription)
       }
     }
-
+    
     onItemsUpdated?()
   }
-
-
+  
+  
   func totalAmount() -> Float {
     return nftItems.reduce(0) { $0 + $1.price }
   }
