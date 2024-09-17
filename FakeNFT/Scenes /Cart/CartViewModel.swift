@@ -1,11 +1,22 @@
+//  Created by Alexander Salagubov on 09.09.2024.
+//
+
+import Foundation
 import UIKit
 import ProgressHUD
+
+private enum SortCriteria: String {
+  case price
+  case rating
+  case name
+  case none
+}
 
 final class CartViewModel {
   
   private let orderService: OrderService = OrderServiceImpl(networkClient: DefaultNetworkClient())
   private let nftService: NftService = NftServiceImpl(networkClient: DefaultNetworkClient(), storage: NftStorageImpl())
-  
+
   var isLoading: Bool = false {
     didSet {
       onLoading?(isLoading)
@@ -21,13 +32,6 @@ final class CartViewModel {
   var onItemsUpdated: (() -> Void)?
   var onLoading: ((Bool) -> Void)?
   private var order: Order?
-  
-  private enum SortCriteria: String {
-    case price
-    case rating
-    case name
-    case none
-  }
   
   private var currentSortCriteria: SortCriteria {
     get {

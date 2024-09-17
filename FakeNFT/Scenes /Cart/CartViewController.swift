@@ -1,11 +1,13 @@
+//  Created by Alexander Salagubov on 09.09.2024.
+//
+
+import Foundation
 import UIKit
 import ProgressHUD
 
 final class CartViewController: UIViewController {
 
-  private let viewModel = CartViewModel()
-
-  let servicesAssembly: ServicesAssembly
+  // MARK: - ServicesAssembly
 
   init(servicesAssembly: ServicesAssembly) {
     self.servicesAssembly = servicesAssembly
@@ -16,25 +18,15 @@ final class CartViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    view.backgroundColor = .systemBackground
-    setupAppearance()
-    viewModel.onItemsUpdated = {
-      DispatchQueue.main.async {
-        self.tableView.reloadData()
-        self.updateSummary()
-        self.updateHolders()
-      }
-    }
-    viewModel.loadItems()
-    viewModel.applySorting()
-  }
+  // MARK: -  Varibles
+
+  let servicesAssembly: ServicesAssembly
+  private let viewModel = CartViewModel()
+
 
   private lazy var tableView: UITableView = {
     let tableView = UITableView()
     tableView.rowHeight = 140
-    tableView.delegate = self
     tableView.dataSource = self
     tableView.backgroundColor = .systemBackground
     tableView.separatorStyle = .none
@@ -118,12 +110,33 @@ final class CartViewController: UIViewController {
     return backgroundView
   }()
 
+  // MARK: - LifeCycle
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = .systemBackground
+    setupAppearance()
+    viewModel.onItemsUpdated = {
+      DispatchQueue.main.async {
+        self.tableView.reloadData()
+        self.updateSummary()
+        self.updateHolders()
+      }
+    }
+    viewModel.loadItems()
+    viewModel.applySorting()
+  }
+
+  // MARK: - Button Go To Payment Screen
+
   @objc private func paymentButtonTapped() {
     let paymentViewController = PaymentViewController()
     navigationController?.pushViewController(paymentViewController, animated: true)
     navigationController?.navigationBar.tintColor = UIColor.segmentActive
     navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
   }
+
+  // MARK: - Alert Action Sheet
 
   @objc private func sortButtonTapped() {
     let actionSheet = UIAlertController(title: Strings.Alerts.sortTitle, message: nil, preferredStyle: .actionSheet)
@@ -204,6 +217,8 @@ final class CartViewController: UIViewController {
   }
 }
 
+// MARK: - TableView DataSource
+
 extension CartViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return viewModel.nftItems.count
@@ -219,9 +234,7 @@ extension CartViewController: UITableViewDataSource {
   }
 }
 
-extension CartViewController: UITableViewDelegate {
-  // TODO:
-}
+// MARK: - NFT DeleteDelegate
 
 extension CartViewController: DeleteViewControllerDelegate {
   func didConfirmDeletion(of nftItem: Nft) {

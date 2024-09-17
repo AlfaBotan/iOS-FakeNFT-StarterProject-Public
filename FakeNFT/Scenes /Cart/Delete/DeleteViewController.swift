@@ -89,7 +89,7 @@ final class DeleteViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupAppearance()
-    setupBlurEffect()
+    view.setupBlurEffect()
   }
   
   private func setupAppearance() {
@@ -119,14 +119,6 @@ final class DeleteViewController: UIViewController {
           buttonStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 36),
           buttonStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -36),
       ])
-  }
-
-  private func setupBlurEffect() {
-    let blurEffect = UIBlurEffect(style: .regular)
-    let blurEffectView = UIVisualEffectView(effect: blurEffect)
-    blurEffectView.frame = view.bounds
-    blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    view.insertSubview(blurEffectView, at: 0)
   }
   
   @objc private func deleteNft() {

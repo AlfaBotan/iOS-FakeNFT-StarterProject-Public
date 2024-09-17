@@ -2,12 +2,6 @@ import UIKit
 
 final class PaymentResultViewController: UIViewController {
 
-  override func viewDidLoad() {
-    view.backgroundColor = .systemBackground
-    super.viewDidLoad()
-    setupAppearance()
-  }
-
   private lazy var backToCatalogButton: UIButton = {
     let backToCatalogButton = UIButton()
     backToCatalogButton.setTitle(Strings.Cart.backToCartBtn, for: .normal)
@@ -43,6 +37,12 @@ final class PaymentResultViewController: UIViewController {
     stack.alignment = .leading
     return stack
   }()
+
+  override func viewDidLoad() {
+    view.backgroundColor = .systemBackground
+    super.viewDidLoad()
+    setupAppearance()
+  }
 
   @objc private func backToCatalog() {
     //TODO: add transition to the catalog tab

@@ -1,3 +1,7 @@
+//  Created by Alexander Salagubov on 09.09.2024.
+//
+
+import Foundation
 import UIKit
 import Kingfisher
 
@@ -129,17 +133,4 @@ final class CartTableViewCell: UITableViewCell {
       nftRatingView.addArrangedSubview(starImageView)
     }
   }
-}
-
-extension UIView {
-    var parentViewController: UIViewController? {
-        var parentResponder: UIResponder? = self
-        while parentResponder != nil {
-            parentResponder = parentResponder?.next
-            if let viewController = parentResponder as? UIViewController {
-                return viewController
-            }
-        }
-        return nil
-    }
 }

@@ -48,7 +48,7 @@ final class PaymentViewCell: UICollectionViewCell {
     currencyImage.kf.setImage(with: currency.image, placeholder: UIImage(systemName: "nft1"))
   }
 
-  func setupAppearance() {
+  private func setupAppearance() {
     [stackView, currencyImage].forEach {
       $0.translatesAutoresizingMaskIntoConstraints = false
       contentView.addSubview($0)

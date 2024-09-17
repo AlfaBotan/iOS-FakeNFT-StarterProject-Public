@@ -140,11 +140,11 @@ final class PaymentViewController: UIViewController {
     ProgressHUD.animationType = .circleSpinFade
     if !isLoading {
       isLoading = true
-      orderService.loadCurrencyList { (result: Result<[Currency], Error>) in
+      orderService.loadCurrencyList { [weak self] (result: Result<[Currency], Error>) in
         switch result {
         case .success(let currencies):
           ProgressHUD.dismiss()
-          self.currencies = currencies
+          self?.currencies = currencies
         case .failure(let error):
           ProgressHUD.showError()
           print(error.localizedDescription)
