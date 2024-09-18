@@ -45,7 +45,7 @@ final class PaymentResultViewController: UIViewController {
   }
 
   @objc private func backToCatalog() {
-    //TODO: add transition to the catalog tab
+    tabBarController?.selectedIndex = 1
   }
 
   func setupAppearance() {

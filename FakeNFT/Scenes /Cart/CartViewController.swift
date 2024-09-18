@@ -127,6 +127,19 @@ final class CartViewController: UIViewController {
     viewModel.applySorting()
   }
 
+  override func viewWillAppear(_ animated: Bool) {
+    ProgressHUD.show()
+    ProgressHUD.animationType = .circleSpinFade
+    super.viewWillAppear(animated)
+    tabBarController?.tabBar.isHidden = false
+    navigationController?.setNavigationBarHidden(true, animated: animated)
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    navigationController?.setNavigationBarHidden(false, animated: animated)
+  }
+
   // MARK: - Button Go To Payment Screen
 
   @objc private func paymentButtonTapped() {
@@ -162,17 +175,6 @@ final class CartViewController: UIViewController {
     present(actionSheet, animated: true, completion: nil)
   }
 
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    tabBarController?.tabBar.isHidden = false
-    navigationController?.setNavigationBarHidden(true, animated: animated)
-  }
-
-  override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-
-    navigationController?.setNavigationBarHidden(false, animated: animated)
-  }
 
   func setupAppearance() {
     [tableView, sortButton, placeholderLabel, backgroundView].forEach {

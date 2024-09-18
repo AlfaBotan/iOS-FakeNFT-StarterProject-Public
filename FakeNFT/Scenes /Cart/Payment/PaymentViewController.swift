@@ -124,7 +124,7 @@ final class PaymentViewController: UIViewController {
   }
 
   @objc private func paymentButtonTapped() {
-    let paymentResult = PaymentResultViewController()
+    let paymentResult = PaymentResultViewController(servicesAssembly: ser)
     navigationController?.pushViewController(paymentResult, animated: true)
   }
 

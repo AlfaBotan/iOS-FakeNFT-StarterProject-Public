@@ -21,6 +21,10 @@ final class WebViewController: UIViewController {
     showProgressHUD()
   }
   
+  override func viewDidAppear(_ animated: Bool) {
+    ProgressHUD.dismiss()
+  }
+  
   private func makeRequest() {
     guard let url = URL(string: "https://yandex.ru/legal/practicum_termsofuse/") else { return }
     let request = URLRequest(url: url)
