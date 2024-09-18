@@ -3,6 +3,7 @@ import UIKit
 final class EditProfileViewController: UIViewController {
     
     var viewModel: ProfileViewModel!
+    var onProfileImageUpdated: ((URL?) -> Void)?
     
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
@@ -125,6 +126,20 @@ final class EditProfileViewController: UIViewController {
         view.backgroundColor = .white
         setupViews()
         populateFields()
+        setupBindings()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Обновляем данные во ViewModel
+        viewModel.userName.value = nameTextField.text ?? ""
+        viewModel.userDescription.value = descriptionTextView.text ?? ""
+        viewModel.userWebsite.value = websiteTextField.text ?? ""
+        
+        // Сохранение через метод viewWillDisappear() во ViewModel
+        viewModel.viewWillDisappear()
+        onProfileImageUpdated?(viewModel.userImage.value)
     }
     
     private func createClearButton() -> UIButton {
@@ -225,7 +240,34 @@ final class EditProfileViewController: UIViewController {
         nameTextField.text = viewModel.userName.value
         descriptionTextView.text = viewModel.userDescription.value
         websiteTextField.text = viewModel.userWebsite.value
-        avatarImageView.image = viewModel.userImage.value
+        DispatchQueue.main.async {
+            self.avatarImageView.kf.setImage(
+                with: self.viewModel.userImage.value,
+                placeholder: UIImage(named: "ProfileMokIMG"),
+                options: [
+                    .scaleFactor(UIScreen.main.scale),
+                    .transition(.fade(1))
+                ]
+            )
+        }
+    }
+    
+    private func setupBindings() {
+        guard let viewModel = viewModel else { return }
+        
+        // Привязка изображения профиля
+        viewModel.userImage.bind { [weak self] image in
+            DispatchQueue.main.async {
+                self?.avatarImageView.kf.setImage(
+                    with: image,
+                    placeholder: UIImage(named: "ProfileMokIMG"),
+                    options: [
+                        .scaleFactor(UIScreen.main.scale),
+                        .transition(.fade(0.2))
+                    ]
+                )
+            }
+        }
     }
     
     @objc private func changePhotoTapped() {
@@ -235,31 +277,9 @@ final class EditProfileViewController: UIViewController {
     }
     
     @objc private func loadImageTapped() {
-        let alertController = UIAlertController(title: "Enter Image URL", message: nil, preferredStyle: .alert)
-        
-        alertController.addTextField { textField in
-            textField.placeholder = "Enter image URL"
-        }
-        
-        let doneAction = UIAlertAction(title: "Save", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            if let imageURL = alertController.textFields?.first?.text, !imageURL.isEmpty {
-                // Сохраняем URL в UserDefaults
-                UserDefaults.standard.set(imageURL, forKey: "profileImageURL")
-                print("Image URL saved: \(imageURL)")
-            }
-            // Скрываем loadImageLabel после нажатия "Done"
-            self.loadImageLabel.isHidden = true
-        }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { [weak self] _ in
-            self?.loadImageLabel.isHidden = true
-        }
-        
-        alertController.addAction(doneAction)
-        alertController.addAction(cancelAction)
-        
+        let alertController = viewModel.makeShowImageAllert()
         present(alertController, animated: true, completion: nil)
+        self.loadImageLabel.isHidden = true
     }
     
     @objc private func closeButtonTapped() {
@@ -268,17 +288,5 @@ final class EditProfileViewController: UIViewController {
     
     @objc private func clearTextFieldTapped() {
         nameTextField.text = ""
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        // Обновляем данные во ViewModel
-        viewModel.userName.value = nameTextField.text ?? ""
-        viewModel.userDescription.value = descriptionTextView.text ?? ""
-        viewModel.userWebsite.value = websiteTextField.text ?? ""
-        
-        // Сохраняем изменения в UserDefaults через ViewModel
-        viewModel.saveProfile()
     }
 }
