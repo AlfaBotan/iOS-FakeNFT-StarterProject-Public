@@ -11,7 +11,7 @@ import ProgressHUD
 final class CollectionModel {
     private let networkClient: NetworkClient
     private let storage: NftStorage
-
+    
     init(networkClient: NetworkClient, storage: NftStorage) {
         self.storage = storage
         self.networkClient = networkClient
@@ -40,7 +40,6 @@ final class CollectionModel {
                 switch result {
                 case .success(let nft):
                     nfts.append(nft)
-                    print("NFT \(nft)")
                 case .failure(let error):
                     print(error.localizedDescription)
                 }

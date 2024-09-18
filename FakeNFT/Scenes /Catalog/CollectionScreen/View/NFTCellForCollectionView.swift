@@ -10,6 +10,8 @@ import UIKit
 final class NFTCellForCollectionView: UICollectionViewCell {
     
     static let reuseIdentifier = "NFTCollectionViewCell"
+    private var isLike = false
+    private var inCart = false
     
     private lazy var nftImageView: UIImageView = {
         let view = UIImageView()
@@ -69,12 +71,25 @@ final class NFTCellForCollectionView: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        isLike = false
+        inCart = false
+        nameLabel.text = ""
+        nftImageView.image = nil
+        updateRating(0)
+        cartButton.setImage(nil, for: .normal)
+        favoriteButton.setImage(nil, for: .normal)
+        ethLabel.text = ""
+        
+    }
+    
     func configure(nft: Nft) {
-        let isLike = true
-        let inCart = true
+        inCart = true
+        isLike = true
         let fullName = nft.name
         let firstName = fullName.components(separatedBy: " ").first ?? fullName
-            
+        
         nameLabel.text = firstName
         
         let urlForImage = nft.images[0]

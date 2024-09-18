@@ -57,8 +57,8 @@ final class CatalogTableViewCell: UITableViewCell {
         ])
     }
     
-    func configCell(name: String, count: Int, image: String) {
-        let urlForImage = URL(string: image)
+    func configCell(name: String, count: Int, image: URL) {
+        let urlForImage = image
         topImage.kf.setImage(
             with: urlForImage,
             options: [

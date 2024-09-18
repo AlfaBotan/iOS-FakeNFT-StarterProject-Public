@@ -5,8 +5,8 @@
 //  Created by Илья Волощик on 9.09.24.
 //
 
-import UIKit
-import ProgressHUD
+import Foundation
+
 
 protocol CatalogViewModelProtocol: AnyObject {
     func fetchCollections(completion: @escaping () -> Void)
@@ -25,12 +25,10 @@ class CatalogViewModel: CatalogViewModelProtocol {
     private var catalog: [NFTModelCatalog] = []
     var reloadTableView: (() -> Void)?
     
-
+    
     func fetchCollections(completion: @escaping () -> Void) {
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
-        ProgressHUD.show()
-        ProgressHUD.animationType = .circleSpinFade
         
         catalogModel.loadCatalog { [weak self] (result: Result<NFTsModelCatalog, any Error>) in
             guard let self = self else {return}
@@ -38,10 +36,8 @@ class CatalogViewModel: CatalogViewModelProtocol {
             case .success(let catalog):
                 self.catalog = catalog
                 self.applySavedSortOption()
-                ProgressHUD.dismiss()
                 completion()
             case .failure(let error):
-                ProgressHUD.showError()
                 print(error.localizedDescription)
             }
         }
@@ -69,19 +65,19 @@ class CatalogViewModel: CatalogViewModelProtocol {
     }
     
     private func saveSortOption(_ option: SortOption) {
-            UserDefaults.standard.set(option.rawValue, forKey: sortOptionKey)
+        UserDefaults.standard.set(option.rawValue, forKey: sortOptionKey)
+    }
+    
+    private func applySavedSortOption() {
+        let savedOption = UserDefaults.standard.string(forKey: sortOptionKey)
+        switch savedOption {
+        case SortOption.name.rawValue:
+            sortByName()
+        case SortOption.count.rawValue:
+            sortByCount()
+        default:
+            break
         }
-        
-        private func applySavedSortOption() {
-            let savedOption = UserDefaults.standard.string(forKey: sortOptionKey)
-            switch savedOption {
-            case SortOption.name.rawValue:
-                sortByName()
-            case SortOption.count.rawValue:
-                sortByCount()
-            default:
-                break
-            }
-        }
+    }
 }
 

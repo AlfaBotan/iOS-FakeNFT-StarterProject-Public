@@ -21,8 +21,6 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     private var pickedCollection: NFTModelCatalog
     private var NFTsFromCollection: Nfts = []
     
-    //    private var collections: [NFTCellModel] = []
-    
     init(pickedCollection: NFTModelCatalog, model: CollectionModel) {
         self.collectionModel = model
         self.pickedCollection = pickedCollection
@@ -53,10 +51,10 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     
     func fetchNFTs(completion: @escaping () -> Void) {
         
-            let dispatchGroup = DispatchGroup()
-            
-            ProgressHUD.show()
-            ProgressHUD.animationType = .circleSpinFade
+        let dispatchGroup = DispatchGroup()
+        
+        ProgressHUD.show()
+        ProgressHUD.animationType = .circleSpinFade
         
         let idArray = pickedCollection.nfts
         var nftsArray: Nfts = []
@@ -75,7 +73,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
                 dispatchGroup.leave()
             }
         }
-            
+        
         dispatchGroup.notify(queue: .main) {
             print(nftsArray.count)
             ProgressHUD.dismiss()

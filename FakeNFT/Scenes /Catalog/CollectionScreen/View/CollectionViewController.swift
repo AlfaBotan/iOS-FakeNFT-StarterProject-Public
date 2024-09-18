@@ -114,24 +114,24 @@ final class CollectionViewController: UIViewController {
     
     private func configureNavBar() {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-           navigationController?.navigationBar.shadowImage = UIImage()
-           navigationController?.navigationBar.isTranslucent = true
-           navigationController?.view.backgroundColor = .clear
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.view.backgroundColor = .clear
         
-         let backButton = UIBarButtonItem(
-             image: UIImage(named: "backward"),
-             style: .plain,
-             target: self,
-             action: #selector(backButtonTapped)
-         )
-         backButton.tintColor = .black
-         navigationItem.leftBarButtonItem = backButton
-     }
-     
-     @objc private func backButtonTapped() {
-         navigationController?.popViewController(animated: true)
-     }
- 
+        let backButton = UIBarButtonItem(
+            image: UIImage(named: "backward"),
+            style: .plain,
+            target: self,
+            action: #selector(backButtonTapped)
+        )
+        backButton.tintColor = .black
+        navigationItem.leftBarButtonItem = backButton
+    }
+    
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     
     private func addSubviews() {
         view.addSubview(scrollView)
@@ -202,7 +202,7 @@ final class CollectionViewController: UIViewController {
     
     func configureSubviews() {
         let pickedCollection = viewModel.getPickedCollection()
-        let urlForImage = URL(string: pickedCollection.cover)
+        let urlForImage = pickedCollection.cover
         topImage.kf.setImage(
             with: urlForImage,
             options: [
@@ -253,6 +253,7 @@ extension CollectionViewController: UICollectionViewDataSource {
         }
         
         let nft = viewModel.collection(at: indexPath.row)
+        cell.prepareForReuse()
         cell.configure(nft: nft)
         
         return cell
