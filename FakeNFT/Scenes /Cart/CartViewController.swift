@@ -1,27 +1,32 @@
+//  Created by Alexander Salagubov on 09.09.2024.
+//
+
+import Foundation
 import UIKit
 import ProgressHUD
 
 final class CartViewController: UIViewController {
 
+  // MARK: - ServicesAssembly
+
+  init(servicesAssembly: ServicesAssembly) {
+    self.servicesAssembly = servicesAssembly
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: -  Varibles
+
+  let servicesAssembly: ServicesAssembly
   private let viewModel = CartViewModel()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    view.backgroundColor = .systemBackground
-    setupAppearance()
-    viewModel.onItemsUpdated = {
-      DispatchQueue.main.async {
-        self.tableView.reloadData()
-        self.updateSummary()
-      }
-    }
-    viewModel.loadItems()
-  }
 
   private lazy var tableView: UITableView = {
     let tableView = UITableView()
     tableView.rowHeight = 140
-    tableView.delegate = self
     tableView.dataSource = self
     tableView.backgroundColor = .systemBackground
     tableView.separatorStyle = .none
@@ -41,7 +46,7 @@ final class CartViewController: UIViewController {
 
   private lazy var sortButton: UIButton = {
     let sortButton = UIButton()
-    let image = Images.Common.sortBtn
+    let image = Images.Common.sortBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
     sortButton.setImage(image, for: .normal)
     sortButton.addTarget(nil, action: #selector(sortButtonTapped), for: .touchUpInside)
     return sortButton
@@ -105,27 +110,71 @@ final class CartViewController: UIViewController {
     return backgroundView
   }()
 
+  // MARK: - LifeCycle
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = .systemBackground
+    setupAppearance()
+    viewModel.onItemsUpdated = {
+      DispatchQueue.main.async {
+        self.tableView.reloadData()
+        self.updateSummary()
+        self.updateHolders()
+      }
+    }
+    viewModel.loadItems()
+    viewModel.applySorting()
+  }
+
+  override func viewWillAppear(_ animated: Bool) {
+    ProgressHUD.show()
+    ProgressHUD.animationType = .circleSpinFade
+    super.viewWillAppear(animated)
+    tabBarController?.tabBar.isHidden = false
+    navigationController?.setNavigationBarHidden(true, animated: animated)
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    navigationController?.setNavigationBarHidden(false, animated: animated)
+  }
+
+  // MARK: - Button Go To Payment Screen
+
   @objc private func paymentButtonTapped() {
     let paymentViewController = PaymentViewController()
-    present(paymentViewController, animated: true, completion: nil)
+    navigationController?.pushViewController(paymentViewController, animated: true)
+    navigationController?.navigationBar.tintColor = UIColor.segmentActive
+    navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
   }
+
+  // MARK: - Alert Action Sheet
 
   @objc private func sortButtonTapped() {
     let actionSheet = UIAlertController(title: Strings.Alerts.sortTitle, message: nil, preferredStyle: .actionSheet)
+
     let priceSort = UIAlertAction(title: Strings.Alerts.sortByPrice, style: .default) { _ in
-      // TODO: Add price sort
+      self.viewModel.sortByPrice()
+      self.tableView.reloadData()
     }
+
     let ratingSort = UIAlertAction(title: Strings.Alerts.sortByRating, style: .default) { _ in
-      // TODO: Add rating sort
+      self.viewModel.sortByRating()
+      self.tableView.reloadData()
     }
-    let titleSort = UIAlertAction(title: Strings.Alerts.sortByName, style: .default) { _ in
-      // TODO: Add name sort
+
+    let titleSort = UIAlertAction(title: Strings.Alerts.sortByTitle, style: .default) { _ in
+      self.viewModel.sortByName()
+      self.tableView.reloadData()
     }
+
     let cancelAction = UIAlertAction(title: Strings.Alerts.closeBtn, style: .cancel)
 
     [priceSort, ratingSort, titleSort, cancelAction].forEach { actionSheet.addAction($0) }
     present(actionSheet, animated: true, completion: nil)
   }
+
 
   func setupAppearance() {
     [tableView, sortButton, placeholderLabel, backgroundView].forEach {
@@ -138,7 +187,7 @@ final class CartViewController: UIViewController {
       tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
       tableView.bottomAnchor.constraint(equalTo: backgroundView.topAnchor),
 
-      sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 2),
+      sortButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
       sortButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -9),
       sortButton.widthAnchor.constraint(equalToConstant: 42),
       sortButton.heightAnchor.constraint(equalToConstant: 42),
@@ -161,7 +210,16 @@ final class CartViewController: UIViewController {
     totalAmountLabel.text = "\(totalAmount) \(Strings.Common.eth)"
   }
 
+  private func updateHolders() {
+    tableView.isHidden = viewModel.nftItems.isEmpty
+    payButton.isHidden = viewModel.nftItems.isEmpty
+    backgroundView.isHidden = viewModel.nftItems.isEmpty
+    sortButton.isHidden = viewModel.nftItems.isEmpty
+    placeholderLabel.isHidden = !viewModel.nftItems.isEmpty || viewModel.isLoading
+  }
 }
+
+// MARK: - TableView DataSource
 
 extension CartViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -178,6 +236,11 @@ extension CartViewController: UITableViewDataSource {
   }
 }
 
-extension CartViewController: UITableViewDelegate {
-  // TODO:
+// MARK: - NFT DeleteDelegate
+
+extension CartViewController: DeleteViewControllerDelegate {
+  func didConfirmDeletion(of nftItem: Nft) {
+    guard let index = viewModel.nftItems.firstIndex(where: { $0.name == nftItem.name }) else { return }
+    viewModel.removeItem(at: index)
+  }
 }

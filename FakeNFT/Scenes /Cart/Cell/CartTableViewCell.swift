@@ -1,14 +1,13 @@
-//
-//  CartTableViewCell.swift
-//  FakeNFT
-//
 //  Created by Alexander Salagubov on 09.09.2024.
 //
 
 import Foundation
 import UIKit
+import Kingfisher
 
 final class CartTableViewCell: UITableViewCell {
+
+  private var nftItem: Nft?
 
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -54,7 +53,7 @@ final class CartTableViewCell: UITableViewCell {
 
   private lazy var removeButton: UIButton = {
     let removeButton = UIButton()
-    let image = Images.Common.deleteCartBtn
+    let image = Images.Common.deleteCartBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
     removeButton.setImage(image, for: .normal)
     removeButton.addTarget(self, action: #selector(deleteNft), for: .touchUpInside)
     return removeButton
@@ -91,15 +90,34 @@ final class CartTableViewCell: UITableViewCell {
     ])
   }
 
-  func configure(with nftItem: NftItem) {
-    nftImage.image = nftItem.image
+  func configure(with nftItem: Nft) {
+    self.nftItem = nftItem
+    nftImage.kf.indicatorType = .activity
+    if let firstImageUrl = nftItem.images.first {
+        nftImage.kf.setImage(
+            with: firstImageUrl,
+            placeholder: UIImage(named: "mockNFT"),
+            options: [
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1)),
+                .cacheOriginalImage
+            ]
+        )
+    } else {
+        nftImage.image = UIImage(named: "mockNFT")
+    }
     nftLabel.text = nftItem.name
     nftPrice.text = "\(nftItem.price) \(Strings.Common.eth)"
     configureRating(rating: nftItem.rating)
   }
 
+  
   @objc private func deleteNft() {
-    
+    guard let parentViewController = self.parentViewController, let nftItem = nftItem else { return }
+    let deleteViewController = DeleteViewController(nftItem: nftItem)
+    deleteViewController.modalPresentationStyle = .overFullScreen
+    deleteViewController.delegate = parentViewController as? CartViewController
+    parentViewController.present(deleteViewController, animated: true)
   }
 
   private func configureRating(rating: Int) {
