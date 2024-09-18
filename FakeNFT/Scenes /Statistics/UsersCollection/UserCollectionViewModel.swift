@@ -5,14 +5,14 @@
 //  Created by Дмитрий on 09.09.2024.
 //
 
-import UIKit
-import ProgressHUD
+import Foundation
 
 protocol UserCollectionViewModelProtocol {
     var userNFTs: [String] { get }
     var nftService: NftService { get }
     var numberOfItems: Int { get }
     var onDataChanged: (() -> Void)? { get set }
+    var showErrorAlert: ((String) -> Void)? { get set }
     
     func item(at indexPath: IndexPath) -> NFTCellModel?
     func loadNFTs()
@@ -27,13 +27,13 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
         return nfts.count
     }
     var onDataChanged: (() -> Void)?
+    var showErrorAlert: ((String) -> Void)?
     
     init(userNFTs: [String],
          nftService: NftService = NftServiceImpl(networkClient: DefaultNetworkClient(),
                                                  storage: NftStorageImpl())) {
         self.userNFTs = userNFTs
         self.nftService = nftService
-        print(userNFTs)
     }
     
     private var nfts: [NFTCellModel] = []
@@ -49,13 +49,12 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
             return
         }
         
-        ProgressHUD.show()
         var nftsFromNetwork: [NFTCellModel] = []
         let dispatchGroup = DispatchGroup()
         
         for userNFT in userNFTs {
             dispatchGroup.enter()
-            nftService.loadNft(id: userNFT) { result in
+            nftService.loadNft(id: userNFT) { [weak self] result in
                 switch result {
                 case .success(let nft):
                     let nftCellModel = NFTCellModel(
@@ -68,6 +67,8 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
                     
                 case .failure(let error):
                     print("Failed to load NFT with id \(userNFT): \(error.localizedDescription)")
+                    self?.showErrorAlert?(Strings.Error.network)
+                    return
                 }
                 dispatchGroup.leave()
             }
@@ -81,8 +82,6 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
                 // Можно вывести сообщение, что данные не загружены
                 print("No NFTs loaded.")
             }
-            ProgressHUD.dismiss()
         }
     }
-    
 }

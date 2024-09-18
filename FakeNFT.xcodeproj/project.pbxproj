@@ -61,6 +61,7 @@
 		68C0A1432C93A82100FC05FF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C0A1422C93A82100FC05FF /* User.swift */; };
 		68DC7F972C8E3D5300DB8CDE /* UserCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DC7F962C8E3D5300DB8CDE /* UserCollectionViewController.swift */; };
 		68DC7F9A2C8E3D5900DB8CDE /* NFTCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DC7F992C8E3D5900DB8CDE /* NFTCollectionViewCell.swift */; };
+		68F7949C2C9B2FEA00770484 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F7949B2C9B2FEA00770484 /* RatingView.swift */; };
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
 /* End PBXBuildFile section */
@@ -139,6 +140,7 @@
 		68C0A1422C93A82100FC05FF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		68DC7F962C8E3D5300DB8CDE /* UserCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionViewController.swift; sourceTree = "<group>"; };
 		68DC7F992C8E3D5900DB8CDE /* NFTCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NFTCollectionViewCell.swift; sourceTree = "<group>"; };
+		68F7949B2C9B2FEA00770484 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		E1CD40D92A96BE7D00BE7FE8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -432,6 +434,7 @@
 		68B5D3932C8BA48800FABE53 /* UsersCollection */ = {
 			isa = PBXGroup;
 			children = (
+				68F7949A2C9B2FD900770484 /* View */,
 				68DC7F982C8E3D5900DB8CDE /* Cell */,
 				68DC7F962C8E3D5300DB8CDE /* UserCollectionViewController.swift */,
 				6886EF362C8EFE1700F93102 /* UserCollectionViewModel.swift */,
@@ -446,6 +449,14 @@
 				68050FB82C8E4AB100E635C7 /* NFTCellModel.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		68F7949A2C9B2FD900770484 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				68F7949B2C9B2FEA00770484 /* RatingView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
@@ -631,6 +642,7 @@
 				68B5D3952C8CE5A700FABE53 /* UserCardViewController.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
+				68F7949C2C9B2FEA00770484 /* RatingView.swift in Sources */,
 				68050FB92C8E4AB100E635C7 /* NFTCellModel.swift in Sources */,
 				6892244E2C8A3FD700CE698A /* StatisticViewController.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,

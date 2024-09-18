@@ -9,9 +9,11 @@ import UIKit
 import Kingfisher
 
 final class NFTCollectionViewCell: UICollectionViewCell {
-    
+
+    // MARK: - Public Properties
     static let reuseIdentifier = "NFTCollectionViewCell"
-    
+
+    // MARK: - Private Properties
     private var isLiked: Bool = false
     private var inCart: Bool = false
     
@@ -58,29 +60,25 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    private lazy var ratingStackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .horizontal
-        view.alignment = .leading
-        view.spacing = 2
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
+    private lazy var ratingStackView = RatingView()
+
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        constraintView()
+        setupViews()
+        constraintViews()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: - Public Methods
     func configure(nft: NFTCellModel) {
-        // TODO: Добавить индикатор загрузки изображений
         nameLabel.text = nft.name
         DispatchQueue.main.async {
+            
             self.nftImageView.kf.indicatorType = .activity
             self.nftImageView.kf.setImage(
                 with: nft.imageURL,
@@ -92,57 +90,11 @@ final class NFTCollectionViewCell: UICollectionViewCell {
             )
         }
         ethLabel.text = "\(nft.cost) \(Strings.Common.eth)"
-        updateRating(nft.rating)
+        ratingStackView.setRating(nft.rating)
     }
     
-    @objc func tapLikeButton() {
-        changeLikeStatus()
-        // TODO: Добавить отправку лайка по сети, после реализации сервиса
-    }
-    
-    @objc func tapCartButton() {
-        changeCartStatus()
-        // TODO: Добавить отправку NFT в корзину, после реализации сервиса
-    }
-    
-    private func changeLikeStatus() {
-        isLiked = !isLiked
-        let favoriteImage = isLiked ? Images.Common.favoriteActive : Images.Common.favoriteInactive
-        favoriteButton.setImage(favoriteImage ?? UIImage(), for: .normal)
-    }
-    
-    private func changeCartStatus() {
-        inCart = !inCart
-        let cartImage = inCart ? Images.Common.deleteCartBtn : Images.Common.addCartBtn
-        cartImage?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
-        
-        cartButton.setImage(cartImage ?? UIImage(), for: .normal)
-    }
-    
-    private func updateRating(_ rating: Int) {
-        for (i, view) in ratingStackView.arrangedSubviews.enumerated() {
-            if let star = view as? UIImageView {
-                if i < rating {
-                    star.image = Images.Common.starActive
-                } else {
-                    star.image = Images.Common.startInactive
-                }
-            }
-        }
-    }
-    
-    private func constraintView() {
-        for _ in 0..<5 {
-            let star = UIImageView()
-            star.image = Images.Common.startInactive ?? UIImage()
-            star.contentMode = .scaleAspectFill
-            star.translatesAutoresizingMaskIntoConstraints = false
-            star.widthAnchor.constraint(equalToConstant: 12).isActive = true
-            star.heightAnchor.constraint(equalToConstant: 12).isActive = true
-            
-            ratingStackView.addArrangedSubview(star)
-        }
-        
+    // MARK: - Private Methods
+    private func setupViews() {
         [nftImageView,
          ratingStackView,
          nameLabel,
@@ -151,7 +103,9 @@ final class NFTCollectionViewCell: UICollectionViewCell {
          cartButton].forEach {
             contentView.addSubview($0)
         }
-        
+    }
+    
+    private func constraintViews() {
         NSLayoutConstraint.activate([
             nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -180,5 +134,29 @@ final class NFTCollectionViewCell: UICollectionViewCell {
             cartButton.widthAnchor.constraint(equalToConstant: 40),
             cartButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+    }
+    
+    private func changeLikeStatus() {
+        isLiked = !isLiked
+        let favoriteImage = isLiked ? Images.Common.favoriteActive : Images.Common.favoriteInactive
+        favoriteButton.setImage(favoriteImage ?? UIImage(), for: .normal)
+    }
+    
+    private func changeCartStatus() {
+        inCart = !inCart
+        let cartImage = inCart ? Images.Common.deleteCartBtn : Images.Common.addCartBtn
+        cartImage?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
+        
+        cartButton.setImage(cartImage ?? UIImage(), for: .normal)
+    }
+    
+    @objc private func tapLikeButton() {
+        changeLikeStatus()
+        // TODO: Добавить отправку лайка по сети, после реализации сервиса
+    }
+    
+    @objc private func tapCartButton() {
+        changeCartStatus()
+        // TODO: Добавить отправку NFT в корзину, после реализации сервиса
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class UserCollectionViewController: UIViewController {
 
@@ -35,7 +36,7 @@ final class UserCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.loadNFTs()
+        loadNFT()
         
         addSubviews()
         addConstraints()
@@ -59,9 +60,19 @@ final class UserCollectionViewController: UIViewController {
         ])
     }
     
+    private func loadNFT() {
+        ProgressHUD.show()
+        viewModel.loadNFTs()
+        ProgressHUD.dismiss()
+    }
+    
     private func setupBindings() {
         viewModel.onDataChanged = { [weak self] in
             self?.userCollectionView.reloadData()
+        }
+        
+        viewModel.showErrorAlert = { [weak self] alertText in
+            self?.showAlert(with: alertText)
         }
     }
     
@@ -88,6 +99,24 @@ final class UserCollectionViewController: UIViewController {
         layout.minimumLineSpacing = 8
         
         return layout
+    }
+    
+    private func showAlert(with text: String) {
+        let alert = UIAlertController(title: "", message: text, preferredStyle: .alert)
+        
+        // TODO: Придумать как сделать кнопки универсальными
+        let cancle = UIAlertAction(title: Strings.Cart.cancleBtn, style: .cancel) { _ in
+            ProgressHUD.dismiss()
+            self.navigationController?.popViewController(animated: true)
+        }
+        let reload = UIAlertAction(title: Strings.Cart.repeatBtn, style: .default) { [weak self] _ in
+            self?.loadNFT()
+        }
+        
+        alert.addAction(cancle)
+        alert.addAction(reload)
+        
+        present(alert, animated: true)
     }
 }
 
