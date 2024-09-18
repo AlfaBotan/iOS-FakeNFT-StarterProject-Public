@@ -10,7 +10,7 @@ import Foundation
 protocol StatisticViewModelProtocol: AnyObject {
     var reloadTableView: (() -> Void)? { get set }
     var showSortActionSheet: (() -> Void)? { get set }
-    var users: [UserStatistics] { get }
+    var users: Users { get }
     
     func loadMockData()
     func sortByName()
@@ -23,7 +23,21 @@ final class StatisticViewModel: StatisticViewModelProtocol {
     
     var showSortActionSheet: (() -> Void)?
     
-    private(set) var users: [UserStatistics] = []
+    private(set) var users: Users = []
+    
+    private var isSortByName: Bool {
+        // TODO: нужно будет разобраться: раз в несколько запусков сохранение порядка не срабатывает(
+        
+        get {
+            let value = UserDefaults.standard.bool(forKey: Constants.UserDefaultKeys.isSortByName)
+            return value
+        }
+        
+        set(newValue) {
+            UserDefaults.standard.setValue(newValue,
+                                           forKey: Constants.UserDefaultKeys.isSortByName)
+        }
+    }
     
     init() {
         loadMockData()
@@ -31,20 +45,33 @@ final class StatisticViewModel: StatisticViewModelProtocol {
     
     func loadMockData() {
         users = UserMock.mockStatisticsUserData
-        reloadTableView?()
+        
+        if isSortByName {
+            sortByName()
+        } else {
+            sortByRating()
+        }
     }
     
     func sortByName() {
+        isSortByName = true
         users.sort { $0.name < $1.name }
         reloadTableView?()
     }
     
     func sortByRating() {
-        users.sort { $0.score > $1.score }
+        isSortByName = false
+        users.sort { $0.rating > $1.rating }
         reloadTableView?()
     }
     
     func showSortOptions() {
         showSortActionSheet?()
+    }
+}
+
+private enum Constants {
+    enum UserDefaultKeys {
+        static let isSortByName = "isSortByName"
     }
 }

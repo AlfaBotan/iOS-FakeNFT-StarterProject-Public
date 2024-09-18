@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class StatisticsUserTableViewCell: UITableViewCell {
     
@@ -73,11 +74,20 @@ final class StatisticsUserTableViewCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: padding, right: 0))
     }
     
-    func configure(with model: UserStatistics, and index: Int) {
+    func configure(with model: User, and index: Int) {
         cellIndex.text = "\(index)"
-        avatarImageView.image = model.avatarImage.withTintColor(UIColor.segmentActive)
+        DispatchQueue.main.async {
+            self.avatarImageView.kf.indicatorType = .activity
+            self.avatarImageView.kf.setImage(
+                with: URL(string: model.avatar),
+                placeholder: UIImage(named: "profile"),
+                options: [
+                    .transition(.fade(0.2))
+                ]
+            )
+        }
         nameLabel.text = model.name
-        scoreLabel.text = "\(model.score)"
+        scoreLabel.text = "\(model.rating)"
     }
     
     private func constraintViews() {

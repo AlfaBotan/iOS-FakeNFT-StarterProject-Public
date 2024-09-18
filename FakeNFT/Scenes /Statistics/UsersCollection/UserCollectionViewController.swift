@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import ProgressHUD
 
-final class UserCollectionViewController: UIViewController, ViewSetupable {
+final class UserCollectionViewController: UIViewController {
 
     // MARK: - Private Properties
     private var viewModel: UserCollectionViewModelProtocol
@@ -22,7 +23,7 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
     }()
     
     // MARK: - Initializers
-    init(viewModel: UserCollectionViewModelProtocol = UserCollectionViewModel()) {
+    init(viewModel: UserCollectionViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -35,22 +36,22 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadNFT()
+        
         addSubviews()
         addConstraints()
         configureView()
         
         setupCollection()
         setupBindings()
-        
-        viewModel.loadNFTs()
     }
     
-    // MARK: - Public Methods
-    func addSubviews() {
+    // MARK: - Private Methods
+    private func addSubviews() {
         view.addSubview(userCollectionView)
     }
     
-    func addConstraints() {
+    private func addConstraints() {
         NSLayoutConstraint.activate([
             userCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.Layout.topSpacing),
             userCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.Layout.leading),
@@ -59,10 +60,19 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
         ])
     }
     
-    // MARK: - Private Methods
+    private func loadNFT() {
+        ProgressHUD.show()
+        viewModel.loadNFTs()
+        ProgressHUD.dismiss()
+    }
+    
     private func setupBindings() {
         viewModel.onDataChanged = { [weak self] in
             self?.userCollectionView.reloadData()
+        }
+        
+        viewModel.showErrorAlert = { [weak self] alertText in
+            self?.showAlert(with: alertText)
         }
     }
     
@@ -72,7 +82,8 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
     }
     
     private func setupCollection() {
-        userCollectionView.register(NFTCollectionViewCell.self, forCellWithReuseIdentifier: NFTCollectionViewCell.reuseIdentifier)
+        userCollectionView.register(NFTCollectionViewCell.self, 
+                                    forCellWithReuseIdentifier: NFTCollectionViewCell.reuseIdentifier)
         userCollectionView.dataSource = self
         userCollectionView.delegate = self
     }
@@ -88,6 +99,24 @@ final class UserCollectionViewController: UIViewController, ViewSetupable {
         layout.minimumLineSpacing = 8
         
         return layout
+    }
+    
+    private func showAlert(with text: String) {
+        let alert = UIAlertController(title: "", message: text, preferredStyle: .alert)
+        
+        // TODO: Придумать как сделать кнопки универсальными
+        let cancle = UIAlertAction(title: Strings.Cart.cancleBtn, style: .cancel) { _ in
+            ProgressHUD.dismiss()
+            self.navigationController?.popViewController(animated: true)
+        }
+        let reload = UIAlertAction(title: Strings.Cart.repeatBtn, style: .default) { [weak self] _ in
+            self?.loadNFT()
+        }
+        
+        alert.addAction(cancle)
+        alert.addAction(reload)
+        
+        present(alert, animated: true)
     }
 }
 
