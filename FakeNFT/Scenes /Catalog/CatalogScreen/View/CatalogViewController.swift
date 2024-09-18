@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class CatalogViewController: UIViewController {
     
@@ -29,18 +30,25 @@ final class CatalogViewController: UIViewController {
         configureNavBar()
         addSubvies()
         loadData()
+        setUpBinding()
+    }
+    
+    private func setUpBinding() {
+        viewModel.reloadTableView = { [weak self] in
+            self?.NFTTableView.reloadData()
+        }
     }
     
     private func configureNavBar() {
-         let sortButton = UIBarButtonItem(
-             image: UIImage(named: "sortBtn"),
-             style: .plain,
-             target: self,
-             action: #selector(sortButtonTupped)
-         )
+        let sortButton = UIBarButtonItem(
+            image: UIImage(named: "sortBtn"),
+            style: .plain,
+            target: self,
+            action: #selector(sortButtonTupped)
+        )
         sortButton.tintColor = .black
-         navigationItem.rightBarButtonItem = sortButton
-     }
+        navigationItem.rightBarButtonItem = sortButton
+    }
     
     private func addSubvies() {
         view.addSubview(NFTTableView)
@@ -54,8 +62,11 @@ final class CatalogViewController: UIViewController {
     }
     
     private func loadData() {
+        ProgressHUD.show()
+        ProgressHUD.animationType = .circleSpinFade
         viewModel.fetchCollections {
             DispatchQueue.main.async {
+                ProgressHUD.dismiss()
                 self.NFTTableView.reloadData()
             }
         }
@@ -65,8 +76,13 @@ final class CatalogViewController: UIViewController {
         
         let alert = CustomAlertControllerForSort(title: Strings.Alerts.sortTitle, message: nil, preferredStyle: .actionSheet)
         let cancelAction = UIAlertAction(title: Strings.Alerts.closeBtn, style: .cancel, handler: nil)
-        let sortByTitle = UIAlertAction(title: Strings.Alerts.sortByTitle, style: .default, handler: nil)
-        let sortByNftQuantity = UIAlertAction(title: Strings.Alerts.sortByNftQuantity, style: .default, handler: nil)
+        let sortByTitle = UIAlertAction(title: Strings.Alerts.sortByTitle, style: .default) {[weak self] _ in
+            self?.viewModel.sortByName()
+            
+        }
+        let sortByNftQuantity = UIAlertAction(title: Strings.Alerts.sortByNftQuantity, style: .default) {[weak self] _ in
+            self?.viewModel.sortByCount()
+        }
         alert.setDimmingColor(UIColor.black.withAlphaComponent(0.5))
         alert.addAction(cancelAction)
         alert.addAction(sortByTitle)
@@ -79,10 +95,13 @@ final class CatalogViewController: UIViewController {
 extension CatalogViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewModelForCollectionVC = CollectionViewModel()
+        
+        let viewModelForCollectionVC = CollectionViewModel(pickedCollection: viewModel.collection(at: indexPath.row),
+                                                           model: CollectionModel(networkClient: DefaultNetworkClient(), storage: NftStorageImpl()))
+        
         let collectionVC = CollectionViewController(viewModel: viewModelForCollectionVC)
-           navigationController?.pushViewController(collectionVC, animated: true)
-       }
+        navigationController?.pushViewController(collectionVC, animated: true)
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 187
@@ -100,7 +119,8 @@ extension CatalogViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         let nft = viewModel.collection(at: indexPath.row)
-        cell.configCell(name: nft.name, count: nft.count, image: nft.image)
+        cell.prepareForReuse()
+        cell.configCell(name: nft.name, count: nft.nfts.count, image: nft.cover)
         cell.selectionStyle = .none
         return cell
     }
