@@ -134,8 +134,6 @@ final class PaymentViewController: UIViewController {
 
   @objc private func paymentButtonTapped() {
     paymentConfirmationRequest(for: currencyID)
-//    let paymentResult = PaymentResultViewController()
-//    navigationController?.pushViewController(paymentResult, animated: true)
   }
 
   @objc private func showAgreement() {
@@ -187,7 +185,7 @@ final class PaymentViewController: UIViewController {
 
     let alert = UIAlertController(title: "", message: Strings.Cart.errorMsg, preferredStyle: .alert)
 
-    let cancle = UIAlertAction(title: Strings.Cart.cancleBtn, style: .cancel) { _ in
+    let cancel = UIAlertAction(title: Strings.Cart.cancleBtn, style: .cancel) { _ in
       ProgressHUD.dismiss()
       self.navigationController?.popViewController(animated: true)
     }
@@ -195,7 +193,7 @@ final class PaymentViewController: UIViewController {
       self.paymentConfirmationRequest(for: self.currencyID)
     }
 
-    alert.addAction(cancle)
+    alert.addAction(cancel)
     alert.addAction(reload)
 
     present(alert, animated: true)
