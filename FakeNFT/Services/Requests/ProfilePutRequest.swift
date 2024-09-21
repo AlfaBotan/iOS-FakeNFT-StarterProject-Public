@@ -28,7 +28,7 @@ struct ProfileDtoObject: Dto {
     
     func asDictionary() -> [String : String] {
         [
-            CodingKeys.likes.rawValue: likes.joined(separator:", "),
+            CodingKeys.likes.rawValue: likes.isEmpty ? "" : likes.joined(separator:", "),
             CodingKeys.avatar.rawValue: avatar,
             CodingKeys.name.rawValue: name
         ]
