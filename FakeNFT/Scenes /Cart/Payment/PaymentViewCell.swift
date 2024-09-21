@@ -5,7 +5,6 @@ final class PaymentViewCell: UICollectionViewCell {
   private lazy var currencyTitle: UILabel = {
     let currencyTitle = UILabel()
     currencyTitle.font = UIFont.caption2
-    currencyTitle.text = ""
     currencyTitle.textColor = UIColor.textPrimary
     return currencyTitle
   }()
@@ -13,7 +12,6 @@ final class PaymentViewCell: UICollectionViewCell {
   private lazy var currencySymbol: UILabel = {
     let currencySymbol = UILabel()
     currencySymbol.font = UIFont.caption2
-    currencySymbol.text = ""
     currencySymbol.textColor = UIColor.currencyType
     return currencySymbol
   }()
