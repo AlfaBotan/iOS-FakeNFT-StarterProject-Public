@@ -11,8 +11,9 @@ protocol StatisticViewModelProtocol: AnyObject {
     var reloadTableView: (() -> Void)? { get set }
     var showSortActionSheet: (() -> Void)? { get set }
     var users: Users { get }
+    var isLoadingData: Bool { get }
     
-    func loadMockData()
+    func loadData(completion: @escaping () -> Void)
     func sortByName()
     func sortByRating()
     func showSortOptions()
@@ -20,10 +21,11 @@ protocol StatisticViewModelProtocol: AnyObject {
 
 final class StatisticViewModel: StatisticViewModelProtocol {
     var reloadTableView: (() -> Void)?
-    
     var showSortActionSheet: (() -> Void)?
     
+    private(set) var isLoadingData = false
     private(set) var users: Users = []
+    private let userService: UserService
     
     private var isSortByName: Bool {
         // TODO: нужно будет разобраться: раз в несколько запусков сохранение порядка не срабатывает(
@@ -39,17 +41,40 @@ final class StatisticViewModel: StatisticViewModelProtocol {
         }
     }
     
-    init() {
-        loadMockData()
+    init(userService: UserService = UserServiceImpl(
+        networkClient: DefaultNetworkClient(), storage: UserStorageImpl())
+    ) {
+        self.userService = userService
     }
     
-    func loadMockData() {
-        users = UserMock.mockStatisticsUserData
+    func loadData(completion: @escaping () -> Void) {
         
-        if isSortByName {
-            sortByName()
-        } else {
-            sortByRating()
+        guard !isLoadingData else { return }
+        
+        isLoadingData = true
+        userService.loadNextUsersPage { [weak self] result in
+            
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let users):
+                
+                self.users += users
+                
+                if self.isSortByName {
+                    self.sortByName()
+                } else {
+                    self.sortByRating()
+                }
+                
+                completion()
+            case .failure(let error):
+                // TODO: Добавить алерт
+                print("[StatisticViewModel]: \(error.localizedDescription)")
+                completion()
+            }
+            
+            self.isLoadingData = false
         }
     }
     

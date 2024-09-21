@@ -14,8 +14,9 @@ struct User: Codable {
     let description: String
     let website: String
     let nfts: [String]
-    let rating: Int
+    let rating: String
     let id: String
 }
 
 typealias Users = [User]
+
