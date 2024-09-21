@@ -12,11 +12,13 @@ protocol StatisticViewModelProtocol: AnyObject {
     var showSortActionSheet: (() -> Void)? { get set }
     var users: Users { get }
     var isLoadingData: Bool { get }
+    var hasMoreData: Bool { get }
     
     func loadData(completion: @escaping () -> Void)
     func sortByName()
     func sortByRating()
     func showSortOptions()
+    func resetPagination()
 }
 
 final class StatisticViewModel: StatisticViewModelProtocol {
@@ -25,7 +27,10 @@ final class StatisticViewModel: StatisticViewModelProtocol {
     
     private(set) var isLoadingData = false
     private(set) var users: Users = []
+    private(set) var hasMoreData = true
     private let userService: UserService
+    
+    private var isFirstLoad = true
     
     private var isSortByName: Bool {
         // TODO: нужно будет разобраться: раз в несколько запусков сохранение порядка не срабатывает(
@@ -47,9 +52,20 @@ final class StatisticViewModel: StatisticViewModelProtocol {
         self.userService = userService
     }
     
+    func resetPagination() {
+        isFirstLoad = true
+        hasMoreData = true
+        users.removeAll()
+        userService.resetPagination()
+        reloadTableView?()
+    }
+    
     func loadData(completion: @escaping () -> Void) {
         
-        guard !isLoadingData else { return }
+        guard !isLoadingData, hasMoreData else {
+            completion()
+            return
+        }
         
         isLoadingData = true
         userService.loadNextUsersPage { [weak self] result in
@@ -58,36 +74,39 @@ final class StatisticViewModel: StatisticViewModelProtocol {
             
             switch result {
             case .success(let users):
+                self.users += users 
+                self.hasMoreData = !users.isEmpty
                 
-                self.users += users
-                
-                if self.isSortByName {
-                    self.sortByName()
-                } else {
-                    self.sortByRating()
+                if self.isFirstLoad {
+                    if self.isSortByName {
+                        self.sortByName()
+                    } else {
+                        self.sortByRating()
+                    }
+                    self.isFirstLoad = false
                 }
                 
                 completion()
             case .failure(let error):
                 // TODO: Добавить алерт
+                
                 print("[StatisticViewModel]: \(error.localizedDescription)")
                 completion()
             }
             
             self.isLoadingData = false
+            reloadTableView?()
         }
     }
     
     func sortByName() {
         isSortByName = true
         users.sort { $0.name < $1.name }
-        reloadTableView?()
     }
     
     func sortByRating() {
         isSortByName = false
         users.sort { $0.rating > $1.rating }
-        reloadTableView?()
     }
     
     func showSortOptions() {

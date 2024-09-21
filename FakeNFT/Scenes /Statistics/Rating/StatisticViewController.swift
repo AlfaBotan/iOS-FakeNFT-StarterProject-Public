@@ -7,6 +7,12 @@ final class StatisticViewController: UIViewController {
     var viewModel: StatisticViewModelProtocol
     
     // MARK: - Private Properties
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        return control
+    }()
+    
     private lazy var sortButton: UIButton = {
         let button = UIButton(type: .custom)
         let image = Images.Common.sortBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
@@ -87,6 +93,20 @@ final class StatisticViewController: UIViewController {
         view.backgroundColor = .systemBackground
     }
     
+    private func loadData(refreshing: Bool = false) {
+        if refreshing {
+            viewModel.resetPagination()
+        }
+        
+        ProgressHUD.show()
+        viewModel.loadData() {
+            ProgressHUD.dismiss()
+            if refreshing {
+                self.refreshControl.endRefreshing()
+            }
+        }
+    }
+    
     private func setupBindings() {
         viewModel.reloadTableView = { [weak self] in
             self?.scoreTable.reloadData()
@@ -96,10 +116,7 @@ final class StatisticViewController: UIViewController {
             self?.showSortAlert()
         }
         
-        ProgressHUD.show()
-        viewModel.loadData() {
-            ProgressHUD.dismiss()
-        }
+        loadData()
     }
     
     private func setupTable() {
@@ -107,6 +124,7 @@ final class StatisticViewController: UIViewController {
         scoreTable.dataSource = self
         scoreTable.register(StatisticsUserTableViewCell.self,
                             forCellReuseIdentifier: StatisticsUserTableViewCell.reuseIdentifier)
+        scoreTable.refreshControl = refreshControl
     }
     
     private func setupNavBar() {
@@ -118,14 +136,20 @@ final class StatisticViewController: UIViewController {
         viewModel.showSortOptions()
     }
     
+    @objc private func refreshData() {
+        loadData(refreshing: true)
+    }
+    
     private func showSortAlert() {
         let alert = UIAlertController(title: Strings.Alerts.sortTitle, message: nil, preferredStyle: .actionSheet)
         
         let name = UIAlertAction(title: Strings.Alerts.sortByName, style: .default) { [weak self] _ in
             self?.viewModel.sortByName()
+            self?.scoreTable.reloadData()
         }
         let rating = UIAlertAction(title: Strings.Alerts.sortByRating, style: .default) { [weak self] _ in
             self?.viewModel.sortByRating()
+            self?.scoreTable.reloadData()
         }
         let close = UIAlertAction(title: Strings.Alerts.closeBtn, style: .cancel)
         
@@ -161,11 +185,8 @@ extension StatisticViewController: UITableViewDataSource {
     
     private func loadMoreDataIfNeeded() {
         // Здесь проверяем, не идет ли сейчас загрузка данных
-        if !viewModel.isLoadingData {
-            ProgressHUD.show()
-            viewModel.loadData {
-                ProgressHUD.dismiss()
-            }
+        if !viewModel.isLoadingData && viewModel.hasMoreData {
+            loadData()
         }
     }
 }

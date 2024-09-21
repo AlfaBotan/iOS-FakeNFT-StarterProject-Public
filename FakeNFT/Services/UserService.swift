@@ -7,13 +7,12 @@
 
 import Foundation
 
-typealias UserCompletion = (Result<User, Error>) -> Void
 typealias UsersCompletion = (Result<Users, Error>) -> Void
 
 protocol UserService {
-    func loadUser(id: String, completion: @escaping UserCompletion)
     func loadUsers(page: Int, size: Int, completion: @escaping UsersCompletion)
     func loadNextUsersPage(completion: @escaping UsersCompletion)
+    func resetPagination()
 }
 
 final class UserServiceImpl: UserService {
@@ -24,17 +23,22 @@ final class UserServiceImpl: UserService {
     private(set) var users: Users = []
     private var lastLoadedPage: Int?
     private var isFetching = false
-
+    
     init(networkClient: NetworkClient, storage: UserStorage) {
         self.storage = storage
         self.networkClient = networkClient
     }
     
-    func loadUser(id: String, completion: @escaping UserCompletion) {
-        print("Пользователь")
+    func resetPagination() {
+        lastLoadedPage = nil
+        users.removeAll()
     }
     
     func loadUsers(page: Int, size: Int, completion: @escaping UsersCompletion) {
+        
+        if page == 0 {
+            storage.clearUsers()
+        }
         
         if let user = storage.getUsers(with: page) {
             completion(.success(user))
