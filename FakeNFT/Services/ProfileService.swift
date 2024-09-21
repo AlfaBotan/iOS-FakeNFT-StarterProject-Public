@@ -22,10 +22,8 @@ protocol ProfileService {
 
 final class ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient
-    private let storage: NftStorage
     
-    init(networkClient: NetworkClient, storage: NftStorage) {
-        self.storage = storage
+    init(networkClient: NetworkClient) {
         self.networkClient = networkClient
     }
     

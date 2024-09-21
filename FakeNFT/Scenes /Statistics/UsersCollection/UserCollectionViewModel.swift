@@ -10,17 +10,19 @@ import Foundation
 protocol UserCollectionViewModelProtocol {
     var userNFTs: [String] { get }
     var nftService: NftService { get }
+    var profileService: ProfileService { get }
     var numberOfItems: Int { get }
     var onDataChanged: (() -> Void)? { get set }
     var showErrorAlert: ((String) -> Void)? { get set }
     
     func item(at indexPath: IndexPath) -> NFTCellModel?
-    func loadNFTs()
+    func loadNFTs(completion: @escaping () -> Void)
 }
 
 final class UserCollectionViewModel: UserCollectionViewModelProtocol {
     
     var nftService: NftService
+    var profileService: ProfileService
     var userNFTs: [String]
     
     var numberOfItems: Int {
@@ -31,9 +33,13 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
     
     init(userNFTs: [String],
          nftService: NftService = NftServiceImpl(networkClient: DefaultNetworkClient(),
-                                                 storage: NftStorageImpl())) {
+                                                 storage: NftStorageImpl()),
+         profileService: ProfileService = ProfileServiceImpl(networkClient: DefaultNetworkClient())
+    
+    ) {
         self.userNFTs = userNFTs
         self.nftService = nftService
+        self.profileService = profileService
     }
     
     private var nfts: [NFTCellModel] = []
@@ -43,9 +49,9 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
         return nfts[indexPath.row]
     }
     
-    func loadNFTs() {
-        
-        if userNFTs.count == 0 {
+    func loadNFTs(completion: @escaping () -> Void) {
+        if userNFTs.isEmpty {
+            completion()
             return
         }
         
@@ -68,7 +74,6 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
                 case .failure(let error):
                     print("Failed to load NFT with id \(userNFT): \(error.localizedDescription)")
                     self?.showErrorAlert?(Strings.Error.network)
-                    return
                 }
                 dispatchGroup.leave()
             }
@@ -79,9 +84,9 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
             if !self.nfts.isEmpty {
                 self.onDataChanged?()
             } else {
-                // Можно вывести сообщение, что данные не загружены
                 print("No NFTs loaded.")
             }
+            completion() // Сообщаем о завершении загрузки
         }
     }
 }

@@ -77,18 +77,18 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     // MARK: - Public Methods
     func configure(nft: NFTCellModel) {
         nameLabel.text = nft.name
-        DispatchQueue.main.async {
-            
-            self.nftImageView.kf.indicatorType = .activity
-            self.nftImageView.kf.setImage(
-                with: nft.imageURL,
-                options: [
-                    .scaleFactor(UIScreen.main.scale),
-                    .transition(.fade(1)),
-                    .cacheOriginalImage
-                ]
-            )
-        }
+        
+        nftImageView.kf.indicatorType = .activity
+        nftImageView.kf.setImage(
+            with: nft.imageURL,
+            placeholder: UIImage.from(color: .segmentActive),
+            options: [
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(0.2)),
+                .cacheOriginalImage
+            ]
+        )
+        
         ethLabel.text = "\(nft.cost) \(Strings.Common.eth)"
         ratingStackView.setRating(nft.rating)
     }

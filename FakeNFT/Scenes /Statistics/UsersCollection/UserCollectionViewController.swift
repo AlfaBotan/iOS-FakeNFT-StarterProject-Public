@@ -9,7 +9,7 @@ import UIKit
 import ProgressHUD
 
 final class UserCollectionViewController: UIViewController {
-
+    
     // MARK: - Private Properties
     private var viewModel: UserCollectionViewModelProtocol
     
@@ -62,8 +62,9 @@ final class UserCollectionViewController: UIViewController {
     
     private func loadNFT() {
         ProgressHUD.show()
-        viewModel.loadNFTs()
-        ProgressHUD.dismiss()
+        viewModel.loadNFTs {
+            ProgressHUD.dismiss() // Убираем индикатор после загрузки
+        }
     }
     
     private func setupBindings() {
@@ -82,7 +83,7 @@ final class UserCollectionViewController: UIViewController {
     }
     
     private func setupCollection() {
-        userCollectionView.register(NFTCollectionViewCell.self, 
+        userCollectionView.register(NFTCollectionViewCell.self,
                                     forCellWithReuseIdentifier: NFTCollectionViewCell.reuseIdentifier)
         userCollectionView.dataSource = self
         userCollectionView.delegate = self
