@@ -134,7 +134,9 @@ extension UserCollectionViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
+        cell.delegate = self
         cell.configure(nft: nft)
+        
         return cell
     }
 }
@@ -149,5 +151,16 @@ private enum Constants {
         static let trailing: CGFloat = -16
         static let topSpacing: CGFloat = 0
         static let bottomSpacing: CGFloat = 0
+    }
+}
+
+extension UserCollectionViewController: NFTCollectionViewCellDelegate {
+    func tapLikeButton(with id: String) {
+        ProgressHUD.show()
+        view.isUserInteractionEnabled = false
+        viewModel.toggleLike(for: id) {
+            ProgressHUD.dismiss()
+            self.view.isUserInteractionEnabled = true
+        }
     }
 }

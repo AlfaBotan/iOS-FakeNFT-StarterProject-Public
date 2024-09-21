@@ -8,12 +8,18 @@
 import UIKit
 import Kingfisher
 
+protocol NFTCollectionViewCellDelegate: AnyObject {
+    func tapLikeButton(with id: String)
+}
+
 final class NFTCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Public Properties
     static let reuseIdentifier = "NFTCollectionViewCell"
+    weak var delegate: NFTCollectionViewCellDelegate?
 
     // MARK: - Private Properties
+    private var id: String = ""
     private var isLiked: Bool = false
     private var inCart: Bool = false
     
@@ -76,6 +82,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Public Methods
     func configure(nft: NFTCellModel) {
+        id = nft.id
         nameLabel.text = nft.name
         
         nftImageView.kf.indicatorType = .activity
@@ -91,6 +98,10 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         
         ethLabel.text = "\(nft.cost) \(Strings.Common.eth)"
         ratingStackView.setRating(nft.rating)
+        
+        if nft.isLiked {
+            changeLikeStatus()
+        }
     }
     
     // MARK: - Private Methods
@@ -152,6 +163,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     
     @objc private func tapLikeButton() {
         changeLikeStatus()
+        delegate?.tapLikeButton(with: id)
         // TODO: Добавить отправку лайка по сети, после реализации сервиса
     }
     

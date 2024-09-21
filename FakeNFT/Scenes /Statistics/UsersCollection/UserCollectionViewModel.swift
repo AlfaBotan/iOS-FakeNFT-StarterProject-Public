@@ -17,6 +17,7 @@ protocol UserCollectionViewModelProtocol {
     
     func item(at indexPath: IndexPath) -> NFTCellModel?
     func loadNFTs(completion: @escaping () -> Void)
+    func toggleLike(for nftID: String, completion: @escaping () -> Void)
 }
 
 final class UserCollectionViewModel: UserCollectionViewModelProtocol {
@@ -31,11 +32,15 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
     var onDataChanged: (() -> Void)?
     var showErrorAlert: ((String) -> Void)?
     
+    private var profile: Profile? = nil
+    private var likes: [String] = []
+    
     init(userNFTs: [String],
          nftService: NftService = NftServiceImpl(networkClient: DefaultNetworkClient(),
                                                  storage: NftStorageImpl()),
-         profileService: ProfileService = ProfileServiceImpl(networkClient: DefaultNetworkClient())
-    
+         profileService: ProfileService = ProfileServiceImpl(networkClient: DefaultNetworkClient(),
+                                                             storage: ProfileStorageImpl())
+         
     ) {
         self.userNFTs = userNFTs
         self.nftService = nftService
@@ -50,13 +55,44 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
     }
     
     func loadNFTs(completion: @escaping () -> Void) {
+        loadProfile { [weak self] result in
+            switch result {
+            case .success:
+                self?.loadNFTsAfterProfile(completion: completion)
+            case .failure:
+                completion()
+            }
+        }
+    }
+    
+    func toggleLike(for nftID: String, completion: @escaping () -> Void) {
+        guard var profile = profile else { return }
+        
+        if let index = profile.likes.firstIndex(of: nftID) {
+            profile.likes.remove(at: index)
+        } else {
+            profile.likes.append(nftID)
+        }
+        
+        profileService.sendExamplePutRequest(likes: profile.likes, avatar: profile.avatar, name: profile.name) { [weak self] result in
+            switch result {
+            case .success(let updatedProfile):
+                self?.profile = updatedProfile
+            case .failure(let error):
+                self?.showErrorAlert?(error.localizedDescription)
+            }
+            completion()
+        }
+    }
+    
+    private func loadNFTsAfterProfile(completion: @escaping () -> Void) {
         if userNFTs.isEmpty {
             completion()
             return
         }
         
-        var nftsFromNetwork: [NFTCellModel] = []
         let dispatchGroup = DispatchGroup()
+        var nftsFromNetwork: [NFTCellModel] = []
         
         for userNFT in userNFTs {
             dispatchGroup.enter()
@@ -64,10 +100,12 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
                 switch result {
                 case .success(let nft):
                     let nftCellModel = NFTCellModel(
+                        id: nft.id,
                         imageURL: nft.images[0],
                         rating: nft.rating,
                         name: nft.name.components(separatedBy: " ")[0],
-                        cost: nft.price
+                        cost: nft.price,
+                        isLiked: self?.profile?.likes.contains(nft.id) ?? false
                     )
                     nftsFromNetwork.append(nftCellModel)
                     
@@ -80,13 +118,28 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
         }
         
         dispatchGroup.notify(queue: .main) {
-            self.nfts = nftsFromNetwork
+            self.nfts = nftsFromNetwork.sorted { $0.id < $1.id }
             if !self.nfts.isEmpty {
                 self.onDataChanged?()
             } else {
                 print("No NFTs loaded.")
             }
-            completion() // Сообщаем о завершении загрузки
+            completion()
+        }
+    }
+    
+    private func loadProfile(completion: @escaping (Result<Profile, Error>) -> Void) {
+        profileService.loadProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+                print("Profile loaded:", profile)
+                completion(.success(profile))
+            case .failure(let error):
+                print("Failed to load user profile: \(error.localizedDescription)")
+                self?.showErrorAlert?(Strings.Error.network)
+                completion(.failure(error))
+            }
         }
     }
 }
