@@ -42,18 +42,19 @@ final class OrderServiceImpl: OrderService {
       }
     }
   }
-
+  
   func updateOrder(nftsIds: [String], completion: @escaping OrderCompletion) {
-    let newOrderModel = NewOrderModel(nfts: nftsIds)
-    let request = EditOrderRequest(newOrder: newOrderModel)
-    networkClient.send(request: request, type: Order.self) { result in
-      switch result {
-      case .success(let order):
-        completion(.success(order))
-      case .failure(let error):
-        completion(.failure(error))
+      let newOrderModel = NewOrderModel(nfts: nftsIds)
+      let request = EditOrderRequest(newOrder: newOrderModel)
+
+      networkClient.send(request: request, type: Order.self) { result in
+          switch result {
+          case .success(let order):
+              completion(.success(order))
+          case .failure(let error):
+              completion(.failure(error))
+          }
       }
-    }
   }
 
   func loadPayment(currencyId: String, completion: @escaping PaymentConfirmationRequest) {
