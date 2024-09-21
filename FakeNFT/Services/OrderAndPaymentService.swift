@@ -8,7 +8,7 @@ protocol OrderService {
   func loadOrder(completion: @escaping OrderCompletion)
   func loadCurrencyList(completion: @escaping CurrencyListCompletion)
   func updateOrder(nftsIds: [String], completion: @escaping OrderCompletion)
-  func loadPayment(completion: @escaping PaymentConfirmationRequest)
+  func loadPayment(currencyId: String, completion: @escaping PaymentConfirmationRequest)
 }
 
 final class OrderServiceImpl: OrderService {
@@ -56,7 +56,7 @@ final class OrderServiceImpl: OrderService {
     }
   }
 
-  func loadPayment(completion: @escaping PaymentConfirmationRequest) {
+  func loadPayment(currencyId: String, completion: @escaping PaymentConfirmationRequest) {
     networkClient.send(request: PaymentRequest(), type: Payment.self) { result in
       switch result {
       case .success(let payment):
