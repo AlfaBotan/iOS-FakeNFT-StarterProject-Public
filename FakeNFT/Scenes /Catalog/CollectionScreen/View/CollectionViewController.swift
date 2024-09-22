@@ -232,6 +232,12 @@ final class CollectionViewController: UIViewController {
     
     @objc func goToAuthorURL() {
         print("Переходим по ссылке: ")
+        let nft = viewModel.collection(at: 0)
+        guard let url = URL(string: nft.author) else { return }
+        print(url)
+        
+        let webViewVC = AuthorWebViewController(url: url)
+        navigationController?.pushViewController(webViewVC, animated: true)
     }
 }
 
