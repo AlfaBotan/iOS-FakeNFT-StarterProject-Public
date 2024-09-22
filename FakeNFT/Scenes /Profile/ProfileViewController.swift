@@ -157,7 +157,15 @@ final class ProfileViewController: UIViewController {
         // Привязка изображения профиля
         viewModel.userImage.bind { [weak self] image in
             DispatchQueue.main.async {
-                self?.avatarImageView.image = image
+                self?.avatarImageView.kf.setImage(
+                    with: image,
+                    placeholder: UIImage(named: "ProfileMokIMG"),
+                    options: [
+                        .scaleFactor(UIScreen.main.scale),
+                        .transition(.fade(1)),
+                        .cacheOriginalImage
+                    ]
+                )
             }
         }
     }
@@ -174,8 +182,24 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func editButtonTapped() {
-        // Обработка нажатия на кнопку
-        print("Edit button tapped")
+        let editProfileVC = EditProfileViewController()
+        editProfileVC.viewModel = viewModel
+        editProfileVC.onProfileImageUpdated = { [weak self] imageURL in
+            guard let self = self else { return }
+            if let imageURL = imageURL {
+                self.avatarImageView.kf.setImage(
+                    with: imageURL,
+                    placeholder: UIImage(named: "ProfileMokIMG"),
+                    options: [
+                        .scaleFactor(UIScreen.main.scale),
+                        .transition(.fade(0.2)),
+                        .cacheOriginalImage
+                    ]
+                )
+            }
+        }
+        editProfileVC.modalPresentationStyle = .formSheet
+        present(editProfileVC, animated: true, completion: nil)
     }
 }
 
