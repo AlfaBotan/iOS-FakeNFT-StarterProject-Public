@@ -2,12 +2,7 @@ import UIKit
 
 final class MyNftViewController: UIViewController {
     
-    // Пример данных NFT
-    private let nftData: [NFT] = [
-        NFT(imageName: "2", name: "Lilo", author: "John Doe", price: 1.78, rating: 3),
-        NFT(imageName: "3", name: "Spring", author: "John Doe", price: 1.78, rating: 3),
-        NFT(imageName: "1", name: "April", author: "John Doe", price: 1.78, rating: 3)
-    ]
+    private let viewModel = MyNftViewModel()
     
     private let tableView = UITableView()
     
@@ -78,45 +73,32 @@ final class MyNftViewController: UIViewController {
         weak var weakSelf = self
         
         // Вариант сортировки по цене
-        let sortByNameAction = UIAlertAction(title: "По цене", style: .default) { _ in
-            weakSelf?.sortByPrice()
+        let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { _ in
+            weakSelf?.viewModel.sortByPrice()
+            weakSelf?.tableView.reloadData()
         }
         
         // Вариант сортировки по рейтингу
-        let sortByPriceAction = UIAlertAction(title: "По рейтингу", style: .default) { _ in
-            weakSelf?.sortByRating()
+        let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { _ in
+            weakSelf?.viewModel.sortByRating()
+            weakSelf?.tableView.reloadData()
         }
         
         // Вариант сортировки по названию
-        let sortByRatingAction = UIAlertAction(title: "По названию", style: .default) { _ in
-            weakSelf?.sortByName()
+        let sortByNameAction = UIAlertAction(title: "По названию", style: .default) { _ in
+            weakSelf?.viewModel.sortByName()
+            weakSelf?.tableView.reloadData()
         }
         
         // Кнопка "Закрыть"
         let cancelAction = UIAlertAction(title: "Закрыть", style: .cancel, handler: nil)
         
-        alertController.addAction(sortByNameAction)
         alertController.addAction(sortByPriceAction)
         alertController.addAction(sortByRatingAction)
+        alertController.addAction(sortByNameAction)
         alertController.addAction(cancelAction)
         
         present(alertController, animated: true, completion: nil)
-    }
-    
-    // Методы сортировки
-    private func sortByName() {
-        print("Сортировка по названию")
-        // логика сортировки данных по названию
-    }
-    
-    private func sortByPrice() {
-        print("Сортировка по цене")
-        // логика сортировки данных по цене
-    }
-    
-    private func sortByRating() {
-        print("Сортировка по рейтингу")
-        //  логика сортировки данных по рейтингу
     }
 }
 
@@ -124,13 +106,13 @@ final class MyNftViewController: UIViewController {
 extension MyNftViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return nftData.count
+        return viewModel.filteredNftData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NftCell", for: indexPath) as! NftTableViewCell
-        // Настройка ячейки - передача данных NFT в ячейку
-        cell.configure(with: nftData[indexPath.row])
+        // Настройка ячейки - передача данных из ViewModel
+        cell.configure(with: viewModel.filteredNftData[indexPath.row])
         return cell
     }
     
