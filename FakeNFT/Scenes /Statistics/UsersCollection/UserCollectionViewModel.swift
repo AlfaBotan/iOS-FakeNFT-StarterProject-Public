@@ -106,14 +106,15 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
     
     func toggleCart(for nftId: String, completion: @escaping () -> Void) {
         guard var order = order else { return }
+        var nftsId = order.nfts
         
-        if let index = order.nfts.firstIndex(of: nftId) {
-            order.nfts.remove(at: index)
+        if let index = nftsId.firstIndex(of: nftId) {
+            nftsId.remove(at: index)
         } else {
-            order.nfts.append(nftId)
+            nftsId.append(nftId)
         }
         
-        orderService.updateOrder(nftsIds: order.nfts) { [weak self] result in
+        orderService.updateOrder(nftsIds: nftsId) { [weak self] result in
             switch result {
             case .success(let order):
                 self?.order = order
