@@ -62,10 +62,10 @@
 		68BA90BA2C9E041C00A9729E /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BA90B92C9E041C00A9729E /* ProfileService.swift */; };
 		68BA90BC2C9E043D00A9729E /* ProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BA90BB2C9E043C00A9729E /* ProfileRequest.swift */; };
 		68BA90BE2C9E075700A9729E /* ProfilePutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BA90BD2C9E075700A9729E /* ProfilePutRequest.swift */; };
-		68DEA61F2C9F739E00A17CCA /* ProfileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DEA61E2C9F739E00A17CCA /* ProfileStorage.swift */; };
 		68C0A1432C93A82100FC05FF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C0A1422C93A82100FC05FF /* User.swift */; };
 		68DC7F972C8E3D5300DB8CDE /* UserCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DC7F962C8E3D5300DB8CDE /* UserCollectionViewController.swift */; };
 		68DC7F9A2C8E3D5900DB8CDE /* NFTCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DC7F992C8E3D5900DB8CDE /* NFTCollectionViewCell.swift */; };
+		68DEA61F2C9F739E00A17CCA /* ProfileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DEA61E2C9F739E00A17CCA /* ProfileStorage.swift */; };
 		68E849322C9E0EB000C8D927 /* UserCardWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E849302C9E0EB000C8D927 /* UserCardWebViewController.swift */; };
 		68E849332C9E0EB000C8D927 /* UserCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E849312C9E0EB000C8D927 /* UserCardViewModel.swift */; };
 		68E849352C9E0ED100C8D927 /* UserCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E849342C9E0ED100C8D927 /* UserCollectionViewModel.swift */; };
@@ -150,10 +150,10 @@
 		68BA90B92C9E041C00A9729E /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		68BA90BB2C9E043C00A9729E /* ProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRequest.swift; sourceTree = "<group>"; };
 		68BA90BD2C9E075700A9729E /* ProfilePutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePutRequest.swift; sourceTree = "<group>"; };
-		68DEA61E2C9F739E00A17CCA /* ProfileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStorage.swift; sourceTree = "<group>"; };
 		68C0A1422C93A82100FC05FF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		68DC7F962C8E3D5300DB8CDE /* UserCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionViewController.swift; sourceTree = "<group>"; };
 		68DC7F992C8E3D5900DB8CDE /* NFTCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NFTCollectionViewCell.swift; sourceTree = "<group>"; };
+		68DEA61E2C9F739E00A17CCA /* ProfileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStorage.swift; sourceTree = "<group>"; };
 		68E849302C9E0EB000C8D927 /* UserCardWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCardWebViewController.swift; sourceTree = "<group>"; };
 		68E849312C9E0EB000C8D927 /* UserCardViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCardViewModel.swift; sourceTree = "<group>"; };
 		68E849342C9E0ED100C8D927 /* UserCollectionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionViewModel.swift; sourceTree = "<group>"; };
@@ -299,6 +299,7 @@
 		3F6806AC29CBBAF200B4F915 /* FakeNFTTests */ = {
 			isa = PBXGroup;
 			children = (
+				68DEA6242C9F847B00A17CCA /* Statistics */,
 				3F6806AD29CBBAF200B4F915 /* ExampleUnitTests.swift */,
 			);
 			path = FakeNFTTests;
@@ -476,6 +477,13 @@
 				68050FB82C8E4AB100E635C7 /* NFTCellModel.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		68DEA6242C9F847B00A17CCA /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Statistics;
 			sourceTree = "<group>";
 		};
 		68F7949A2C9B2FD900770484 /* View */ = {
