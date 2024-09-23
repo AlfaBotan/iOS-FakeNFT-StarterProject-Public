@@ -28,7 +28,7 @@ final class NftTableViewCell: UITableViewCell {
         contentView.addSubview(nftImageView)
         
         heartButton.translatesAutoresizingMaskIntoConstraints = false
-        heartButton.setImage(UIImage(named: "heart"), for: .normal)
+        heartButton.setImage(UIImage(named: "favoriteInactive"), for: .normal)
         contentView.addSubview(heartButton)
         
         fromLabel.font = .caption1
