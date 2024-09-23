@@ -42,12 +42,14 @@ final class NFTCellForCollectionView: UICollectionViewCell {
     private lazy var favoriteButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(favoriteButtonTupped), for: .touchUpInside)
         return button
     }()
     
     private lazy var cartButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(cartButtonTupped), for: .touchUpInside)
         return button
     }()
     
@@ -170,5 +172,20 @@ final class NFTCellForCollectionView: UICollectionViewCell {
             cartButton.widthAnchor.constraint(equalToConstant: 40),
             cartButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+    }
+    
+    @objc func favoriteButtonTupped() {
+        print("favoriteButtonTupped")
+        isLike.toggle()
+        let imageForLike = isLike ? Images.Common.favoriteActive ?? UIImage() : Images.Common.favoriteInactive ?? UIImage()
+        favoriteButton.setImage(imageForLike, for: .normal)
+    }
+    
+    @objc func cartButtonTupped() {
+        print("cartButtonTupped")
+        inCart.toggle()
+        
+        let imageForCart = inCart ? Images.Common.deleteCartBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal) :                                                       Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
+        cartButton.setImage(imageForCart, for: .normal)
     }
 }
