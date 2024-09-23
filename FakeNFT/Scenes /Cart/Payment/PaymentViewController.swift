@@ -185,9 +185,9 @@ final class PaymentViewController: UIViewController {
 
     let alert = UIAlertController(title: "", message: Strings.Cart.errorMsg, preferredStyle: .alert)
 
-    let cancel = UIAlertAction(title: Strings.Cart.cancleBtn, style: .cancel) { _ in
+    let cancel = UIAlertAction(title: Strings.Cart.cancleBtn, style: .cancel) { [weak self] _ in
       ProgressHUD.dismiss()
-      self.navigationController?.popViewController(animated: true)
+      self?.navigationController?.popViewController(animated: true)
     }
     let reload = UIAlertAction(title: Strings.Cart.repeatBtn, style: .default) { _ in
       self.paymentConfirmationRequest(for: self.currencyID)
