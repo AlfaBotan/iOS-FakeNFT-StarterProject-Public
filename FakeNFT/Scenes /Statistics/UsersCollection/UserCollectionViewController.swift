@@ -163,4 +163,13 @@ extension UserCollectionViewController: NFTCollectionViewCellDelegate {
             self.view.isUserInteractionEnabled = true
         }
     }
+    
+    func tapCartButton(with id: String) {
+        ProgressHUD.show()
+        view.isUserInteractionEnabled = false
+        viewModel.toggleCart(for: id) {
+            ProgressHUD.dismiss()
+            self.view.isUserInteractionEnabled = true
+        }
+    }
 }

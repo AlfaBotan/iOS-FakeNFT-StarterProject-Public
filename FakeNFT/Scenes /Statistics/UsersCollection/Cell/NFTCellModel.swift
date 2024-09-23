@@ -14,4 +14,5 @@ struct NFTCellModel {
     let name: String
     let cost: Float
     let isLiked: Bool
+    let inCart: Bool
 }

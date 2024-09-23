@@ -10,6 +10,7 @@ import Kingfisher
 
 protocol NFTCollectionViewCellDelegate: AnyObject {
     func tapLikeButton(with id: String)
+    func tapCartButton(with id: String)
 }
 
 final class NFTCollectionViewCell: UICollectionViewCell {
@@ -102,6 +103,10 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         if nft.isLiked {
             changeLikeStatus()
         }
+        
+        if nft.inCart {
+            changeCartStatus()
+        }
     }
     
     // MARK: - Private Methods
@@ -169,6 +174,6 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     
     @objc private func tapCartButton() {
         changeCartStatus()
-        // TODO: Добавить отправку NFT в корзину, после реализации сервиса
+        delegate?.tapCartButton(with: id)
     }
 }
