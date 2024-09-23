@@ -95,12 +95,21 @@ final class CatalogViewController: UIViewController {
 extension CatalogViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let viewModelForCollectionVC = CollectionViewModel(pickedCollection: viewModel.collection(at: indexPath.row),
-                                                           model: CollectionModel(networkClient: DefaultNetworkClient(), storage: NftStorageImpl()))
-        
-        let collectionVC = CollectionViewController(viewModel: viewModelForCollectionVC)
-        navigationController?.pushViewController(collectionVC, animated: true)
+        ProgressHUD.show()
+        ProgressHUD.animationType = .circleSpinFade
+        viewModel.getProfile() {
+            DispatchQueue.main.async { [self] in
+                ProgressHUD.dismiss()
+                guard let profile = viewModel.profile else {return}
+                let viewModelForCollectionVC = CollectionViewModel(pickedCollection: viewModel.collection(at: indexPath.row),
+                                                                   model: CollectionModel(networkClient: DefaultNetworkClient(),
+                                                                                          storage: NftStorageImpl()),
+                                                                   profile: profile)
+                
+                let collectionVC = CollectionViewController(viewModel: viewModelForCollectionVC)
+                self.navigationController?.pushViewController(collectionVC, animated: true)
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

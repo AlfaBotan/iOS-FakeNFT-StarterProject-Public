@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class CollectionViewController: UIViewController {
     
@@ -257,10 +258,17 @@ extension CollectionViewController: UICollectionViewDataSource {
             print("Не прошёл каст")
             return UICollectionViewCell()
         }
-        
+        cell.delegate = self
+        var isLike = false
         let nft = viewModel.collection(at: indexPath.row)
+        let likes = viewModel.getLikes()
+        if let index = likes.firstIndex(of: nft.id) {
+            isLike = true
+        } else {
+            isLike = false
+        }
         cell.prepareForReuse()
-        cell.configure(nft: nft)
+        cell.configure(nft: nft, isLike: isLike, nftID: nft.id)
         
         return cell
     }
@@ -282,4 +290,25 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 8, left: leftAndRightInset, bottom: 8, right: leftAndRightInset)
     }
     
+}
+
+extension CollectionViewController: NFTCollectionViewCellDelegate {
+    func tapLikeButton(with id: String) {
+        print("Попали в метод делегата")
+        ProgressHUD.show()
+        view.isUserInteractionEnabled = false
+        viewModel.toggleLike(for: id) {
+            ProgressHUD.dismiss()
+            self.view.isUserInteractionEnabled = true
+        }
+    }
+    
+    func tapCartButton(with id: String) {
+        ProgressHUD.show()
+        view.isUserInteractionEnabled = false
+        viewModel.toggleCart(for: id) {
+            ProgressHUD.dismiss()
+            self.view.isUserInteractionEnabled = true
+        }
+    }
 }
