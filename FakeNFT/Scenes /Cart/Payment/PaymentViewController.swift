@@ -7,6 +7,13 @@ final class PaymentViewController: UIViewController {
 
   private var isLoading = false
 
+  private var currencyID = "" {
+    didSet {
+      payButton.alpha = 1
+      payButton.isEnabled = true
+    }
+  }
+
   private var currencies : [Currency] = [] {
     didSet {
       collectionView.reloadData()
@@ -28,6 +35,8 @@ final class PaymentViewController: UIViewController {
     payButton.layer.cornerRadius = 16
     payButton.layer.masksToBounds = true
     payButton.backgroundColor = UIColor.segmentActive
+    payButton.alpha = 0.5
+    payButton.isEnabled = false
     payButton.addTarget(self, action: #selector(paymentButtonTapped), for: .touchUpInside)
     payButton.translatesAutoresizingMaskIntoConstraints = false
     return payButton
@@ -124,8 +133,7 @@ final class PaymentViewController: UIViewController {
   }
 
   @objc private func paymentButtonTapped() {
-    let paymentResult = PaymentResultViewController(servicesAssembly: ser)
-    navigationController?.pushViewController(paymentResult, animated: true)
+    paymentConfirmationRequest(for: currencyID)
   }
 
   @objc private func showAgreement() {
@@ -160,6 +168,36 @@ final class PaymentViewController: UIViewController {
       }
     }
   }
+
+  private func paymentConfirmationRequest(for id: String) {
+    orderService.loadPayment(currencyId: id) {(result: Result<Payment, Error>) in
+      switch result {
+      case .success:
+        let paymentResult = PaymentResultViewController()
+        self.navigationController?.pushViewController(paymentResult, animated: true)
+      case .failure:
+        self.showUnsuccessfulPaymentAlert()
+      }
+    }
+  }
+
+  private func showUnsuccessfulPaymentAlert() {
+
+    let alert = UIAlertController(title: "", message: Strings.Cart.errorMsg, preferredStyle: .alert)
+
+    let cancel = UIAlertAction(title: Strings.Cart.cancleBtn, style: .cancel) { [weak self] _ in
+      ProgressHUD.dismiss()
+      self?.navigationController?.popViewController(animated: true)
+    }
+    let reload = UIAlertAction(title: Strings.Cart.repeatBtn, style: .default) { _ in
+      self.paymentConfirmationRequest(for: self.currencyID)
+    }
+
+    alert.addAction(cancel)
+    alert.addAction(reload)
+
+    present(alert, animated: true)
+  }
 }
 
 extension PaymentViewController: UICollectionViewDataSource {
@@ -180,6 +218,7 @@ extension PaymentViewController: UICollectionViewDataSource {
 extension PaymentViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let cell = collectionView.cellForItem(at: indexPath) as? PaymentViewCell
+    currencyID = currencies[indexPath.item].id
     cell?.layer.borderWidth = 1
     cell?.layer.cornerRadius = 12
     cell?.layer.borderColor = UIColor.segmentActive.cgColor

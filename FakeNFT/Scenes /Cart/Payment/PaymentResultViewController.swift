@@ -1,6 +1,9 @@
 import UIKit
+import ProgressHUD
 
 final class PaymentResultViewController: UIViewController {
+
+  private let orderService: OrderService = OrderServiceImpl(networkClient: DefaultNetworkClient())
 
   private lazy var backToCatalogButton: UIButton = {
     let backToCatalogButton = UIButton()
@@ -45,7 +48,21 @@ final class PaymentResultViewController: UIViewController {
   }
 
   @objc private func backToCatalog() {
-    tabBarController?.selectedIndex = 1
+    clearOrder()
+  }
+
+  func clearOrder() {
+    self.orderService.updateOrder(nftsIds: []) { (result: Result<Order, Error>) in
+      switch result {
+      case .success(let updatedOrder):
+        print("Order successfully updated: \(updatedOrder)")
+        self.tabBarController?.selectedIndex = 1
+        self.navigationController?.popToRootViewController(animated: true)
+      case .failure(let error):
+        print("Error updating order: \(error)")
+        ProgressHUD.showError()
+      }
+    }
   }
 
   func setupAppearance() {
