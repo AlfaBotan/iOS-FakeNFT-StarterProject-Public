@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class ProfileViewController: UIViewController {
     
@@ -79,7 +80,13 @@ final class ProfileViewController: UIViewController {
         configureNavBar()
         setupViews()
         setupBindings()
-        viewModel.viewDidLoad()
+        ProgressHUD.show()
+        viewModel.viewDidLoad { [weak self] in
+                DispatchQueue.main.async {
+                    self?.setupBindings()  // Привязываем данные к UI после загрузки профиля
+                    ProgressHUD.dismiss()
+                }
+            }
     }
     
     private func setupViews() {
@@ -237,7 +244,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             navigationController?.pushViewController(favouritesNftVC, animated: true)
         }
         if indexPath.row == 2 {
-            let webVC = ProfileWebViewController(urlString: "https://practicum.yandex.ru")
+            let webVC = ProfileWebViewController(urlString: viewModel.userWebsite.value)
             navigationController?.pushViewController(webVC, animated: true)
         }
     }
