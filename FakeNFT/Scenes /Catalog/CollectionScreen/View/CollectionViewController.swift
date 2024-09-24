@@ -232,7 +232,6 @@ final class CollectionViewController: UIViewController {
     }
     
     @objc func goToAuthorURL() {
-        print("Переходим по ссылке: ")
         let nft = viewModel.collection(at: 0)
         guard let url = URL(string: nft.author) else { return }
         print(url)
@@ -260,15 +259,25 @@ extension CollectionViewController: UICollectionViewDataSource {
         }
         cell.delegate = self
         var isLike = false
+        var inCart = false
         let nft = viewModel.collection(at: indexPath.row)
         let likes = viewModel.getLikes()
+        let cart = viewModel.getCart()
+        
         if let index = likes.firstIndex(of: nft.id) {
             isLike = true
         } else {
             isLike = false
         }
+        
+        if let index = cart.firstIndex(of: nft.id) {
+            inCart = true
+        } else {
+            inCart = false
+        }
+        
         cell.prepareForReuse()
-        cell.configure(nft: nft, isLike: isLike, nftID: nft.id)
+        cell.configure(nft: nft, isLike: isLike, nftID: nft.id, inCart: inCart)
         
         return cell
     }
@@ -294,7 +303,6 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
 
 extension CollectionViewController: NFTCollectionViewCellDelegate {
     func tapLikeButton(with id: String) {
-        print("Попали в метод делегата")
         ProgressHUD.show()
         view.isUserInteractionEnabled = false
         viewModel.toggleLike(for: id) {

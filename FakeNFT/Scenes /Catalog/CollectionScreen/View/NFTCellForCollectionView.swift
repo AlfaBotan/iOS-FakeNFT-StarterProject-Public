@@ -72,7 +72,6 @@ final class NFTCellForCollectionView: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         constraintView()
     }
     
@@ -93,9 +92,9 @@ final class NFTCellForCollectionView: UICollectionViewCell {
         
     }
     
-    func configure(nft: Nft, isLike: Bool, nftID: String) {
+    func configure(nft: Nft, isLike: Bool, nftID: String, inCart: Bool) {
         id = nftID
-        inCart = true
+        self.inCart = inCart
         self.isLike = isLike
         let fullName = nft.name
         let firstName = fullName.components(separatedBy: " ").first ?? fullName
@@ -192,10 +191,8 @@ final class NFTCellForCollectionView: UICollectionViewCell {
     @objc func cartButtonTupped() {
         print("cartButtonTupped")
         inCart.toggle()
-        
         let imageForCart = inCart ? Images.Common.deleteCartBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal) :                                                       Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
         cartButton.setImage(imageForCart, for: .normal)
-        
         delegate?.tapCartButton(with: id)
     }
 }

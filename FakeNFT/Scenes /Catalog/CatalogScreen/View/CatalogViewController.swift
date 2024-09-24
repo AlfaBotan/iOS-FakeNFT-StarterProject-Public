@@ -46,7 +46,7 @@ final class CatalogViewController: UIViewController {
             target: self,
             action: #selector(sortButtonTupped)
         )
-        sortButton.tintColor = .black
+        sortButton.tintColor = .segmentActive
         navigationItem.rightBarButtonItem = sortButton
     }
     
@@ -101,12 +101,15 @@ extension CatalogViewController: UITableViewDelegate {
             DispatchQueue.main.async { [self] in
                 ProgressHUD.dismiss()
                 guard let profile = viewModel.profile else {return}
+                guard let order = viewModel.order else {return}
                 let viewModelForCollectionVC = CollectionViewModel(pickedCollection: viewModel.collection(at: indexPath.row),
                                                                    model: CollectionModel(networkClient: DefaultNetworkClient(),
                                                                                           storage: NftStorageImpl()),
-                                                                   profile: profile)
+                                                                   profile: profile, 
+                                                                   order: order)
                 
                 let collectionVC = CollectionViewController(viewModel: viewModelForCollectionVC)
+                print("Открываем новый экран")
                 self.navigationController?.pushViewController(collectionVC, animated: true)
             }
         }

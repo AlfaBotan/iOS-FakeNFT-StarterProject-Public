@@ -52,14 +52,11 @@ final class ProfileServiceImpl: ProfileService {
                                avatar: String,
                                name: String,
                                completion: @escaping ProfilePutCompletion) {
-        print(likes.count)
-        print(likes)
         let dto = ProfileDtoObject(likes: likes, avatar: avatar, name: name)
         let request = ProfilePutRequest(dto: dto)
         networkClient.send(request: request, type: Profile.self) { [weak self] result in
             switch result {
             case .success(let profileResponse):
-                print(profileResponse.likes.count)
                 self?.storage.saveProfile(profile: profileResponse)
                 completion(.success(profileResponse))
             case .failure(let error):

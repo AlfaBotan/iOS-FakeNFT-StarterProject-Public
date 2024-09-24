@@ -16,6 +16,7 @@ protocol CatalogViewModelProtocol: AnyObject {
     func getProfile(completion: @escaping () -> Void)
     var reloadTableView: (() -> Void)? { get set }
     var profile: Profile? { get set }
+    var order: Order? {get set }
 
     func sortByName()
     func sortByCount()
@@ -25,9 +26,11 @@ class CatalogViewModel: CatalogViewModelProtocol {
  
     private let catalogModel = CatalogModel(networkClient: DefaultNetworkClient(), storage: NftStorageImpl())
     private let networkClient = DefaultNetworkClient()
+    private let orderService = OrderServiceImpl(networkClient: DefaultNetworkClient())
     private let sortOptionKey = "sortOptionKey"
     private var catalog: [NFTModelCatalog] = []
     var profile: Profile?
+    var order: Order?
     var reloadTableView: (() -> Void)?
     
     
@@ -87,15 +90,19 @@ class CatalogViewModel: CatalogViewModelProtocol {
     }
     
     func getProfile(completion: @escaping () -> Void) {
+        print("Вызвали getProfile")
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
         loadProfile { [weak self] result in
             guard let self = self else {return}
             switch result {
-            case .success(let newProfile):
-                self.profile = newProfile
-                print(newProfile)
-                completion()
+            case .success(_):
+                print("завершили загрузку Profile, он теперь равен: \(self.profile)")
+                print("Вызываем loadorder")
+                loadOrder {
+                    print("Вызвали комплишн для перехода на другой экран")
+                    completion()
+                }
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -104,14 +111,30 @@ class CatalogViewModel: CatalogViewModelProtocol {
     }
     
     func loadProfile(completion: @escaping ProfileCompletion) {
-        
+        print("Вызвали loadProfile")
         let request = ProfileRequest()
         networkClient.send(request: request, type: Profile.self) { [weak self] result in
+            guard let self = self else {return}
             switch result {
-            case .success(let profile):
-                completion(.success(profile))
+            case .success(let newProfile):
+                self.profile = newProfile
+                completion(.success(newProfile))
             case .failure(let error):
                 completion(.failure(error))
+            }
+        }
+    }
+    
+    func loadOrder(completion: @escaping () -> Void) {
+        print("loadOrder")
+        orderService.loadOrder { [weak self] result in
+            switch result {
+            case .success(let order):
+                self?.order = order
+                print("завершили загрузку Order, он теперь равен: \(self?.order)")
+                completion()
+            case .failure(let error):
+                print("Failed to load order: \(error.localizedDescription)")
             }
         }
     }
