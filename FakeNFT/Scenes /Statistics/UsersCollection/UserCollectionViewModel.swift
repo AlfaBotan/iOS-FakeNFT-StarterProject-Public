@@ -13,6 +13,8 @@ protocol UserCollectionViewModelProtocol {
     var orderService: OrderService { get }
     var userNFTs: [String] { get }
     var numberOfItems: Int { get }
+    var profile: Profile? { get }
+    var order: Order? { get }
     var onDataChanged: (() -> Void)? { get set }
     var showErrorAlert: ((String) -> Void)? { get set }
     
@@ -36,8 +38,8 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
     var onDataChanged: (() -> Void)?
     var showErrorAlert: ((String) -> Void)?
     
-    private var profile: Profile? = nil
-    private var order: Order? = nil
+    private(set) var profile: Profile? = nil
+    private(set) var order: Order? = nil
     
     init(userNFTs: [String],
          nftService: NftService = NftServiceImpl(networkClient: DefaultNetworkClient(),
@@ -106,8 +108,9 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
             case .failure(let error):
                 self?.showErrorAlert?(error.localizedDescription)
             }
-            completion()
         }
+        
+        completion()
     }
     
     func toggleCart(for nftId: String, completion: @escaping () -> Void) {
@@ -127,8 +130,9 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
             case .failure(let error):
                 self?.showErrorAlert?(error.localizedDescription)
             }
-            completion()
         }
+        
+        completion()
     }
     
     private func loadNFTsAfterProfile(completion: @escaping () -> Void) {

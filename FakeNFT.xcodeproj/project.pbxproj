@@ -60,6 +60,7 @@
 		685E980A2CA1E336004A7563 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685E98092CA1E335004A7563 /* DeleteViewController.swift */; };
 		685E980C2CA1E393004A7563 /* ParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685E980B2CA1E393004A7563 /* ParentViewController.swift */; };
 		685E980F2CA1E3A7004A7563 /* PaymentResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685E980E2CA1E3A7004A7563 /* PaymentResultViewController.swift */; };
+		688398952CA2C03200123508 /* UserCollectionViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 688398942CA2C03200123508 /* UserCollectionViewModelTest.swift */; };
 		689224452C8A365D00CE698A /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689224442C8A365D00CE698A /* Strings.swift */; };
 		6892244A2C8A3EA900CE698A /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689224492C8A3EA900CE698A /* CartViewController.swift */; };
 		6892244C2C8A3F3600CE698A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6892244B2C8A3F3600CE698A /* ProfileViewController.swift */; };
@@ -173,6 +174,7 @@
 		685E98092CA1E335004A7563 /* DeleteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		685E980B2CA1E393004A7563 /* ParentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentViewController.swift; sourceTree = "<group>"; };
 		685E980E2CA1E3A7004A7563 /* PaymentResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentResultViewController.swift; sourceTree = "<group>"; };
+		688398942CA2C03200123508 /* UserCollectionViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionViewModelTest.swift; sourceTree = "<group>"; };
 		689224442C8A365D00CE698A /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		689224492C8A3EA900CE698A /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		6892244B2C8A3F3600CE698A /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -579,6 +581,7 @@
 		68DEA6242C9F847B00A17CCA /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
+				688398942CA2C03200123508 /* UserCollectionViewModelTest.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -850,6 +853,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F6806AE29CBBAF200B4F915 /* ExampleUnitTests.swift in Sources */,
+				688398952CA2C03200123508 /* UserCollectionViewModelTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
