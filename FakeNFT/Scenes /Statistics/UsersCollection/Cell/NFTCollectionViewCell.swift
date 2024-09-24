@@ -100,13 +100,8 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         ethLabel.text = "\(nft.cost) \(Strings.Common.eth)"
         ratingStackView.setRating(nft.rating)
         
-        if nft.isLiked {
-            changeLikeStatus()
-        }
-        
-        if nft.inCart {
-            changeCartStatus()
-        }
+        setLikeStatus(isLiked: nft.isLiked)
+        setCartStatus(inCart: nft.inCart)
     }
     
     // MARK: - Private Methods
@@ -152,14 +147,14 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func changeLikeStatus() {
-        isLiked = !isLiked
+    private func setLikeStatus(isLiked: Bool) {
+        self.isLiked = isLiked
         let favoriteImage = isLiked ? Images.Common.favoriteActive : Images.Common.favoriteInactive
         favoriteButton.setImage(favoriteImage ?? UIImage(), for: .normal)
     }
     
-    private func changeCartStatus() {
-        inCart = !inCart
+    private func setCartStatus(inCart: Bool) {
+        self.inCart = inCart
         let cartImage = inCart ? Images.Common.deleteCartBtn : Images.Common.addCartBtn
         cartImage?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
         
@@ -167,13 +162,13 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func tapLikeButton() {
-        changeLikeStatus()
+        setLikeStatus(isLiked: !isLiked)
         delegate?.tapLikeButton(with: id)
         // TODO: Добавить отправку лайка по сети, после реализации сервиса
     }
     
     @objc private func tapCartButton() {
-        changeCartStatus()
+        setCartStatus(inCart: !inCart)
         delegate?.tapCartButton(with: id)
     }
 }

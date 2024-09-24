@@ -17,7 +17,7 @@ protocol UserCollectionViewModelProtocol {
     var showErrorAlert: ((String) -> Void)? { get set }
     
     func item(at indexPath: IndexPath) -> NFTCellModel?
-    func loadNFTs(completion: @escaping () -> Void)
+    func loadNFTs(isRefreshing: Bool, completion: @escaping () -> Void)
     func toggleLike(for nftId: String, completion: @escaping () -> Void)
     func toggleCart(for nftId: String, completion: @escaping () -> Void)
 }
@@ -60,7 +60,13 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
         return nfts[indexPath.row]
     }
     
-    func loadNFTs(completion: @escaping () -> Void) {
+    func loadNFTs(isRefreshing: Bool, completion: @escaping () -> Void) {
+        
+        if isRefreshing {
+            profileService.clearStorage()
+            order = nil
+            profile = nil
+        }
         
         guard !userNFTs.isEmpty else {
             completion()

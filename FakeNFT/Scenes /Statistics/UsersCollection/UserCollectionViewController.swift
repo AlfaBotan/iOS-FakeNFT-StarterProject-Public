@@ -13,6 +13,12 @@ final class UserCollectionViewController: UIViewController {
     // MARK: - Private Properties
     private var viewModel: UserCollectionViewModelProtocol
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        return control
+    }()
+    
     private lazy var userCollectionView: UICollectionView = {
         let collection = UICollectionView(frame: view.frame, collectionViewLayout: createLayout())
         collection.backgroundColor = .clear
@@ -60,9 +66,9 @@ final class UserCollectionViewController: UIViewController {
         ])
     }
     
-    private func loadNFT() {
+    private func loadNFT(isRefreshing: Bool = false) {
         ProgressHUD.show()
-        viewModel.loadNFTs {
+        viewModel.loadNFTs(isRefreshing: isRefreshing) {
             ProgressHUD.dismiss() // Убираем индикатор после загрузки
         }
     }
@@ -87,6 +93,7 @@ final class UserCollectionViewController: UIViewController {
                                     forCellWithReuseIdentifier: NFTCollectionViewCell.reuseIdentifier)
         userCollectionView.dataSource = self
         userCollectionView.delegate = self
+        userCollectionView.refreshControl = refreshControl
     }
     
     private func createLayout() -> UICollectionViewFlowLayout {
@@ -118,6 +125,11 @@ final class UserCollectionViewController: UIViewController {
         alert.addAction(reload)
         
         present(alert, animated: true)
+    }
+    
+    @objc private func refreshData() {
+        loadNFT(isRefreshing: true)
+        refreshControl.endRefreshing()
     }
 }
 
