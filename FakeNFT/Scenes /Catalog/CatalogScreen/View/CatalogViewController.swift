@@ -99,7 +99,6 @@ extension CatalogViewController: UITableViewDelegate {
         ProgressHUD.animationType = .circleSpinFade
         viewModel.getProfile() {
             DispatchQueue.main.async { [self] in
-                ProgressHUD.dismiss()
                 guard let profile = viewModel.profile else {return}
                 guard let order = viewModel.order else {return}
                 let viewModelForCollectionVC = CollectionViewModel(pickedCollection: viewModel.collection(at: indexPath.row),
@@ -109,7 +108,6 @@ extension CatalogViewController: UITableViewDelegate {
                                                                    order: order)
                 
                 let collectionVC = CollectionViewController(viewModel: viewModelForCollectionVC)
-                print("Открываем новый экран")
                 self.navigationController?.pushViewController(collectionVC, animated: true)
             }
         }

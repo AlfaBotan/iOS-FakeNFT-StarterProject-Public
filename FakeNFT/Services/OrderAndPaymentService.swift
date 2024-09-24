@@ -23,7 +23,6 @@ final class OrderServiceImpl: OrderService {
     networkClient.send(request: NFTOrderRequest(), type: Order.self) { result in
       switch result {
       case .success(let order):
-          print("Order из функции loadOrder в OrderServiceImpl: \(order)")
         completion(.success(order))
       case .failure(let error):
         completion(.failure(error))

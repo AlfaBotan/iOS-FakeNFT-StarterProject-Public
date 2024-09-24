@@ -189,7 +189,6 @@ final class NFTCellForCollectionView: UICollectionViewCell {
     }
     
     @objc func cartButtonTupped() {
-        print("cartButtonTupped")
         inCart.toggle()
         let imageForCart = inCart ? Images.Common.deleteCartBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal) :                                                       Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
         cartButton.setImage(imageForCart, for: .normal)

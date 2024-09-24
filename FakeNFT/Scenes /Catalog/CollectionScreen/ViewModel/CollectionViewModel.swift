@@ -56,12 +56,10 @@ final class CollectionViewModel: CollectionViewModelProtocol {
             case .success(let nfts):
                 self.NFTsFromCollection = nfts
                 ProgressHUD.dismiss()
-                print("Все NFT загрузились: \(nfts)")
                 completion()
             case .failure(let error):
                 ProgressHUD.showError()
                 print(error.localizedDescription)
-                print("NFT не загрузились")
             }
         }
     }
@@ -69,17 +67,12 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     func fetchNFTs(completion: @escaping () -> Void) {
         
         let dispatchGroup = DispatchGroup()
-        
-        ProgressHUD.show()
-        ProgressHUD.animationType = .circleSpinFade
-        
         let idArray = pickedCollection.nfts
         var nftsArray: Nfts = []
         
         for i in idArray {
             dispatchGroup.enter()
-            collectionModel.loadNft(id: i) { [weak self] (result: (Result<Nft, Error>)) in
-                guard let self = self else {return}
+            collectionModel.loadNft(id: i) { (result: (Result<Nft, Error>)) in
                 switch result {
                 case .success(let nft):
                     nftsArray.append(nft)
@@ -92,8 +85,6 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         }
         
         dispatchGroup.notify(queue: .main) {
-            print(nftsArray.count)
-            ProgressHUD.dismiss()
             self.NFTsFromCollection = nftsArray
             completion()
         }
@@ -120,7 +111,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     }
     
     func toggleLike(for nftId: String, completion: @escaping () -> Void) {
-        guard var profile = profile else { return }
+        guard let profile = profile else { return }
         
         if let index = favoriteNFT.firstIndex(of: nftId) {
             favoriteNFT.remove(at: index)
@@ -140,7 +131,6 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     }
     
     func toggleCart(for nftId: String, completion: @escaping () -> Void) {
-        guard var order = order else { return }
         
         if let index = cartNFT.firstIndex(of: nftId) {
             cartNFT.remove(at: index)

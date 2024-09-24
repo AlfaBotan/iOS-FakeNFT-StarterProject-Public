@@ -105,8 +105,11 @@ final class CollectionViewController: UIViewController {
     }
     
     private func loadData() {
+        ProgressHUD.show()
+        ProgressHUD.animationType = .circleSpinFade
         viewModel.fetchNFTs {
             DispatchQueue.main.async {
+                ProgressHUD.dismiss()
                 self.collectionView.reloadData()
                 self.updateCollectionViewHeight()
             }
@@ -234,8 +237,6 @@ final class CollectionViewController: UIViewController {
     @objc func goToAuthorURL() {
         let nft = viewModel.collection(at: 0)
         guard let url = URL(string: nft.author) else { return }
-        print(url)
-        
         let webViewVC = AuthorWebViewController(url: url)
         navigationController?.pushViewController(webViewVC, animated: true)
     }
@@ -254,7 +255,7 @@ extension CollectionViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCellForCollectionView.reuseIdentifier,
                                                             for: indexPath) as? NFTCellForCollectionView
         else {
-            print("Не прошёл каст")
+            print("Не прошёл каст к NFTCellForCollectionView")
             return UICollectionViewCell()
         }
         cell.delegate = self
