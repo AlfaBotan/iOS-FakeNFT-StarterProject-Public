@@ -12,6 +12,8 @@ final class NftTableViewCell: UITableViewCell {
     private let priceTitleLabel = UILabel()
     private let authorStackView = UIStackView()
     
+    var heartButtonAction: (() -> Void)?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
@@ -29,6 +31,7 @@ final class NftTableViewCell: UITableViewCell {
         
         heartButton.translatesAutoresizingMaskIntoConstraints = false
         heartButton.setImage(UIImage(named: "favoriteInactive"), for: .normal)
+        heartButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
         contentView.addSubview(heartButton)
         
         fromLabel.font = .caption1
@@ -98,14 +101,20 @@ final class NftTableViewCell: UITableViewCell {
         ])
     }
     
-    // Метод для конфигурации ячейки
-    func configure(with nft: NFT) {
-        nftImageView.image = UIImage(named: nft.imageName)
-        titleLabel.text = nft.name
-        authorLabel.text = nft.author
-        priceLabel.text = "\(nft.price) ETH"
-        configureStars(rating: nft.rating)
-    }
+    @objc private func heartButtonTapped() {
+            heartButton.setImage(UIImage(named: "favoriteActive"), for: .normal)
+            heartButtonAction?()
+        }
+    
+    func configure(with nft: NFT, heartAction: @escaping () -> Void) {
+            nftImageView.image = UIImage(named: nft.imageName)
+            titleLabel.text = nft.name
+            authorLabel.text = nft.author
+            priceLabel.text = "\(nft.price) ETH"
+            configureStars(rating: nft.rating)
+            
+            heartButtonAction = heartAction
+        }
     
     // Метод для настройки звездочек
     private func configureStars(rating: Int) {

@@ -105,7 +105,11 @@ extension MyNftViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NftCell", for: indexPath) as! NftTableViewCell
-        cell.configure(with: viewModel.filteredNftData[indexPath.row])
+        let nft = viewModel.filteredNftData[indexPath.row]
+        
+        cell.configure(with: nft) { [weak self] in
+            self?.viewModel.addToFavourites(nft)
+        }
         cell.selectionStyle = .none
         return cell
     }
