@@ -8,12 +8,19 @@
 import UIKit
 import Kingfisher
 
+protocol NFTCollectionViewCellDelegate: AnyObject {
+    func tapLikeButton(with id: String)
+    func tapCartButton(with id: String)
+}
+
 final class NFTCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Public Properties
     static let reuseIdentifier = "NFTCollectionViewCell"
+    weak var delegate: NFTCollectionViewCellDelegate?
 
     // MARK: - Private Properties
+    private var id: String = ""
     private var isLiked: Bool = false
     private var inCart: Bool = false
     
@@ -76,6 +83,7 @@ final class NFTCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Public Methods
     func configure(nft: NFTCellModel) {
+        id = nft.id
         nameLabel.text = nft.name
         
         nftImageView.kf.indicatorType = .activity
@@ -91,6 +99,9 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         
         ethLabel.text = "\(nft.cost) \(Strings.Common.eth)"
         ratingStackView.setRating(nft.rating)
+        
+        setLikeStatus(isLiked: nft.isLiked)
+        setCartStatus(inCart: nft.inCart)
     }
     
     // MARK: - Private Methods
@@ -136,14 +147,14 @@ final class NFTCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    private func changeLikeStatus() {
-        isLiked = !isLiked
+    private func setLikeStatus(isLiked: Bool) {
+        self.isLiked = isLiked
         let favoriteImage = isLiked ? Images.Common.favoriteActive : Images.Common.favoriteInactive
         favoriteButton.setImage(favoriteImage ?? UIImage(), for: .normal)
     }
     
-    private func changeCartStatus() {
-        inCart = !inCart
+    private func setCartStatus(inCart: Bool) {
+        self.inCart = inCart
         let cartImage = inCart ? Images.Common.deleteCartBtn : Images.Common.addCartBtn
         cartImage?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
         
@@ -151,12 +162,13 @@ final class NFTCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func tapLikeButton() {
-        changeLikeStatus()
+        setLikeStatus(isLiked: !isLiked)
+        delegate?.tapLikeButton(with: id)
         // TODO: Добавить отправку лайка по сети, после реализации сервиса
     }
     
     @objc private func tapCartButton() {
-        changeCartStatus()
-        // TODO: Добавить отправку NFT в корзину, после реализации сервиса
+        setCartStatus(inCart: !inCart)
+        delegate?.tapCartButton(with: id)
     }
 }
