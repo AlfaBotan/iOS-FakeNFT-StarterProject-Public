@@ -4,7 +4,7 @@ enum NetworkClientError: Error {
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
-    case parsingError
+    case parsingError(Error)
 }
 
 protocol NetworkClient {
@@ -143,7 +143,7 @@ struct DefaultNetworkClient: NetworkClient {
             let response = try decoder.decode(T.self, from: data)
             onResponse(.success(response))
         } catch {
-            onResponse(.failure(NetworkClientError.parsingError))
+            onResponse(.failure(NetworkClientError.parsingError(error)))
         }
     }
 }

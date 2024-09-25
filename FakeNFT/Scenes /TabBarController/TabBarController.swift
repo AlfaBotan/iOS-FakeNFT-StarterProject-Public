@@ -57,7 +57,10 @@ final class TabBarController: UITabBarController {
           let cartNavigationController = UINavigationController (rootViewController: cartVC)
           return cartNavigationController
         case .catalog: return CatalogViewController(servicesAssembly: servicesAssembly)
-        case .statistic: return StatisticViewController()
+        case .statistic:
+            let statisticsViewController = StatisticViewController()
+            let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
+            return statisticsNavigationController
         }
     }
 }

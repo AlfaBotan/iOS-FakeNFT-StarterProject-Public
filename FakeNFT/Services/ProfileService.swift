@@ -12,6 +12,7 @@ typealias ProfilePutCompletion = (Result<Profile, Error>) -> Void
 
 protocol ProfileService {
     func loadProfile(completion: @escaping ProfileCompletion)
+    func clearStorage()
     func sendExamplePutRequest(
         likes: [String],
         avatar: String,
@@ -27,6 +28,10 @@ final class ProfileServiceImpl: ProfileService {
     init(networkClient: NetworkClient, storage: ProfileStorage) {
         self.storage = storage
         self.networkClient = networkClient
+    }
+    
+    func clearStorage() {
+        storage.clear()
     }
     
     func loadProfile(completion: @escaping ProfileCompletion) {
