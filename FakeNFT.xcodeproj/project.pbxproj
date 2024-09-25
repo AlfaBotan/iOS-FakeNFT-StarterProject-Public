@@ -302,6 +302,37 @@
 			path = MemoryStorage;
 			sourceTree = "<group>";
 		};
+		2C2164522CA457E1001F8DFD /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				6892244B2C8A3F3600CE698A /* ProfileViewController.swift */,
+				2C173DFE2C8EDAD1009B8D23 /* ProfileViewModel.swift */,
+				2C173E002C8EDB81009B8D23 /* ProfileWebViewController.swift */,
+				2CEC9ECD2C947A54007D09FD /* EditProfileViewController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		2C2164542CA45817001F8DFD /* MyNft */ = {
+			isa = PBXGroup;
+			children = (
+				2C66FB8C2CA0B20C004095A5 /* MyNftViewModel.swift */,
+				2C66FB8A2CA08E35004095A5 /* MyNftTableViewCell.swift */,
+				2C173E062C8F131F009B8D23 /* MyNftViewController.swift */,
+			);
+			path = MyNft;
+			sourceTree = "<group>";
+		};
+		2C2164552CA4582F001F8DFD /* FavouritesNft */ = {
+			isa = PBXGroup;
+			children = (
+				2C173E092C8F1340009B8D23 /* FavouritesNftViewController.swift */,
+				2C82D6582CA1B590000707B5 /* FavouritesNftCollectionViewCell.swift */,
+				2C82D65B2CA1BCFE000707B5 /* FavouritesNftViewModel.swift */,
+			);
+			path = FavouritesNft;
+			sourceTree = "<group>";
+		};
 		3F478ECD29DB473000F6D39E /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,17 +509,10 @@
 		689224472C8A3E8300CE698A /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				6892244B2C8A3F3600CE698A /* ProfileViewController.swift */,
-				2C173DFE2C8EDAD1009B8D23 /* ProfileViewModel.swift */,
-				2C173E002C8EDB81009B8D23 /* ProfileWebViewController.swift */,
+				2C2164552CA4582F001F8DFD /* FavouritesNft */,
+				2C2164542CA45817001F8DFD /* MyNft */,
+				2C2164522CA457E1001F8DFD /* Profile */,
 				2C173E032C8EEE9D009B8D23 /* Observable.swift */,
-				2C173E062C8F131F009B8D23 /* MyNftViewController.swift */,
-				2C173E092C8F1340009B8D23 /* FavouritesNftViewController.swift */,
-				2CEC9ECD2C947A54007D09FD /* EditProfileViewController.swift */,
-				2C66FB8A2CA08E35004095A5 /* MyNftTableViewCell.swift */,
-				2C66FB8C2CA0B20C004095A5 /* MyNftViewModel.swift */,
-				2C82D6582CA1B590000707B5 /* FavouritesNftCollectionViewCell.swift */,
-				2C82D65B2CA1BCFE000707B5 /* FavouritesNftViewModel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";

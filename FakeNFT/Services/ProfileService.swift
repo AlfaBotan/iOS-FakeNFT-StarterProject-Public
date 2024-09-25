@@ -31,10 +31,10 @@ final class ProfileServiceImpl: ProfileService {
     
     func loadProfile(completion: @escaping ProfileCompletion) {
         
-        if let profile = storage.getProfile() {
-            completion(.success(profile))
-            return
-        }
+        //if let profile = storage.getProfile() {
+            //completion(.success(profile))
+            //return
+        //}
         
         let request = ProfileRequest()
         networkClient.send(request: request, type: Profile.self) { [weak self] result in

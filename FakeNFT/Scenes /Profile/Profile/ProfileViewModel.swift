@@ -22,7 +22,7 @@ class ProfileViewModel {
             UserDefaults.standard.set(value, forKey: Constants.profileImageKey)
         }
     }
-    private var profile: Profile? = nil
+    var profile: Profile? = nil
     private let profileService: ProfileService
     private let userNameKey = "userName"
     private let userDescriptionKey = "userDescription"

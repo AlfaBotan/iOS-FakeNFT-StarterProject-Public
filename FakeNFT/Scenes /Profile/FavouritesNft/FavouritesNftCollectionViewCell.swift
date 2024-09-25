@@ -77,8 +77,15 @@ final class FavouritesNftCollectionViewCell: UICollectionViewCell {
         heartButtonAction?()
     }
     
-    func configure(with nft: NFT, heartAction: @escaping () -> Void) {
-        nftImageView.image = UIImage(named: nft.imageName)
+    func configure(with nft: Nft, heartAction: @escaping () -> Void) {
+        nftImageView.kf.setImage(
+            with: nft.images[0],
+            placeholder: UIImage(named: "ProfileMokIMG"),
+            options: [
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1))
+            ]
+        )
         titleLabel.text = nft.name
         priceLabel.text = "\(nft.price) ETH"
         configureStars(rating: nft.rating)

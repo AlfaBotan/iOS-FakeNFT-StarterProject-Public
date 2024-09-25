@@ -81,6 +81,11 @@ final class ProfileViewController: UIViewController {
         setupViews()
         setupBindings()
         ProgressHUD.show()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel.viewDidLoad { [weak self] in
                 DispatchQueue.main.async {
                     self?.setupBindings()  // Привязываем данные к UI после загрузки профиля
@@ -236,11 +241,13 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         viewModel.didSelectMenuItem(at: indexPath.row)
         
         if indexPath.row == 0 {
-            let myNftVC = MyNftViewController()
+            let myNftVM = MyNftViewModel(nftList: viewModel.profile?.nfts ?? [], favouriteList: viewModel.profile?.likes ?? [], profile: viewModel.profile)
+            let myNftVC = MyNftViewController(viewModel: myNftVM)
             navigationController?.pushViewController(myNftVC, animated: true)
         }
         if indexPath.row == 1 {
-            let favouritesNftVC = FavouritesNftViewController()
+            let favouritesNftVM = FavouritesNftViewModel(nftList: viewModel.profile?.likes ?? [])
+            let favouritesNftVC = FavouritesNftViewController(viewModel: favouritesNftVM)
             navigationController?.pushViewController(favouritesNftVC, animated: true)
         }
         if indexPath.row == 2 {

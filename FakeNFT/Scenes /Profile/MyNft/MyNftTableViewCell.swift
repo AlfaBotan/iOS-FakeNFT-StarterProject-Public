@@ -1,6 +1,13 @@
 import UIKit
+import Kingfisher
+
+protocol MyNftTableViewCellDelegate: AnyObject {
+    func didTapHeartButton(id: String)
+}
 
 final class NftTableViewCell: UITableViewCell {
+    
+    weak var delegate: MyNftTableViewCellDelegate?
     
     private let nftImageView = UIImageView()
     private let heartButton = UIButton()
@@ -12,7 +19,8 @@ final class NftTableViewCell: UITableViewCell {
     private let priceTitleLabel = UILabel()
     private let authorStackView = UIStackView()
     
-    var heartButtonAction: (() -> Void)?
+    var isLiked: Bool = false
+    var id: String = ""
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -102,19 +110,28 @@ final class NftTableViewCell: UITableViewCell {
     }
     
     @objc private func heartButtonTapped() {
-            heartButton.setImage(UIImage(named: "favoriteActive"), for: .normal)
-            heartButtonAction?()
-        }
+        isLiked = !isLiked
+        heartButton.setImage(isLiked ? UIImage(named: "favoriteActive") : UIImage(named: "favoriteInactive"), for: .normal)
+        delegate?.didTapHeartButton(id: id)
+    }
     
-    func configure(with nft: NFT, heartAction: @escaping () -> Void) {
-            nftImageView.image = UIImage(named: nft.imageName)
-            titleLabel.text = nft.name
-            authorLabel.text = nft.author
-            priceLabel.text = "\(nft.price) ETH"
-            configureStars(rating: nft.rating)
-            
-            heartButtonAction = heartAction
-        }
+    func configure(with nft: Nft, isLiked: Bool) {
+        id = nft.id
+        self.isLiked = isLiked
+        heartButton.setImage(isLiked ? UIImage(named: "favoriteActive") : UIImage(named: "favoriteInactive"), for: .normal)
+        nftImageView.kf.setImage(
+            with: nft.images[0],
+            placeholder: UIImage(named: "ProfileMokIMG"),
+            options: [
+                .scaleFactor(UIScreen.main.scale),
+                .transition(.fade(1))
+            ]
+        )
+        titleLabel.text = nft.name
+        authorLabel.text = nft.name
+        priceLabel.text = "\(nft.price) ETH"
+        configureStars(rating: nft.rating)
+    }
     
     // Метод для настройки звездочек
     private func configureStars(rating: Int) {
@@ -144,12 +161,4 @@ final class NftTableViewCell: UITableViewCell {
             ])
         }
     }
-}
-
-struct NFT: Codable {
-    let imageName: String
-    let name: String
-    let author: String
-    let price: Double
-    let rating: Int
 }

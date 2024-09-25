@@ -1,8 +1,18 @@
 import UIKit
+import ProgressHUD
 
 final class MyNftViewController: UIViewController {
     
-    private let viewModel = MyNftViewModel()
+    let viewModel: MyNftViewModel
+    
+    init(viewModel: MyNftViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private let tableView = UITableView()
     
@@ -12,9 +22,10 @@ final class MyNftViewController: UIViewController {
         configureNavBar()
         setupTableView()
         layoutTableView()
-        
+        setupBindings()
         viewModel.applySavedSort()
-        tableView.reloadData()
+        viewModel.loadNFT()
+        //tableView.reloadData()
     }
     
     private func configureNavBar() {
@@ -61,6 +72,13 @@ final class MyNftViewController: UIViewController {
         ])
     }
     
+    private func setupBindings() {
+            viewModel.onDataChanged = { [weak self] in
+                print("Data changed")
+                self?.tableView.reloadData()
+            }
+        }
+    
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -106,15 +124,23 @@ extension MyNftViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NftCell", for: indexPath) as! NftTableViewCell
         let nft = viewModel.filteredNftData[indexPath.row]
-        
-        cell.configure(with: nft) { [weak self] in
-            self?.viewModel.addToFavourites(nft)
-        }
+        cell.delegate = self
+        cell.configure(with: nft, isLiked: viewModel.favouriteList.contains(nft.id))
+    
         cell.selectionStyle = .none
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 140
+    }
+}
+
+extension MyNftViewController: MyNftTableViewCellDelegate {
+    func didTapHeartButton(id: String) {
+        ProgressHUD.show()
+        viewModel.toggleLike(for: id) { 
+            ProgressHUD.dismiss()
+        }
     }
 }
