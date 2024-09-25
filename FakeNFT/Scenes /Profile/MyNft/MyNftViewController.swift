@@ -22,11 +22,23 @@ final class MyNftViewController: UIViewController {
         configureNavBar()
         setupTableView()
         layoutTableView()
+        setupEmptyLabel()
         setupBindings()
-        viewModel.applySavedSort()
-        viewModel.loadNFT()
-        //tableView.reloadData()
+        
+        viewModel.applySavedSort()  // Применяем сохраненную сортировку
+        viewModel.loadNFT()  // Загружаем данные
     }
+    
+    private let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.text = "У вас ещё нет NFT"
+        label.font = .bodyBold
+        label.textColor = .black
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
+    }()
     
     private func configureNavBar() {
         let backButton = UIBarButtonItem(
@@ -72,12 +84,29 @@ final class MyNftViewController: UIViewController {
         ])
     }
     
+    private func setupEmptyLabel() {
+        view.addSubview(emptyLabel)
+        NSLayoutConstraint.activate([
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
     private func setupBindings() {
-            viewModel.onDataChanged = { [weak self] in
-                print("Data changed")
-                self?.tableView.reloadData()
-            }
+        viewModel.onDataChanged = { [weak self] in
+            self?.tableView.reloadData()
         }
+    }
+    
+    private func checkEmptyState() {
+        if viewModel.filteredNftData.isEmpty {
+            tableView.isHidden = true
+            emptyLabel.isHidden = false
+        } else {
+            tableView.isHidden = false
+            emptyLabel.isHidden = true
+        }
+    }
     
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
@@ -86,21 +115,16 @@ final class MyNftViewController: UIViewController {
     @objc private func menuButtonTapped() {
         let alertController = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
         
-        weak var weakSelf = self
-        
         let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { _ in
-            weakSelf?.viewModel.sort(by: .price)
-            weakSelf?.tableView.reloadData()
+            self.viewModel.sort(by: .price)
         }
         
         let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { _ in
-            weakSelf?.viewModel.sort(by: .rating)
-            weakSelf?.tableView.reloadData()
+            self.viewModel.sort(by: .rating)
         }
         
         let sortByNameAction = UIAlertAction(title: "По названию", style: .default) { _ in
-            weakSelf?.viewModel.sort(by: .name)
-            weakSelf?.tableView.reloadData()
+            self.viewModel.sort(by: .name)
         }
         
         let cancelAction = UIAlertAction(title: "Закрыть", style: .cancel, handler: nil)
@@ -126,7 +150,7 @@ extension MyNftViewController: UITableViewDataSource, UITableViewDelegate {
         let nft = viewModel.filteredNftData[indexPath.row]
         cell.delegate = self
         cell.configure(with: nft, isLiked: viewModel.favouriteList.contains(nft.id))
-    
+        
         cell.selectionStyle = .none
         return cell
     }
@@ -139,7 +163,7 @@ extension MyNftViewController: UITableViewDataSource, UITableViewDelegate {
 extension MyNftViewController: MyNftTableViewCellDelegate {
     func didTapHeartButton(id: String) {
         ProgressHUD.show()
-        viewModel.toggleLike(for: id) { 
+        viewModel.toggleLike(for: id) {
             ProgressHUD.dismiss()
         }
     }
