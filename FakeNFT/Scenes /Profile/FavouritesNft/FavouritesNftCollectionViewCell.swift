@@ -1,12 +1,19 @@
 import UIKit
 
+protocol FavouritesNftCollectionViewCellDelegate: AnyObject {
+    func didTapHeartButton(id: String)
+}
+
 final class FavouritesNftCollectionViewCell: UICollectionViewCell {
+    
+    weak var delegate: FavouritesNftCollectionViewCellDelegate?
     
     private let nftImageView = UIImageView()
     private let heartButton = UIButton()
     private let titleLabel = UILabel()
     private let starsView = UIStackView()
     private let priceLabel = UILabel()
+    private var id: String = ""
     
     var heartButtonAction: (() -> Void)?
     
@@ -74,10 +81,10 @@ final class FavouritesNftCollectionViewCell: UICollectionViewCell {
     
     @objc private func heartButtonTapped() {
         print("Heart button tapped")
-        heartButtonAction?()
+        delegate?.didTapHeartButton(id: id)
     }
     
-    func configure(with nft: Nft, heartAction: @escaping () -> Void) {
+    func configure(with nft: Nft) {
         nftImageView.kf.setImage(
             with: nft.images[0],
             placeholder: UIImage(named: "ProfileMokIMG"),
@@ -86,11 +93,10 @@ final class FavouritesNftCollectionViewCell: UICollectionViewCell {
                 .transition(.fade(1))
             ]
         )
-        titleLabel.text = nft.name
+        self.id = nft.id
+        titleLabel.text = nft.name.components(separatedBy: " ").first
         priceLabel.text = "\(nft.price) ETH"
         configureStars(rating: nft.rating)
-        
-        heartButtonAction = heartAction
     }
     
     private func configureStars(rating: Int) {

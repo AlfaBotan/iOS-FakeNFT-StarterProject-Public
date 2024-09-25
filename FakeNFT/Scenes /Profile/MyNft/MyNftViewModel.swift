@@ -67,7 +67,7 @@ final class MyNftViewModel {
     }
     
     // Загрузка данных NFT
-    func loadNFT() {
+    func loadNFT(completion: @escaping () -> Void) {
         let dispatchGroup = DispatchGroup()
         var nftsFromNetwork: [Nft] = []
         
@@ -83,11 +83,11 @@ final class MyNftViewModel {
                 dispatchGroup.leave()
             }
         }
-        
         dispatchGroup.notify(queue: .main) {
             self.nftData = nftsFromNetwork
             self.applySavedSort()  // Применяем сортировку после загрузки данных
             self.onDataChanged?()
+            completion()
         }
     }
     

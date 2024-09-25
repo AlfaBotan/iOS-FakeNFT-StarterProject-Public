@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class FavouritesNftViewController: UIViewController {
     
@@ -38,7 +39,13 @@ final class FavouritesNftViewController: UIViewController {
         configureNavBar()
         setupCollectionView()
         setupEmptyLabel()
+        setupBindings()
         checkEmptyState()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.loadNFT()
     }
     
     private func configureNavBar() {
@@ -82,8 +89,15 @@ final class FavouritesNftViewController: UIViewController {
         ])
     }
     
+    private func setupBindings() {
+        viewModel.onDataChanged = { [weak self] in
+            self?.checkEmptyState()
+            self?.collectionView.reloadData()
+        }
+    }
+    
     private func checkEmptyState() {
-        if viewModel.getNftData().isEmpty {
+        if viewModel.nftData.isEmpty {
             collectionView.isHidden = true
             emptyLabel.isHidden = false
         } else {
@@ -101,30 +115,23 @@ final class FavouritesNftViewController: UIViewController {
 extension FavouritesNftViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.getNftData().count
+        return viewModel.nftData.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NftCell", for: indexPath) as! FavouritesNftCollectionViewCell
-        let nft = viewModel.getNftData()[indexPath.item]
-        
-        cell.configure(with: nft) { [weak self] in
-            guard let self = self else { return }
-            
-            self.viewModel.removeFromFavourites(at: indexPath.item)
-            
-            if self.viewModel.getNftData().isEmpty {
-                self.collectionView.reloadData()
-                self.checkEmptyState()
-            } else {
-                self.collectionView.performBatchUpdates({
-                    self.collectionView.deleteItems(at: [indexPath])
-                }) { _ in
-                    self.collectionView.reloadData()
-                    self.checkEmptyState()
-                }
-            }
-        }
+        let nft = viewModel.nftData[indexPath.item]
+        cell.delegate = self
+        cell.configure(with: nft) 
         return cell
+    }
+}
+
+extension FavouritesNftViewController: FavouritesNftCollectionViewCellDelegate {
+    func didTapHeartButton(id: String) {
+        ProgressHUD.show()
+        viewModel.toggleLike(for: id) {
+            ProgressHUD.dismiss()
+        }
     }
 }

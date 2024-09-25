@@ -26,7 +26,10 @@ final class MyNftViewController: UIViewController {
         setupBindings()
         
         viewModel.applySavedSort()  // Применяем сохраненную сортировку
-        viewModel.loadNFT()  // Загружаем данные
+        ProgressHUD.show()
+        viewModel.loadNFT() {
+            ProgressHUD.dismiss()
+        }
     }
     
     private let emptyLabel: UILabel = {

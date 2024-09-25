@@ -246,7 +246,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             navigationController?.pushViewController(myNftVC, animated: true)
         }
         if indexPath.row == 1 {
-            let favouritesNftVM = FavouritesNftViewModel(nftList: viewModel.profile?.likes ?? [])
+            let favouritesNftVM = FavouritesNftViewModel(nftList: viewModel.profile?.likes ?? [], profile: viewModel.profile)
             let favouritesNftVC = FavouritesNftViewController(viewModel: favouritesNftVM)
             navigationController?.pushViewController(favouritesNftVC, animated: true)
         }
