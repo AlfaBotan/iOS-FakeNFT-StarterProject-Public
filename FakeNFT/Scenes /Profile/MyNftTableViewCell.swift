@@ -137,7 +137,7 @@ final class NftTableViewCell: UITableViewCell {
     }
 }
 
-struct NFT {
+struct NFT: Codable {
     let imageName: String
     let name: String
     let author: String
