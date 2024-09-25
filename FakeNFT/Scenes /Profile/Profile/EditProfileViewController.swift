@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class EditProfileViewController: UIViewController {
     
@@ -131,15 +132,6 @@ final class EditProfileViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        // Обновляем данные во ViewModel
-        viewModel.userName.value = nameTextField.text ?? ""
-        viewModel.userDescription.value = descriptionTextView.text ?? ""
-        viewModel.userWebsite.value = websiteTextField.text ?? ""
-        
-        // Сохранение через метод viewWillDisappear() во ViewModel
-        viewModel.viewWillDisappear()
-        onProfileImageUpdated?(viewModel.userImage.value)
     }
     
     private func createClearButton() -> UIButton {
@@ -283,7 +275,30 @@ final class EditProfileViewController: UIViewController {
     }
     
     @objc private func closeButtonTapped() {
-        dismiss(animated: true, completion: nil)
+        // Обновляем данные во ViewModel перед отправкой
+        viewModel.userName.value = nameTextField.text ?? ""
+        viewModel.userDescription.value = descriptionTextView.text ?? ""
+        viewModel.userWebsite.value = websiteTextField.text ?? ""
+        
+        // Показываем индикатор загрузки
+        ProgressHUD.show("Сохранение...")
+        
+        // Сохраняем данные через метод ViewModel
+        viewModel.viewWillDisappear { [weak self] success in
+            // Прячем индикатор загрузки по завершении операции
+            ProgressHUD.dismiss()
+            print(success)
+            if success {
+                // Успешное сохранение, закрываем контроллер
+                self?.dismiss(animated: true, completion: nil)
+            } else {
+                // Обработка ошибки (например, показать alert)
+                print("error")
+                let alert = UIAlertController(title: "Ошибка", message: "Не удалось сохранить данные", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self?.present(alert, animated: true, completion: nil)
+            }
+        }
     }
     
     @objc private func clearTextFieldTapped() {

@@ -22,6 +22,7 @@ class ProfileViewModel {
             UserDefaults.standard.set(value, forKey: Constants.profileImageKey)
         }
     }
+    
     var profile: Profile? = nil
     private let profileService: ProfileService
     private let userNameKey = "userName"
@@ -36,26 +37,40 @@ class ProfileViewModel {
     ]
     
     func viewDidLoad(completion: @escaping () -> Void) {
-            loadProfile(completion: completion)
-        }
+        loadProfile(completion: completion)
+    }
     
     // Сохранение данных в UserDefaults
-    func saveProfile() {
-        
+    func saveProfile(completion: @escaping (Bool) -> Void) {
+        // Сохраняем локальные данные в UserDefaults
         UserDefaults.standard.set(userName.value, forKey: userNameKey)
         UserDefaults.standard.set(userDescription.value, forKey: userDescriptionKey)
         UserDefaults.standard.set(userWebsite.value, forKey: userWebsiteKey)
-        guard let profile = profile, let imageURL = imageURL else { return }
-        profileService.sendExamplePutRequest(likes: profile.likes, avatar: imageURL, name: userName.value) { result in
+        
+        // Проверяем наличие профиля и URL изображения
+        guard let profile = profile  else {
+            print("123")
+            completion(false)
+            return
+        }
+        var imageToSave: String = profile.avatar
+        if let imageURL = self.imageURL {
+            imageToSave = imageURL
+        }
+        // Отправляем PUT запрос для сохранения профиля на сервере
+        profileService.sendExamplePutRequest(likes: profile.likes, avatar: imageToSave, name: userName.value) { result in
             switch result {
             case .success(let profile):
                 self.profile = profile
-                print("Profile saved")
-            case .failure:
-                print("Error saving profile")
+                print("Profile saved successfully")
+                completion(true)
+            case .failure(let error):
+                print("Error saving profile: \(error.localizedDescription)")
+                completion(false)
             }
         }
     }
+    
     
     func makeShowImageAllert() -> UIAlertController {
         let alertController = UIAlertController(title: "Enter Image URL", message: nil, preferredStyle: .alert)
@@ -92,8 +107,10 @@ class ProfileViewModel {
     }
     
     // Сохранение данных в UserDefaults
-    func viewWillDisappear() {
-        saveProfile()
+    func viewWillDisappear(completion: @escaping (Bool) -> Void) {
+        saveProfile { success in
+            completion(success)
+        }
     }
     
     // Загрузка данных из UserDefaults
