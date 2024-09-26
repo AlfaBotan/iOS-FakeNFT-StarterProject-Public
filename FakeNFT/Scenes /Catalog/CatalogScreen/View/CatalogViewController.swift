@@ -46,7 +46,7 @@ final class CatalogViewController: UIViewController {
             target: self,
             action: #selector(sortButtonTupped)
         )
-        sortButton.tintColor = .black
+        sortButton.tintColor = .segmentActive
         navigationItem.rightBarButtonItem = sortButton
     }
     
@@ -95,12 +95,22 @@ final class CatalogViewController: UIViewController {
 extension CatalogViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let viewModelForCollectionVC = CollectionViewModel(pickedCollection: viewModel.collection(at: indexPath.row),
-                                                           model: CollectionModel(networkClient: DefaultNetworkClient(), storage: NftStorageImpl()))
-        
-        let collectionVC = CollectionViewController(viewModel: viewModelForCollectionVC)
-        navigationController?.pushViewController(collectionVC, animated: true)
+        ProgressHUD.show()
+        ProgressHUD.animationType = .circleSpinFade
+        viewModel.getProfile() {
+            DispatchQueue.main.async { [self] in
+                guard let profile = viewModel.profile else {return}
+                guard let order = viewModel.order else {return}
+                let viewModelForCollectionVC = CollectionViewModel(pickedCollection: viewModel.collection(at: indexPath.row),
+                                                                   model: CollectionModel(networkClient: DefaultNetworkClient(),
+                                                                                          storage: NftStorageImpl()),
+                                                                   profile: profile, 
+                                                                   order: order)
+                
+                let collectionVC = CollectionViewController(viewModel: viewModelForCollectionVC)
+                self.navigationController?.pushViewController(collectionVC, animated: true)
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

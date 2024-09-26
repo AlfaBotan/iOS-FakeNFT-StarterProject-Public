@@ -7,9 +7,16 @@
 
 import UIKit
 
+protocol NFTCollectionViewCellDelegate: AnyObject {
+    func tapLikeButton(with id: String)
+    func tapCartButton(with id: String)
+}
+
 final class NFTCellForCollectionView: UICollectionViewCell {
     
     static let reuseIdentifier = "NFTCollectionViewCell"
+    weak var delegate: NFTCollectionViewCellDelegate?
+    private var id = ""
     private var isLike = false
     private var inCart = false
     
@@ -42,12 +49,14 @@ final class NFTCellForCollectionView: UICollectionViewCell {
     private lazy var favoriteButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(favoriteButtonTupped), for: .touchUpInside)
         return button
     }()
     
     private lazy var cartButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(cartButtonTupped), for: .touchUpInside)
         return button
     }()
     
@@ -63,7 +72,6 @@ final class NFTCellForCollectionView: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         constraintView()
     }
     
@@ -84,9 +92,10 @@ final class NFTCellForCollectionView: UICollectionViewCell {
         
     }
     
-    func configure(nft: Nft) {
-        inCart = true
-        isLike = true
+    func configure(nft: Nft, isLike: Bool, nftID: String, inCart: Bool) {
+        id = nftID
+        self.inCart = inCart
+        self.isLike = isLike
         let fullName = nft.name
         let firstName = fullName.components(separatedBy: " ").first ?? fullName
         
@@ -170,5 +179,19 @@ final class NFTCellForCollectionView: UICollectionViewCell {
             cartButton.widthAnchor.constraint(equalToConstant: 40),
             cartButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+    }
+    
+    @objc func favoriteButtonTupped() {
+        isLike.toggle()
+        let imageForLike = isLike ? Images.Common.favoriteActive ?? UIImage() : Images.Common.favoriteInactive ?? UIImage()
+        favoriteButton.setImage(imageForLike, for: .normal)
+        delegate?.tapLikeButton(with: id)
+    }
+    
+    @objc func cartButtonTupped() {
+        inCart.toggle()
+        let imageForCart = inCart ? Images.Common.deleteCartBtn?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal) :                                                       Images.Common.addCart?.withTintColor(UIColor.segmentActive, renderingMode: .alwaysOriginal)
+        cartButton.setImage(imageForCart, for: .normal)
+        delegate?.tapCartButton(with: id)
     }
 }

@@ -23,7 +23,6 @@ final class CollectionModel {
             switch result {
             case .success(let nft):
                 completion(.success(nft))
-                print("Загрузилась одна NFT")
             case .failure(let error):
                 completion(.failure(error))
             }

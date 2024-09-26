@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class CollectionViewController: UIViewController {
     
@@ -104,8 +105,11 @@ final class CollectionViewController: UIViewController {
     }
     
     private func loadData() {
+        ProgressHUD.show()
+        ProgressHUD.animationType = .circleSpinFade
         viewModel.fetchNFTs {
             DispatchQueue.main.async {
+                ProgressHUD.dismiss()
                 self.collectionView.reloadData()
                 self.updateCollectionViewHeight()
             }
@@ -231,7 +235,10 @@ final class CollectionViewController: UIViewController {
     }
     
     @objc func goToAuthorURL() {
-        print("Переходим по ссылке: ")
+        let nft = viewModel.collection(at: 0)
+        guard let url = URL(string: nft.author) else { return }
+        let webViewVC = AuthorWebViewController(url: url)
+        navigationController?.pushViewController(webViewVC, animated: true)
     }
 }
 
@@ -248,13 +255,30 @@ extension CollectionViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NFTCellForCollectionView.reuseIdentifier,
                                                             for: indexPath) as? NFTCellForCollectionView
         else {
-            print("Не прошёл каст")
+            print("Не прошёл каст к NFTCellForCollectionView")
             return UICollectionViewCell()
         }
-        
+        cell.delegate = self
+        var isLike = false
+        var inCart = false
         let nft = viewModel.collection(at: indexPath.row)
+        let likes = viewModel.getLikes()
+        let cart = viewModel.getCart()
+        
+        if let index = likes.firstIndex(of: nft.id) {
+            isLike = true
+        } else {
+            isLike = false
+        }
+        
+        if let index = cart.firstIndex(of: nft.id) {
+            inCart = true
+        } else {
+            inCart = false
+        }
+        
         cell.prepareForReuse()
-        cell.configure(nft: nft)
+        cell.configure(nft: nft, isLike: isLike, nftID: nft.id, inCart: inCart)
         
         return cell
     }
@@ -276,4 +300,24 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 8, left: leftAndRightInset, bottom: 8, right: leftAndRightInset)
     }
     
+}
+
+extension CollectionViewController: NFTCollectionViewCellDelegate {
+    func tapLikeButton(with id: String) {
+        ProgressHUD.show()
+        view.isUserInteractionEnabled = false
+        viewModel.toggleLike(for: id) {
+            ProgressHUD.dismiss()
+            self.view.isUserInteractionEnabled = true
+        }
+    }
+    
+    func tapCartButton(with id: String) {
+        ProgressHUD.show()
+        view.isUserInteractionEnabled = false
+        viewModel.toggleCart(for: id) {
+            ProgressHUD.dismiss()
+            self.view.isUserInteractionEnabled = true
+        }
+    }
 }
