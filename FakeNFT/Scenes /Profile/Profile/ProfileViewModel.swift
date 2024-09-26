@@ -5,7 +5,9 @@ class ProfileViewModel {
     
     static let shared = ProfileViewModel()
     
-    private init() {}
+    private init() {
+        self.profileService = ProfileServiceImpl(networkClient: DefaultNetworkClient(), storage: ProfileStorageImpl())
+    }
     
     var userName: Observable<String> = Observable("")
     var userDescription: Observable<String> = Observable("")
@@ -21,6 +23,8 @@ class ProfileViewModel {
         }
     }
     
+    var profile: Profile? = nil
+    private let profileService: ProfileService
     private let userNameKey = "userName"
     private let userDescriptionKey = "userDescription"
     private let userWebsiteKey = "userWebsite"
@@ -32,16 +36,41 @@ class ProfileViewModel {
         NSLocalizedString("Profile.aboutAuthor", comment: "aboutAuthor")
     ]
     
-    func viewDidLoad() {
-        loadProfile() // Загружаем профиль из UserDefaults при запуске
+    func viewDidLoad(completion: @escaping () -> Void) {
+        loadProfile(completion: completion)
     }
     
     // Сохранение данных в UserDefaults
-    func saveProfile() {
+    func saveProfile(completion: @escaping (Bool) -> Void) {
+        // Сохраняем локальные данные в UserDefaults
         UserDefaults.standard.set(userName.value, forKey: userNameKey)
         UserDefaults.standard.set(userDescription.value, forKey: userDescriptionKey)
         UserDefaults.standard.set(userWebsite.value, forKey: userWebsiteKey)
+        
+        // Проверяем наличие профиля и URL изображения
+        guard let profile = profile  else {
+            print("123")
+            completion(false)
+            return
+        }
+        var imageToSave: String = profile.avatar
+        if let imageURL = self.imageURL {
+            imageToSave = imageURL
+        }
+        // Отправляем PUT запрос для сохранения профиля на сервере
+        profileService.sendExamplePutRequest(likes: profile.likes, avatar: imageToSave, name: userName.value) { result in
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+                print("Profile saved successfully")
+                completion(true)
+            case .failure(let error):
+                print("Error saving profile: \(error.localizedDescription)")
+                completion(false)
+            }
+        }
     }
+    
     
     func makeShowImageAllert() -> UIAlertController {
         let alertController = UIAlertController(title: "Enter Image URL", message: nil, preferredStyle: .alert)
@@ -78,34 +107,28 @@ class ProfileViewModel {
     }
     
     // Сохранение данных в UserDefaults
-    func viewWillDisappear() {
-        saveProfile()
+    func viewWillDisappear(completion: @escaping (Bool) -> Void) {
+        saveProfile { success in
+            completion(success)
+        }
     }
     
     // Загрузка данных из UserDefaults
-    private func loadProfile() {
-        if let savedName = UserDefaults.standard.string(forKey: userNameKey) {
-            userName.value = savedName
-        } else {
-            userName.value = "Joaquin Phoenix"
-        }
-        
-        if let savedDescription = UserDefaults.standard.string(forKey: userDescriptionKey) {
-            userDescription.value = savedDescription
-        } else {
-            userDescription.value = "Дизайнер из Казани, люблю цифровое искусство  и бейглы. В моей коллекции уже 100+ NFT,  и еще больше — на моём сайте. Открыт к коллаборациям."
-        }
-        
-        if let savedWebsite = UserDefaults.standard.string(forKey: userWebsiteKey) {
-            userWebsite.value = savedWebsite
-        } else {
-            userWebsite.value = "JoaquinPhoenix.com"
-        }
-        
-        if let imageURL {
-            userImage.value = URL(string: imageURL)
-        } else {
-            userImage.value = nil
+    private func loadProfile(completion: @escaping () -> Void) {
+        profileService.loadProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                print("SUCCESS \(profile)")
+                self?.profile = profile
+                self?.userName.value = profile.name
+                self?.userDescription.value = profile.description
+                self?.userWebsite.value = profile.website
+                self?.userImage.value = URL(string: profile.avatar)
+                completion()  // Уведомляем, что данные успешно загружены
+            case .failure(let error):
+                print("ERROR \(error.localizedDescription)")
+                completion()  // Вызовем completion даже в случае ошибки
+            }
         }
     }
 }

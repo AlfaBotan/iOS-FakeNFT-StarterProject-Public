@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class ProfileViewController: UIViewController {
     
@@ -79,7 +80,18 @@ final class ProfileViewController: UIViewController {
         configureNavBar()
         setupViews()
         setupBindings()
-        viewModel.viewDidLoad()
+        ProgressHUD.show()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.viewDidLoad { [weak self] in
+                DispatchQueue.main.async {
+                    self?.setupBindings()  // Привязываем данные к UI после загрузки профиля
+                    ProgressHUD.dismiss()
+                }
+            }
     }
     
     private func setupViews() {
@@ -229,15 +241,17 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         viewModel.didSelectMenuItem(at: indexPath.row)
         
         if indexPath.row == 0 {
-            let myNftVC = MyNftViewController()
+            let myNftVM = MyNftViewModel(nftList: viewModel.profile?.nfts ?? [], favouriteList: viewModel.profile?.likes ?? [], profile: viewModel.profile)
+            let myNftVC = MyNftViewController(viewModel: myNftVM)
             navigationController?.pushViewController(myNftVC, animated: true)
         }
         if indexPath.row == 1 {
-            let favouritesNftVC = FavouritesNftViewController()
+            let favouritesNftVM = FavouritesNftViewModel(nftList: viewModel.profile?.likes ?? [], profile: viewModel.profile)
+            let favouritesNftVC = FavouritesNftViewController(viewModel: favouritesNftVM)
             navigationController?.pushViewController(favouritesNftVC, animated: true)
         }
         if indexPath.row == 2 {
-            let webVC = WebViewController(urlString: "https://practicum.yandex.ru")
+            let webVC = ProfileWebViewController(urlString: viewModel.userWebsite.value)
             navigationController?.pushViewController(webVC, animated: true)
         }
     }
