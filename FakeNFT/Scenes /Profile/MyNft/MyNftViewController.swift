@@ -60,7 +60,7 @@ final class MyNftViewController: UIViewController {
         navigationItem.titleView = titleLabel
         
         let menuButton = UIBarButtonItem(
-            image: UIImage(named: "Vector"),
+            image: UIImage(named: "sortBtn"),
             style: .plain,
             target: self,
             action: #selector(menuButtonTapped)

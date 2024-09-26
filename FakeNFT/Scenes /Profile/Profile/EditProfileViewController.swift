@@ -4,7 +4,6 @@ import ProgressHUD
 final class EditProfileViewController: UIViewController {
     
     var viewModel: ProfileViewModel!
-    var onProfileImageUpdated: ((URL?) -> Void)?
     
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()

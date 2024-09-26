@@ -87,11 +87,11 @@ final class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.viewDidLoad { [weak self] in
-                DispatchQueue.main.async {
-                    self?.setupBindings()  // Привязываем данные к UI после загрузки профиля
-                    ProgressHUD.dismiss()
-                }
+            DispatchQueue.main.async {
+                self?.setupBindings()  // Привязываем данные к UI после загрузки профиля
+                ProgressHUD.dismiss()
             }
+        }
     }
     
     private func setupViews() {
@@ -180,6 +180,20 @@ final class ProfileViewController: UIViewController {
                 )
             }
         }
+        viewModel.onProfileImageUpdated = { [weak self] imageURL in
+            guard let self = self else { return }
+            if let imageURL = imageURL {
+                self.avatarImageView.kf.setImage(
+                    with: imageURL,
+                    placeholder: UIImage(named: "ProfileMokIMG"),
+                    options: [
+                        .scaleFactor(UIScreen.main.scale),
+                        .transition(.fade(0.2)),
+                        .cacheOriginalImage
+                    ]
+                )
+            }
+        }
     }
     
     private func configureNavBar() {
@@ -196,20 +210,7 @@ final class ProfileViewController: UIViewController {
     @objc private func editButtonTapped() {
         let editProfileVC = EditProfileViewController()
         editProfileVC.viewModel = viewModel
-        editProfileVC.onProfileImageUpdated = { [weak self] imageURL in
-            guard let self = self else { return }
-            if let imageURL = imageURL {
-                self.avatarImageView.kf.setImage(
-                    with: imageURL,
-                    placeholder: UIImage(named: "ProfileMokIMG"),
-                    options: [
-                        .scaleFactor(UIScreen.main.scale),
-                        .transition(.fade(0.2)),
-                        .cacheOriginalImage
-                    ]
-                )
-            }
-        }
+        
         editProfileVC.modalPresentationStyle = .formSheet
         present(editProfileVC, animated: true, completion: nil)
     }

@@ -4,6 +4,7 @@ import Kingfisher
 class ProfileViewModel {
     
     static let shared = ProfileViewModel()
+    var onProfileImageUpdated: ((URL?) -> Void)?
     
     private init() {
         self.profileService = ProfileServiceImpl(networkClient: DefaultNetworkClient(), storage: ProfileStorageImpl())
@@ -86,6 +87,7 @@ class ProfileViewModel {
             if let imageURL = alertController.textFields?.first?.text, !imageURL.isEmpty {
                 self.imageURL = imageURL
                 userImage.value = URL(string: imageURL)
+                onProfileImageUpdated?(userImage.value)
                 print("Image URL saved: \(imageURL)")
             }
         }
