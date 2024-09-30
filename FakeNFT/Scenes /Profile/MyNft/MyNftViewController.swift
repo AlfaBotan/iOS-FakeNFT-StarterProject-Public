@@ -118,15 +118,18 @@ final class MyNftViewController: UIViewController {
     @objc private func menuButtonTapped() {
         let alertController = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
         
-        let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { _ in
+        let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { [weak self] _ in
+            guard let self = self else { return }
             self.viewModel.sort(by: .price)
         }
         
-        let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { _ in
+        let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
+            guard let self = self else { return }
             self.viewModel.sort(by: .rating)
         }
         
-        let sortByNameAction = UIAlertAction(title: "По названию", style: .default) { _ in
+        let sortByNameAction = UIAlertAction(title: "По названию", style: .default) { [weak self] _ in
+            guard let self = self else { return }
             self.viewModel.sort(by: .name)
         }
         
