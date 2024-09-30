@@ -56,9 +56,15 @@ final class TabBarController: UITabBarController {
             profileVC.viewModel = ProfileViewModel.shared
                     let navigationController = UINavigationController(rootViewController: profileVC)
                     return navigationController
-        case .cart: return CartViewController()
+        case .cart: 
+          let cartVC = CartViewController(servicesAssembly: servicesAssembly)
+          let cartNavigationController = UINavigationController (rootViewController: cartVC)
+          return cartNavigationController
         case .catalog: return CatalogViewController(servicesAssembly: servicesAssembly)
-        case .statistic: return StatisticViewController()
+        case .statistic:
+            let statisticsViewController = StatisticViewController()
+            let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
+            return statisticsNavigationController
         }
     }
 }
