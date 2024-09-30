@@ -170,6 +170,7 @@ extension MyNftViewController: MyNftTableViewCellDelegate {
     func didTapHeartButton(id: String) {
         ProgressHUD.show()
         viewModel.toggleLike(for: id) {
+            print("success")
             ProgressHUD.dismiss()
         }
     }
