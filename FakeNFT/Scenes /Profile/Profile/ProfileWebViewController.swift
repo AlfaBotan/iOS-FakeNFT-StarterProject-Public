@@ -1,7 +1,7 @@
 import UIKit
 import WebKit
 
-final class WebViewController: UIViewController {
+final class ProfileWebViewController: UIViewController {
     
     private var webView: WKWebView!
     private var urlString: String
