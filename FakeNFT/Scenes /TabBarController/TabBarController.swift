@@ -51,7 +51,11 @@ final class TabBarController: UITabBarController {
     
     private func getController(for tab: Tabs) -> UIViewController {
         switch tab {
-        case .profile: return ProfileViewController()
+        case .profile:
+            let profileVC = ProfileViewController()
+            profileVC.viewModel = ProfileViewModel.shared
+                    let navigationController = UINavigationController(rootViewController: profileVC)
+                    return navigationController
         case .cart: 
           let cartVC = CartViewController(servicesAssembly: servicesAssembly)
           let cartNavigationController = UINavigationController (rootViewController: cartVC)
