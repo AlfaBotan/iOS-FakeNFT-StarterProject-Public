@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol NFTCollectionViewCellDelegate: AnyObject {
+protocol NFTViewCellDelegate: AnyObject {
     func tapLikeButton(with id: String)
     func tapCartButton(with id: String)
 }
@@ -15,7 +15,7 @@ protocol NFTCollectionViewCellDelegate: AnyObject {
 final class NFTCellForCollectionView: UICollectionViewCell {
     
     static let reuseIdentifier = "NFTCollectionViewCell"
-    weak var delegate: NFTCollectionViewCellDelegate?
+    weak var delegate: NFTViewCellDelegate?
     private var id = ""
     private var isLike = false
     private var inCart = false

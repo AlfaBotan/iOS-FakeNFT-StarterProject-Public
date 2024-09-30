@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct NFTCellModel {
+struct NFTCellModelCollection {
     let image: UIImage
     let rating: Int
     let name: String

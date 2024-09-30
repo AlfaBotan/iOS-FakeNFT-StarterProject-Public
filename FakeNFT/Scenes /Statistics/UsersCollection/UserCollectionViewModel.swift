@@ -114,7 +114,7 @@ final class UserCollectionViewModel: UserCollectionViewModelProtocol {
     }
     
     func toggleCart(for nftId: String, completion: @escaping () -> Void) {
-        guard var order = order else { return }
+        guard let order = order else { return }
         var nftsId = order.nfts
         
         if let index = nftsId.firstIndex(of: nftId) {

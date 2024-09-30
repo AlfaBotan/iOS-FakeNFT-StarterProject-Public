@@ -302,7 +302,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
-extension CollectionViewController: NFTCollectionViewCellDelegate {
+extension CollectionViewController: NFTViewCellDelegate {
     func tapLikeButton(with id: String) {
         ProgressHUD.show()
         view.isUserInteractionEnabled = false
