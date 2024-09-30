@@ -10,6 +10,7 @@ import Foundation
 protocol ProfileStorage: AnyObject {
     func saveProfile(profile: Profile)
     func getProfile() -> Profile?
+    func clear()
 }
 
 // Пример простого класса, который сохраняет данные из сети
@@ -28,6 +29,12 @@ final class ProfileStorageImpl: ProfileStorage {
     func getProfile() -> Profile? {
         syncQueue.sync {
             profile
+        }
+    }
+    
+    func clear() {
+        syncQueue.sync {
+            self.profile = nil
         }
     }
 }

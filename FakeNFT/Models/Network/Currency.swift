@@ -1,10 +1,3 @@
-//
-//  Currency.swift
-//  FakeNFT
-//
-//  Created by Илья Волощик on 24.09.24.
-//
-
 import Foundation
 
 struct Currency: Codable {

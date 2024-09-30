@@ -51,13 +51,23 @@ final class TabBarController: UITabBarController {
     
     private func getController(for tab: Tabs) -> UIViewController {
         switch tab {
-        case .profile: return ProfileViewController()
-        case .cart: return CartViewController()
+        case .profile:
+            let profileVC = ProfileViewController()
+            profileVC.viewModel = ProfileViewModel.shared
+                    let navigationController = UINavigationController(rootViewController: profileVC)
+                    return navigationController
+        case .cart: 
+          let cartVC = CartViewController(servicesAssembly: servicesAssembly)
+          let cartNavigationController = UINavigationController (rootViewController: cartVC)
+          return cartNavigationController
         case .catalog: 
             let viewModelForCatalog = CatalogViewModel()
             let catalogVC = CatalogViewController(servicesAssembly: servicesAssembly, viewModel: viewModelForCatalog)
             return UINavigationController(rootViewController: catalogVC)
-        case .statistic: return StatisticViewController()
+        case .statistic:
+            let statisticsViewController = StatisticViewController()
+            let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
+            return statisticsNavigationController
         }
     }
 }
