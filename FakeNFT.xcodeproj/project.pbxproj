@@ -165,10 +165,6 @@
 		1CFE6A4F2CA300C7003A9963 /* OrderAndPaymentService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderAndPaymentService.swift; sourceTree = "<group>"; };
 		1CFE6A512CA3015E003A9963 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		1CFE6A532CA30194003A9963 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
-		1CFE6A552CA30219003A9963 /* NftOrderRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NftOrderRequest.swift; sourceTree = "<group>"; };
-		1CFE6A572CA30271003A9963 /* EditOrderRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditOrderRequest.swift; sourceTree = "<group>"; };
-		1CFE6A582CA30271003A9963 /* CurrencyListRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyListRequest.swift; sourceTree = "<group>"; };
-		1CFE6A592CA30271003A9963 /* PaymentRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentRequest.swift; sourceTree = "<group>"; };
 		2C4D770D2CAB20990042F13C /* Nft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nft.swift; sourceTree = "<group>"; };
 		2C4D770F2CAB20B10042F13C /* NftStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftStorage.swift; sourceTree = "<group>"; };
 		2C4D77112CAB20E30042F13C /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -689,10 +685,6 @@
 		689224462C8A3E1A00CE698A /* Cart */ = {
 			isa = PBXGroup;
 			children = (
-				1CFE6A582CA30271003A9963 /* CurrencyListRequest.swift */,
-				1CFE6A572CA30271003A9963 /* EditOrderRequest.swift */,
-				1CFE6A592CA30271003A9963 /* PaymentRequest.swift */,
-				1CFE6A552CA30219003A9963 /* NftOrderRequest.swift */,
 				0CBDBA4C2C95899D00D1D5CC /* Delete */,
 				0C4471D22C8F7549005D3274 /* Payment */,
 				0C4471CF2C8F21C7005D3274 /* Cell */,
