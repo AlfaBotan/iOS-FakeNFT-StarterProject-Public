@@ -68,7 +68,7 @@ final class PaymentViewController: UIViewController {
     agreementButton.setTitle(Strings.Cart.userAgreement, for: .normal)
     agreementButton.setTitleColor(UIColor.link, for: .normal)
     agreementButton.titleLabel?.font = UIFont.caption2
-    agreementButton.addTarget(PaymentViewController.self, action: #selector(showAgreement), for: .touchUpInside)
+    agreementButton.addTarget(self, action: #selector(showAgreement), for: .touchUpInside)
     return agreementButton
   }()
 
@@ -138,7 +138,7 @@ final class PaymentViewController: UIViewController {
 
   @objc private func showAgreement() {
     let webViewController = WebViewController()
-    present(webViewController, animated: true)
+    navigationController?.pushViewController(webViewController, animated: true)
   }
 
   private func getCurrencyList() {
