@@ -120,8 +120,9 @@ final class CartViewController: UIViewController {
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    loadData()
     super.viewWillAppear(animated)
+    loadData()
+    updateHolders()
     tabBarController?.tabBar.isHidden = false
     navigationController?.setNavigationBarHidden(true, animated: animated)
   }
@@ -134,7 +135,7 @@ final class CartViewController: UIViewController {
   // MARK: - Button Go To Payment Screen
   
   @objc private func paymentButtonTapped() {
-    let paymentViewController = PaymentViewController()
+    let paymentViewController = PaymentViewController(resultHandler: viewModel)
     navigationController?.pushViewController(paymentViewController, animated: true)
     navigationController?.navigationBar.tintColor = UIColor.segmentActive
     navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -218,7 +219,7 @@ final class CartViewController: UIViewController {
     payButton.isHidden = viewModel.nftItems.isEmpty
     backgroundView.isHidden = viewModel.nftItems.isEmpty
     sortButton.isHidden = viewModel.nftItems.isEmpty
-    placeholderLabel.isHidden = !viewModel.nftItems.isEmpty || viewModel.isLoading
+    placeholderLabel.isHidden = !viewModel.nftItems.isEmpty
   }
 }
 

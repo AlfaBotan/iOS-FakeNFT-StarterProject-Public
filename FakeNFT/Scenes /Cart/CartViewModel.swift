@@ -107,7 +107,11 @@ final class CartViewModel {
       }
     }
   }
-  
+
+  private func reset() {
+    nftItems.removeAll()
+  }
+
   func removeItem(at index: Int) {
     nftItems.remove(at: index)
     
@@ -160,5 +164,11 @@ final class CartViewModel {
     case .none:
       break
     }
+  }
+}
+
+extension CartViewModel: PaymentResultHandling {
+  func paymentSucceed() {
+    reset()
   }
 }

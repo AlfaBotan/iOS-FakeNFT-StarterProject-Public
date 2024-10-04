@@ -1,7 +1,12 @@
 import UIKit
 import ProgressHUD
 
+protocol PaymentResultHandling: AnyObject {
+  func paymentSucceed()
+}
+
 final class PaymentViewController: UIViewController {
+  private weak var resultHandler: PaymentResultHandling?
 
   private let orderService: OrderService = OrderServiceImpl(networkClient: DefaultNetworkClient())
 
@@ -20,6 +25,15 @@ final class PaymentViewController: UIViewController {
     }
   }
 
+  init(resultHandler: PaymentResultHandling) {
+    self.resultHandler = resultHandler
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
   override func viewDidLoad() {
     view.backgroundColor = .systemBackground
     super.viewDidLoad()
@@ -127,7 +141,7 @@ final class PaymentViewController: UIViewController {
 
       payButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
       payButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-      payButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 740),
+      payButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -54),
       payButton.heightAnchor.constraint(equalToConstant: 60)
     ])
   }
@@ -170,10 +184,11 @@ final class PaymentViewController: UIViewController {
   }
 
   private func paymentConfirmationRequest(for id: String) {
-    orderService.loadPayment(currencyId: id) {(result: Result<Payment, Error>) in
+    orderService.loadPayment(currencyId: id) { [weak self] (result: Result<Payment, Error>) in
+      guard let self else { return }
       switch result {
       case .success:
-        let paymentResult = PaymentResultViewController()
+        let paymentResult = PaymentResultViewController(resultHandler: resultHandler)
         self.navigationController?.pushViewController(paymentResult, animated: true)
       case .failure:
         self.showUnsuccessfulPaymentAlert()
