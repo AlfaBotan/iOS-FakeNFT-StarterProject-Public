@@ -37,20 +37,32 @@ extension UIColor {
     static let background = UIColor.white
 
     // Text Colors
-    static let textPrimary = UIColor.black
-    static let textSecondary = UIColor.gray
-    static let textOnPrimary = UIColor.white
-    static let textOnSecondary = UIColor.black
-
-    private static let yaBlackLight = UIColor(hexString: "1A1B22")
-    private static let yaBlackDark = UIColor.white
-    private static let yaLightGrayLight = UIColor(hexString: "#F7F7F8")
-    private static let yaLightGrayDark = UIColor(hexString: "#2C2C2E")
-
+    static let textPrimary = UIColor { traits in
+        return traits.userInterfaceStyle == .dark
+        ? .yaWhiteUniversal
+        : .yaBlackUniversal
+    }
+    static let textSecondary = UIColor { traits in
+        return traits.userInterfaceStyle == .dark
+        ? .yaWhiteUniversal
+        : .yaBlackUniversal.withAlphaComponent(0.2)
+    }
+    static let changePhoto = UIColor.yaWhiteUniversal
+    static let textButton = UIColor { traits in
+        return traits.userInterfaceStyle == .dark
+        ? .yaBlackUniversal
+        : .yaWhiteUniversal
+    }
+    static let deleteButton = UIColor.yaRedUniversal
+    static let currencyType = UIColor.yaGreenUniversal
+    static let allertText = UIColor.yaBlueUniversal
+    static let link = UIColor.yaBlueUniversal
+    
+    // Common
     static let segmentActive = UIColor { traits in
         return traits.userInterfaceStyle == .dark
-        ? .yaBlackDark
-        : .yaBlackLight
+        ? .yaWhiteUniversal
+        : .yaBlackUniversal
     }
 
     static let segmentInactive = UIColor { traits in
@@ -61,7 +73,26 @@ extension UIColor {
 
     static let closeButton = UIColor { traits in
         return traits.userInterfaceStyle == .dark
-        ? .yaBlackDark
-        : .yaBlackLight
+        ? .yaWhiteUniversal
+        : .yaBlackUniversal
     }
+    
+    // Tab Bar
+    static let activeTab = UIColor.yaBlueUniversal
+    static let inactiveTab = UIColor { traits in
+        return traits.userInterfaceStyle == .dark 
+        ? .yaWhiteUniversal 
+        : .yaBlackUniversal
+    }
+
+    private static let yaLightGrayLight = UIColor(hexString: "#F7F7F8")
+    private static let yaLightGrayDark = UIColor(hexString: "#2C2C2E")
+    private static let yaGrayUniversal = UIColor(hexString: "#625C5C")
+    private static let yaRedUniversal = UIColor(hexString: "#F56B6C")
+    private static let yaBackgroundUniversal = UIColor(hexString: "#1A1B22")
+    private static let yaGreenUniversal = UIColor(hexString: "#1C9F00")
+    private static let yaBlueUniversal = UIColor(hexString: "#0A84FF")
+    private static let yaBlackUniversal = UIColor(hexString: "#1A1B22")
+    private static let yaWhiteUniversal = UIColor.white
+    private static let yaYellowUniversal = UIColor(hexString: "#FEEF0D")
 }

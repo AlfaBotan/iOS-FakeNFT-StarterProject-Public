@@ -1,0 +1,21 @@
+939694a HEAD@{0}: commit: Немного изменил структуру файлов, разделил экраны и из файлы на соответствующие группы.
+3c22774 HEAD@{1}: checkout: moving from common to catalog1-3
+8df41eb HEAD@{2}: 
+f8f4c34 HEAD@{3}: checkout: moving from catalog to common
+a2151dc HEAD@{4}: checkout: moving from catalog1-3 to catalog
+3c22774 HEAD@{5}: commit: реализовал экран коллекции
+d77e666 HEAD@{6}: commit: Реализовал экран каталога (пока без функционала)
+a2151dc HEAD@{7}: checkout: moving from catalog to catalog1-3
+a2151dc HEAD@{8}: checkout: moving from common to catalog
+f8f4c34 HEAD@{9}: checkout: moving from catalog to common
+a2151dc HEAD@{10}: commit: .
+f8f4c34 HEAD@{11}: 
+f694386 HEAD@{12}: reset: moving to HEAD
+f694386 HEAD@{13}: checkout: moving from Develop to catalog
+f694386 HEAD@{14}: checkout: moving from catalog to Develop
+f8f4c34 HEAD@{15}: 
+f694386 HEAD@{16}: reset: moving to HEAD
+f694386 HEAD@{17}: checkout: moving from Develop to catalog
+f694386 HEAD@{18}: checkout: moving from common to Develop
+f8f4c34 HEAD@{19}: checkout: moving from main to common
+f694386 HEAD@{20}: clone: from https://github.com/AlfaBotan/iOS-FakeNFT-StarterProject-Public.git
